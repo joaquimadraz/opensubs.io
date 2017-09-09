@@ -7,7 +7,16 @@ defmodule SubsWeb.Api.UserView do
       data: render_one(user, UserView, "user.json"),
       meta: %{
         auth_token: auth_token
-      }}
+      }
+    }
+  end
+
+  def render("create.json", %{user: user}) do
+    render("show.json", %{user: user})
+  end
+
+  def render("show.json", %{user: user}) do
+    %{data: render_one(user, UserView, "user.json")}
   end
 
   def render("user.json", %{user: user}) do
