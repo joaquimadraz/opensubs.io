@@ -40,6 +40,7 @@ defmodule Subs.Mixfile do
       {:ecto, "~> 2.1"},
       {:comeonin, "~> 3.0"},
       {:ex_machina, "~> 2.0", only: :test},
+      {:guardian, "~> 1.0-beta"},
     ]
   end
 

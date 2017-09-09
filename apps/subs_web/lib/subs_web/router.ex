@@ -19,8 +19,12 @@ defmodule SubsWeb.Router do
     get "/", PageController, :index
   end
 
-  # Other scopes may use custom stacks.
-  # scope "/api", SubsWeb do
-  #   pipe_through :api
-  # end
+  scope "/api", SubsWeb, as: :api do
+    pipe_through :api
+
+    resources "/users", Api.UserController, only: [:create, :update, :delete]
+    scope "/users", as: :user do
+      post "/authenticate", Api.UserController, :authenticate, as: :authenticate
+    end
+  end
 end
