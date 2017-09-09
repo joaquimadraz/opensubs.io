@@ -7,14 +7,11 @@ defmodule SubsWeb.Test.Controllers.UserControllerTest do
     {:ok, conn: put_req_header(conn, "accept", "application/json")}
   end
 
-  describe "given a user and fails" do
+  describe "POST /api/users/authenticate" do
     setup %{conn: conn} do
       user_password = "password"
 
-      user = insert(
-        :user,
-        encrypted_password: BCrypt.hashpwsalt(user_password)
-      )
+      user = insert(:user, encrypted_password: BCrypt.hashpwsalt(user_password))
 
       [conn: conn,
        user: user,
