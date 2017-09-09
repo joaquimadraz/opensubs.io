@@ -11,7 +11,8 @@ config :subs_web, SubsWeb.Endpoint,
   debug_errors: true,
   code_reloader: true,
   check_origin: false,
-  watchers: []
+  watchers: [node: ["node_modules/.bin/webpack", "--watch", "--display-error-details", "--color", "--stdin",
+                    cd: Path.expand("../frontend", __DIR__)]]
 
 # ## SSL Support
 #
