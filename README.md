@@ -1,5 +1,5 @@
 # Subs
-## Manage on going subscriptions.
+## Manage on going subscriptions :money_with_wings:
 
 #### Stack
 Elixir backend and React frontend.
