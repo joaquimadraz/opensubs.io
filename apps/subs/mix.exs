@@ -37,7 +37,9 @@ defmodule Subs.Mixfile do
   defp deps do
     [
       {:postgrex, ">= 0.0.0"},
-      {:ecto, "~> 2.1"}
+      {:ecto, "~> 2.1"},
+      {:comeonin, "~> 3.0"},
+      {:ex_machina, "~> 2.0", only: :test},
     ]
   end
 

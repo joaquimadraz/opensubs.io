@@ -8,3 +8,5 @@ config :subs, Subs.Repo,
   database: "subs_test",
   hostname: "localhost",
   pool: Ecto.Adapters.SQL.Sandbox
+
+config :subs, :bcrypt, Subs.Test.Support.BCrypt
