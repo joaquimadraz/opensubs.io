@@ -5,6 +5,6 @@ defmodule Notifier do
   def send_confirmation_email(to_email, confirmation_url) do
     to_email
     |> Email.confirmation_email(%{confirmation_url: confirmation_url})
-    |> Mailer.safe_deliver()
+    |> Mailer.deliver_now()
   end
 end
