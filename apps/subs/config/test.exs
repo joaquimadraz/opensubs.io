@@ -10,3 +10,6 @@ config :subs, Subs.Repo,
   pool: Ecto.Adapters.SQL.Sandbox
 
 config :subs, :bcrypt, Subs.Test.Support.BCrypt
+
+config :subs, :notifier, Subs.Test.Support.Notifier
+
