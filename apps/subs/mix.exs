@@ -41,6 +41,7 @@ defmodule Subs.Mixfile do
       {:comeonin, "~> 3.0"},
       {:ex_machina, "~> 2.0", only: :test},
       {:guardian, "~> 1.0-beta"},
+      {:uuid, "~> 1.1"},
     ]
   end
 

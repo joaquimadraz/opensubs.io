@@ -12,6 +12,9 @@ defmodule Subs.User do
     field :password, :string, virtual: true
     field :password_confirmation, :string, virtual: true
     field :encrypted_password, :string
+    field :confirmation_token, :string
+    field :confirmation_sent_at, :naive_datetime
+    field :confirmed_at, :naive_datetime
 
     timestamps()
   end
@@ -32,7 +35,8 @@ defmodule Subs.User do
     |> validate_password_confirmation_presence
     |> validate_confirmation(:password)
     |> unique_constraint(:email)
-    |> encrypt_password
+    |> encrypt_password()
+    |> confirmation_changeset()
   end
 
   def update_changeset(struct, params \\ %{}) do
@@ -42,7 +46,14 @@ defmodule Subs.User do
     |> validate_length(:password, min: 6)
     |> validate_password_confirmation_presence
     |> validate_confirmation(:password)
-    |> encrypt_password
+    |> encrypt_password()
+  end
+
+  def confirmation_changeset(struct) do
+    struct
+    |> put_change(:confirmation_token, UUID.uuid4(:hex))
+    |> put_change(:confirmation_sent_at, nil)
+    |> put_change(:confirmed_at, nil)
   end
 
   def authenticate(email, password) do

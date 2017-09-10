@@ -21,6 +21,10 @@ defmodule Subs.Test.UseCases.Users.CreateUserTest do
       assert user.encrypted_password != nil
       assert String.length(user.encrypted_password) > 0
     end
+
+    test "confirmation details populated", %{user: user} do
+      assert user.confirmation_token != nil
+    end
   end
 
   describe "given an invalid email" do

@@ -8,7 +8,7 @@ defmodule Subs.Test.UseCases.Users.AuthenticateUserTest do
   describe "given an user and valid credentials" do
     setup [:create_user]
     setup context do
-      {:ok, %{user: , auth_token: auth_token}} =
+      {:ok, %{user: user, auth_token: auth_token}} =
         AuthenticateUser.perform(context.email, context.password)
 
       [user: user, email: context.email, auth_token: auth_token]

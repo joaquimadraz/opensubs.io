@@ -11,6 +11,7 @@ defmodule Subs.Test.Support.Factory do
       email: "jon.snow@email.com",
       password: "password",
       password_confirmation: "password",
+      confirmation_token: "111xxx222yyy333zzz"
     }
   end
 end

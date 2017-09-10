@@ -16,6 +16,11 @@ defmodule Subs.Test.Domain.UserTest do
       assert encrypted_password != nil
       assert String.length(encrypted_password) > 0
     end
+
+    test "confirmation_token is set", %{user: user} do
+      confirmation_token = Ecto.Changeset.get_change(user, :confirmation_token)
+      assert confirmation_token != nil
+    end
   end
 
   describe "given an multi cased email" do
