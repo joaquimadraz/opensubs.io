@@ -12,7 +12,15 @@ defmodule SubsWeb.Api.UserView do
   end
 
   def render("create.json", %{user: user}) do
-    render("show.json", %{user: user})
+    data =
+      user
+      |> render_one(UserView, "user.json")
+      |> Map.put(:confirmation_sent_at, user.confirmation_sent_at)
+
+    %{
+      data: data,
+      meta: %{}
+    }
   end
 
   def render("show.json", %{user: user}) do

@@ -25,6 +25,7 @@ defmodule SubsWeb.Router do
     resources "/users", Api.UserController, only: [:create, :update, :delete]
     scope "/users", as: :user do
       post "/authenticate", Api.UserController, :authenticate, as: :authenticate
+      post "/confirm", Api.UserController, :confirm, as: :confirm
     end
   end
 end

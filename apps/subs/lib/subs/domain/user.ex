@@ -20,7 +20,10 @@ defmodule Subs.User do
   end
 
   @required_create_fields ~w(email password password_confirmation)a
-  @required_update_fields ~w(password password_confirmation)a
+  @required_update_fields ~w(password
+                             password_confirmation
+                             confirmation_sent_at
+                             confirmed_at)a
   @optional_fields ~w(name)a
   @email_regex ~r/\A[\w+\-.]+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/
 

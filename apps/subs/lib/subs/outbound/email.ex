@@ -1,9 +1,7 @@
-defmodule Subs.Outboud.Email do
+defmodule Subs.Outbound.Email do
   @moduledoc false
 
-  @notifier Application.get_env(:subs, :notifier)
-
-  def send_confirmation_email(to_email, confirmation_email, notifier \\ Notifier) do
-    notifier.send_confirmation_email(to)
+  def send_confirmation_email(to_email, confirmation_email) do
+    Notifier.send_confirmation_email(to_email, confirmation_email)
   end
 end

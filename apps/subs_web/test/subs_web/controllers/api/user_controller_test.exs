@@ -1,7 +1,10 @@
 defmodule SubsWeb.Test.Controllers.UserControllerTest do
   use SubsWeb.ConnCase
+  use Bamboo.Test
   import Subs.Test.Support.Factory
   alias Subs.Test.Support.BCrypt
+  alias Subs.UserRepo
+  alias SubsWeb.Helpers.UserHelper
 
   setup %{conn: conn} do
     {:ok, conn: put_req_header(conn, "accept", "application/json")}
@@ -29,7 +32,7 @@ defmodule SubsWeb.Test.Controllers.UserControllerTest do
     test "given required user params", %{conn: conn} do
       email = "email@email.com"
       conn = post(conn, api_user_path(conn, :create), user: %{
-        "email" => "email@email.com",
+        "email" => email,
         "password" => "password",
         "password_confirmation" => "password"
       })
@@ -37,6 +40,27 @@ defmodule SubsWeb.Test.Controllers.UserControllerTest do
       assert data = json_response(conn, 201)
       assert data["data"]["id"] != nil
       assert data["data"]["email"] == email
+      assert data["data"]["confirmation_sent_at"] != nil
+    end
+
+    test "user created and confirmation email sent", %{conn: conn} do
+      email = "email@email.com"
+
+      conn = post(conn, api_user_path(conn, :create), user: %{
+        "email" => email,
+        "password" => "password",
+        "password_confirmation" => "password"
+      })
+
+      assert data = json_response(conn, 201)
+
+      user = UserRepo.get_by_id(data["data"]["id"])
+      confirmation_url = UserHelper.generate_confirmation_url(user)
+      confirmation_email = Notifier.Email.confirmation_email(email, %{
+        confirmation_url: confirmation_url
+      })
+
+      assert_delivered_email(confirmation_email)
     end
   end
 

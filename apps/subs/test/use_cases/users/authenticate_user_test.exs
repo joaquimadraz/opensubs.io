@@ -18,7 +18,7 @@ defmodule Subs.Test.UseCases.Users.AuthenticateUserTest do
       assert user.email == email
     end
 
-    test "generates auth_token", %{user: user, auth_token: auth_token} do
+    test "generates auth_token", %{auth_token: auth_token} do
       assert auth_token != nil
     end
   end

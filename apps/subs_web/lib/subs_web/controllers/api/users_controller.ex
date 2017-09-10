@@ -1,7 +1,9 @@
 defmodule SubsWeb.Api.UserController do
   use SubsWeb, :controller
   alias Subs.UseCases.Users.{AuthenticateUser, CreateUser}
+  alias Subs.Application.SendConfirmationEmail
   alias SubsWeb.Api.{ErrorView, ChangesetView}
+  alias SubsWeb.Helpers.UserHelper
 
   def authenticate(conn, %{"email" => email, "password" => password}) do
     case AuthenticateUser.perform(email, password) do
@@ -24,6 +26,9 @@ defmodule SubsWeb.Api.UserController do
   def create(conn, %{"user" => user_params}) do
     case CreateUser.perform(user_params) do
       {:ok, %{user: user}} ->
+        confirmation_url = UserHelper.generate_confirmation_url(user)
+        {:ok, user} = SendConfirmationEmail.send(user, confirmation_url)
+
         conn
         |> put_status(:created)
         |> render("create.json", user: user)
