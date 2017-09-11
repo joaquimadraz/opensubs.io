@@ -43,4 +43,15 @@ defmodule SubsWeb.Api.UserController do
     |> put_status(:bad_request)
     |> render(ErrorView, :"400", message: "Missing user params")
   end
+
+  def confirm(conn, %{"t" => token}) do
+    conn
+    |> put_status(:ok)
+    |> text "ok"
+  end
+  def confirm(conn, _) do
+    conn
+      |> put_status(:bad_request)
+      |> render(ErrorView, :"400", message: "Missing token param")
+  end
 end

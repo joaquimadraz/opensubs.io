@@ -133,7 +133,7 @@ defmodule SubsWeb.Test.Controllers.UserControllerTest do
       conn = post(conn, api_user_confirm_path(conn, :confirm))
 
       assert data = json_response(conn, 400)
-      assert data["message"] == "Missing token"
+      assert data["message"] == "Missing token param"
     end
 
     test "returns forbidden for invalid token", %{conn: conn} do
