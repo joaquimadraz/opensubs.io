@@ -121,5 +121,51 @@ defmodule SubsWeb.Test.Controllers.UserControllerTest do
       }
     end
   end
+
+  describe "POST /api/users/confirm" do
+    setup %{conn: conn} do
+      user = insert(:user, %{confirmation_sent_at: NaiveDateTime.utc_now()})
+
+      [conn: conn, user: user]
+    end
+
+    test "returns bad request for missing token", %{conn: conn} do
+      conn = post(conn, api_user_confirm_path(conn, :confirm))
+
+      assert data = json_response(conn, 400)
+      assert data["message"] == "Missing token"
+    end
+
+    test "returns forbidden for invalid token", %{conn: conn} do
+      conn = post(conn, api_user_confirm_path(conn, :confirm), %{
+        "t" => "invalid"
+      })
+
+      assert data = json_response(conn, 403)
+      assert data["message"] == "Invalid token"
+    end
+
+    test "returns unprocessable entity for user confirmed", %{conn: conn, user: user} do
+      conn = post(conn, api_user_confirm_path(conn, :confirm), %{
+        "t" => user.confirmation_token
+      })
+
+      assert data = json_response(conn, 409)
+      assert data["message"] == "User already confirmed"
+    end
+
+    test "confirms user account", %{conn: conn, user: user} do
+      conn = post(conn, api_user_confirm_path(conn, :confirm), %{
+        "t" => user.confirmation_token
+      })
+
+      assert data = json_response(conn, 200)
+      assert data["data"] == %{
+        "id" => user.id,
+        "name" => user.name,
+        "email" => user.email
+      }
+    end
+  end
 end
 
