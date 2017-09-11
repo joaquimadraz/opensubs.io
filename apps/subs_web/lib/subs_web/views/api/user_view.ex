@@ -23,6 +23,10 @@ defmodule SubsWeb.Api.UserView do
     }
   end
 
+  def render("confirm.json", %{user: user}) do
+    render_one(user, UserView, "show.json")
+  end
+
   def render("show.json", %{user: user}) do
     %{data: render_one(user, UserView, "user.json")}
   end

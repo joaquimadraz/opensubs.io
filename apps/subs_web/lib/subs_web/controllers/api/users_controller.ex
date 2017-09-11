@@ -1,6 +1,6 @@
 defmodule SubsWeb.Api.UserController do
   use SubsWeb, :controller
-  alias Subs.UseCases.Users.{AuthenticateUser, CreateUser}
+  alias Subs.UseCases.Users.{AuthenticateUser, CreateUser, ConfirmUser}
   alias Subs.Application.SendConfirmationEmail
   alias SubsWeb.Api.{ErrorView, ChangesetView}
   alias SubsWeb.Helpers.UserHelper
@@ -45,9 +45,24 @@ defmodule SubsWeb.Api.UserController do
   end
 
   def confirm(conn, %{"t" => token}) do
-    conn
-    |> put_status(:ok)
-    |> text "ok"
+    case ConfirmUser.perform(token) do
+      {:ok, %{user: user}} ->
+        conn
+        |> put_status(:accepted)
+        |> render("confirm.json", user: user)
+      {:error, {:invalid_token, _}} ->
+        conn
+        |> put_status(:forbidden)
+        |> render(ErrorView, :"403", message: "Invalid token")
+      {:error, {:user_confirmed, _}} ->
+        conn
+        |> put_status(:conflict)
+        |> render(ErrorView, :"409", message: "User already confirmed")
+      {:error, _} ->
+        conn
+        |> put_status(:conflict)
+        |> render(ErrorView, :"500", message: "Something went wrong")
+    end
   end
   def confirm(conn, _) do
     conn

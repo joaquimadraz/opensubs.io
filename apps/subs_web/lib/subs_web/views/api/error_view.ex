@@ -10,6 +10,9 @@ defmodule SubsWeb.Api.ErrorView do
   def render("404.json", assigns) do
     %{message: assigns[:message] || "Page not found"}
   end
+  def render("409.json", assigns) do
+    %{message: assigns[:message] || "Conflict"}
+  end
   def render("500.json", assigns) do
     %{message: assigns[:message] || "Internal server error"}
   end

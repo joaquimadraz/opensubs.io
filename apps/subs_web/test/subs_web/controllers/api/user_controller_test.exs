@@ -145,7 +145,9 @@ defmodule SubsWeb.Test.Controllers.UserControllerTest do
       assert data["message"] == "Invalid token"
     end
 
-    test "returns unprocessable entity for user confirmed", %{conn: conn, user: user} do
+    test "returns conflict for user confirmed", %{conn: conn, user: user} do
+      {:ok, user} = UserRepo.update(user, %{confirmed_at: NaiveDateTime.utc_now()})
+
       conn = post(conn, api_user_confirm_path(conn, :confirm), %{
         "t" => user.confirmation_token
       })
@@ -159,7 +161,7 @@ defmodule SubsWeb.Test.Controllers.UserControllerTest do
         "t" => user.confirmation_token
       })
 
-      assert data = json_response(conn, 200)
+      assert data = json_response(conn, 202)
       assert data["data"] == %{
         "id" => user.id,
         "name" => user.name,
