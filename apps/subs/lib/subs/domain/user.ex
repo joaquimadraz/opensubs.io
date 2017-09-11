@@ -70,6 +70,10 @@ defmodule Subs.User do
     end
   end
 
+  def confirmed?(user) do
+    user.confirmed_at != nil
+  end
+
   defp valid_password?(user, password) do
     if @bcrypt.checkpw(password, user.encrypted_password) do
       {:ok, user}

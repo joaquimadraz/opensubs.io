@@ -24,4 +24,8 @@ defmodule Subs.UserRepo do
   end
 
   def get_by_id(user_id), do: Repo.get(User, user_id)
+
+  def get_by_confirmation_token(token) do
+    Repo.get_by(User, confirmation_token: token)
+  end
 end

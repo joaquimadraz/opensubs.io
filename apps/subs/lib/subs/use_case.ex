@@ -21,11 +21,11 @@ end
 defmodule Subs.UseCase.Flow do
   @moduledoc false
 
-  def ok!(context \\ []) do
+  def ok!(context \\ %{}) do
     {:ok, context}
   end
 
-  def failure!(status, context \\ []) do
+  def failure!(status, context \\ %{}) do
     {:error, {status, context}}
   end
 end
