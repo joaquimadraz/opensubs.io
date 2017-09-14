@@ -1,4 +1,4 @@
-defmodule SubsWeb.Test.Controllers.UserControllerTest do
+defmodule SubsWeb.Test.Controllers.SubscriptionControllerTest do
   use SubsWeb.ConnCase
   import Subs.Test.Support.Factory
 
