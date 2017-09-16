@@ -1,10 +1,8 @@
-require IEx
-
 defmodule Subs.Subscription do
   @moduledoc false
 
   use Subs.Schema
-  alias Subs.SubscriptionRepo
+  alias Subs.User
 
   schema "subscriptions" do
     field :name, :string
@@ -17,6 +15,8 @@ defmodule Subs.Subscription do
     field :first_bill_date, :naive_datetime
     field :next_bill_date, :naive_datetime
 
+    belongs_to :user, User
+
     timestamps()
   end
 
@@ -25,6 +25,7 @@ defmodule Subs.Subscription do
     amount
     amount_currency
     cycle
+    user_id
   )a
 
   @optional_fields ~w(
@@ -37,10 +38,17 @@ defmodule Subs.Subscription do
   @cycles ~w(monthly yearly)
   @default_color "#E2E2E2"
 
+  def build_with_user(user, params) do
+    user
+    |> build_assoc(:subscriptions)
+    |> create_changeset(params)
+  end
+
   def create_changeset(struct, params \\ %{}) do
     struct
     |> cast(params, @required_create_fields ++ @optional_fields)
     |> validate_required(@required_create_fields)
+    |> foreign_key_constraint(:user_id)
     |> validate_number(:amount, greater_than: 0)
     |> validate_inclusion(:amount_currency, @currency_codes, message: "unknown currency")
     |> validate_inclusion(:cycle, @cycles, message: "must be one of: monthly, yearly")

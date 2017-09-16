@@ -2,7 +2,7 @@ defmodule Subs.User do
   @moduledoc false
 
   use Subs.Schema
-  alias Subs.UserRepo
+  alias Subs.{Subscription, UserRepo}
 
   @bcrypt Application.get_env(:subs, :bcrypt)
 
@@ -15,6 +15,8 @@ defmodule Subs.User do
     field :confirmation_token, :string
     field :confirmation_sent_at, :naive_datetime
     field :confirmed_at, :naive_datetime
+
+    has_many :subscriptions, Subscription
 
     timestamps()
   end

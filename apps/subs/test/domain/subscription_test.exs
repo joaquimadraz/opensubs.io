@@ -1,11 +1,33 @@
 defmodule Subs.Test.Domain.SubscriptionTest do
-  use ExUnit.Case
+  use Subs.DataCase
   import Subs.Test.Support.Factory
   alias Subs.Subscription
   alias Ecto.Changeset
 
   def create_changeset(params) do
     Subscription.create_changeset(%Subscription{}, params)
+  end
+
+  def build_changeset_with_user(user, params) do
+    Subscription.build_with_user(user, params)
+  end
+
+  describe("user") do
+    test "returns error for missing user" do
+      non_persisted_user = build(:user)
+      params = string_params_for(:subscription)
+      changeset = build_changeset_with_user(non_persisted_user, params)
+
+      assert {"can't be blank", _} = changeset.errors[:user_id]
+    end
+
+    test "creates subscription from user" do
+      user = insert(:user)
+      params = string_params_for(:subscription)
+      changeset = build_changeset_with_user(user, params)
+
+      assert changeset.valid? == true
+    end
   end
 
   describe("color") do
@@ -51,32 +73,36 @@ defmodule Subs.Test.Domain.SubscriptionTest do
   end
 
   describe("first_bill_date and next_bill_date") do
-    test "populates first_bill_date if not given" do
+    setup do
+      [user: insert(:user)]
+    end
+
+    test "populates first_bill_date if not given", %{user: user} do
       params = string_params_for(:subscription)
-      changeset = create_changeset(params)
+      changeset = build_changeset_with_user(user, params)
       first_bill_date = Changeset.get_change(changeset, :first_bill_date)
 
       assert NaiveDateTime.to_date(first_bill_date) == Date.utc_today()
     end
 
-    test "populates next_bill_date based on monthly cycle" do
+    test "populates next_bill_date based on monthly cycle", %{user: user} do
       params = string_params_for(
         :subscription,
         first_bill_date: "2017-09-12T00:00:00Z"
       )
-      changeset = create_changeset(params)
+      changeset = build_changeset_with_user(user, params)
       next_bill_date = Changeset.get_change(changeset, :next_bill_date)
 
       assert next_bill_date == ~N[2017-10-12 00:00:00]
     end
 
-    test "populates next_bill_date based on yearly cycle" do
+    test "populates next_bill_date based on yearly cycle", %{user: user} do
       params = string_params_for(
         :subscription,
         cycle: "yearly",
         first_bill_date: "2017-09-12T00:00:00Z"
       )
-      changeset = create_changeset(params)
+      changeset = build_changeset_with_user(user, params)
       next_bill_date = Changeset.get_change(changeset, :next_bill_date)
 
       assert next_bill_date == ~N[2018-09-12 00:00:00]

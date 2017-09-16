@@ -3,11 +3,12 @@ defmodule Subs.UseCases.Subscriptions.CreateSubscription do
   use Subs.UseCase
   alias Subs.SubscriptionRepo
 
-  def perform(subscription_params) do
-    with params <- consolidate_amount(subscription_params),
-         {:ok, subscription} <- SubscriptionRepo.create(params) do
-      ok!(%{subscription: subscription})
-    else
+  def perform(user, subscription_params) do
+    params = consolidate_amount(subscription_params)
+
+    case SubscriptionRepo.create_with_user(user, params) do
+      {:ok, subscription} ->
+        ok!(%{subscription: subscription})
       {:error, changeset} ->
         failure!(:invalid_params, %{changeset: changeset})
     end
