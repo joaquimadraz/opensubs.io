@@ -42,6 +42,7 @@ defmodule Subs.Mixfile do
       {:ex_machina, "~> 2.0", only: :test},
       {:guardian, "~> 1.0-beta"},
       {:uuid, "~> 1.1"},
+      {:timex, "~> 3.1"},
     ]
   end
 

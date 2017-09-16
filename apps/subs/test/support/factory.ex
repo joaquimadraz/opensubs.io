@@ -3,7 +3,7 @@ defmodule Subs.Test.Support.Factory do
 
   use ExMachina.Ecto, repo: Subs.Repo
 
-  alias Subs.{User}
+  alias Subs.{User, Subscription}
 
   def user_factory do
     %User{
@@ -12,6 +12,15 @@ defmodule Subs.Test.Support.Factory do
       password: "password",
       password_confirmation: "password",
       confirmation_token: "111xxx222yyy333zzz"
+    }
+  end
+
+  def subscription_factory do
+    %Subscription{
+      name: "Custom Service",
+      amount: 7,
+      amount_currency: "GBP",
+      cycle: "monthly"
     }
   end
 end
