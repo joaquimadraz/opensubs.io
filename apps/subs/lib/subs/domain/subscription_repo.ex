@@ -14,8 +14,12 @@ defmodule Subs.SubscriptionRepo do
     |> Repo.insert()
   end
 
-  def get_user_submissions(user) do
+  def get_user_subscriptions(user) do
     query = from s in Subscription, where: s.user_id == ^user.id
     Repo.all(query)
+  end
+
+  def get_user_subscription(user, subscription_id) do
+    Repo.get_by(Subscription, user_id: user.id, id: subscription_id)
   end
 end

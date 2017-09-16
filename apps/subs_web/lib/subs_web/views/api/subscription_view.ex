@@ -16,6 +16,13 @@ defmodule SubsWeb.Api.SubscriptionView do
     }
   end
 
+  def render("show.json", %{subscription: subscription}) do
+    %{
+      data: render_one(subscription, SubscriptionView, "subscription.json"),
+      meta: %{}
+    }
+  end
+
   def render("subscription.json", %{subscription: subscription}) do
     %{
       id: subscription.id,

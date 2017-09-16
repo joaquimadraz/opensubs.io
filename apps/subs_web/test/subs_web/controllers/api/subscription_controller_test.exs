@@ -56,7 +56,7 @@ defmodule SubsWeb.Test.Controllers.SubscriptionControllerTest do
       [conn: conn, user: user]
     end
 
-    test "returns no subscriptions for user", %{conn: conn} do
+    test "returns 200 with no subscriptions for user", %{conn: conn} do
       insert_list(3, :complete_subscription, %{user_id: insert(:user).id})
       conn = get(conn, api_subscription_path(conn, :index))
 
@@ -64,7 +64,7 @@ defmodule SubsWeb.Test.Controllers.SubscriptionControllerTest do
       assert subscriptions == []
     end
 
-    test "returns user subscriptions", %{conn: conn, user: user} do
+    test "returns 200 with user subscriptions", %{conn: conn, user: user} do
       user_subscriptions = insert_list(3, :complete_subscription, %{user_id: user.id})
       conn = get(conn, api_subscription_path(conn, :index))
 
@@ -74,6 +74,30 @@ defmodule SubsWeb.Test.Controllers.SubscriptionControllerTest do
       for subscription <- user_subscriptions do
         assert Enum.find(subscriptions, fn(sub) -> sub["id"] == subscription.id end) != nil
       end
+    end
+  end
+
+  describe "GET /api/subscriptions:id" do
+    setup %{conn: conn} do
+      user = insert(:user)
+      conn = ApiHelpers.put_authorization_header(conn, user)
+
+      [conn: conn, user: user]
+    end
+
+    test "returns 404 for unknown", %{conn: conn} do
+      conn = get(conn, api_subscription_path(conn, :show, -1))
+
+      assert %{"message" => message} = json_response(conn, 404)
+      assert message == "Not found"
+    end
+
+    test "returns 200 with user subscription", %{conn: conn, user: user} do
+      created_subscription = insert(:complete_subscription, %{user_id: user.id})
+      conn = get(conn, api_subscription_path(conn, :show, created_subscription.id))
+
+      assert %{"data" => subscription} = json_response(conn, 200)
+      assert subscription["id"] == created_subscription.id
     end
   end
 

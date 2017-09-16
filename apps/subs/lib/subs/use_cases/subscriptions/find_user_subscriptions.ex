@@ -4,7 +4,7 @@ defmodule Subs.UseCases.Subscriptions.FindUserSubscriptions do
   alias Subs.SubscriptionRepo
 
   def perform(user) do
-    subscriptions = SubscriptionRepo.get_user_submissions(user)
+    subscriptions = SubscriptionRepo.get_user_subscriptions(user)
     ok!(%{subscriptions: subscriptions})
   end
 end

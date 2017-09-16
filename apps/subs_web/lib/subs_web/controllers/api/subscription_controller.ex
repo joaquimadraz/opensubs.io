@@ -1,6 +1,10 @@
 defmodule SubsWeb.Api.SubscriptionController do
   use SubsWeb, :controller
-  alias Subs.UseCases.Subscriptions.{CreateSubscription, FindUserSubscriptions}
+  alias Subs.UseCases.Subscriptions.{
+    CreateSubscription,
+    FindUserSubscription,
+    FindUserSubscriptions
+  }
   alias SubsWeb.Helpers.UserHelper
   alias SubsWeb.Api.{ErrorView, ChangesetView}
 
@@ -13,6 +17,26 @@ defmodule SubsWeb.Api.SubscriptionController do
         |> put_status(:ok)
         |> render("index.json", subscriptions: subscriptions)
     end
+  end
+
+  def show(conn, %{"id" => subscription_id}) do
+    current_user = UserHelper.current_user(conn)
+
+    case FindUserSubscription.perform(current_user, subscription_id) do
+      {:ok, %{subscription: subscription}} ->
+        conn
+        |> put_status(:ok)
+        |> render("show.json", subscription: subscription)
+      {:error, {:not_found, _}} ->
+        conn
+        |> put_status(:not_found)
+        |> render(ErrorView, :"404", message: "Not found")
+    end
+  end
+  def show(conn, _) do
+    conn
+    |> put_status(:bad_request)
+    |> render(ErrorView, :"400", message: "Missing subscription id")
   end
 
   def create(conn, %{"subscription" => subscription_params}) do
