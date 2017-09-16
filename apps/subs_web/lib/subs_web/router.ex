@@ -19,13 +19,16 @@ defmodule SubsWeb.Router do
     get "/", PageController, :index
   end
 
-  scope "/api", SubsWeb, as: :api do
+   scope "/api", SubsWeb, as: :api do
     pipe_through :api
 
-    resources "/users", Api.UserController, only: [:create, :update, :delete]
+    resources "/users", Api.UserController, only: [:create]
+
     scope "/users", as: :user do
       post "/authenticate", Api.UserController, :authenticate, as: :authenticate
       post "/confirm", Api.UserController, :confirm, as: :confirm
     end
+
+    resources "/subscriptions", Api.SubscriptionController, only: [:index, :create, :show]
   end
 end
