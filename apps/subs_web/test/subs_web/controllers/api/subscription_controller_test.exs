@@ -55,6 +55,26 @@ defmodule SubsWeb.Test.Controllers.SubscriptionControllerTest do
 
       [conn: conn, user: user]
     end
+
+    test "returns no subscriptions for user", %{conn: conn} do
+      insert_list(3, :complete_subscription, %{user_id: insert(:user).id})
+      conn = get(conn, api_subscription_path(conn, :index))
+
+      assert data = json_response(conn, 400)
+      assert data["data"] == []
+    end
+
+    test "returns user subscriptions", %{conn: conn, user: user} do
+      user_subscriptions = insert_list(3, :complete_subscription, %{user_id: user.id})
+      conn = get(conn, api_subscription_path(conn, :index))
+
+      assert data = json_response(conn, 400)
+      assert Enum.count(data["data"]) == 3
+
+      for subscription <- user_subscriptions do
+        assert Enum.find(data["data"], fn(sub) -> sub["id"] == subscription.id end) != nil
+      end
+    end
   end
 
   describe "POST /api/subscriptions" do
@@ -62,7 +82,7 @@ defmodule SubsWeb.Test.Controllers.SubscriptionControllerTest do
       user = insert(:user)
       conn = ApiHelpers.put_authorization_header(conn, user)
 
-      [conn: conn, user: user]
+      [conn: conn]
     end
 
     test "returns bad request when requesting without subscription params", %{conn: conn} do
