@@ -1,8 +1,19 @@
 defmodule SubsWeb.Api.SubscriptionController do
   use SubsWeb, :controller
-  alias Subs.UseCases.Subscriptions.CreateSubscription
+  alias Subs.UseCases.Subscriptions.{CreateSubscription, FindUserSubscriptions}
   alias SubsWeb.Helpers.UserHelper
   alias SubsWeb.Api.{ErrorView, ChangesetView}
+
+  def index(conn, _params) do
+    current_user = UserHelper.current_user(conn)
+
+    case FindUserSubscriptions.perform(current_user) do
+      {:ok, %{subscriptions: subscriptions}} ->
+        conn
+        |> put_status(:ok)
+        |> render("index.json", subscriptions: subscriptions)
+    end
+  end
 
   def create(conn, %{"subscription" => subscription_params}) do
     current_user = UserHelper.current_user(conn)

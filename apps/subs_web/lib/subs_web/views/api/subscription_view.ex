@@ -2,6 +2,13 @@ defmodule SubsWeb.Api.SubscriptionView do
   use SubsWeb, :view
   alias SubsWeb.Api.SubscriptionView
 
+  def render("index.json", %{subscriptions: subscriptions}) do
+    %{
+      data: render_many(subscriptions, SubscriptionView, "subscription.json"),
+      meta: %{}
+    }
+  end
+
   def render("create.json", %{subscription: subscription}) do
     %{
       data: render_one(subscription, SubscriptionView, "subscription.json"),

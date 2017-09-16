@@ -14,6 +14,7 @@ defmodule Subs.UseCases.Subscriptions.CreateSubscription do
     end
   end
 
+  # FIXME: Move calculation to helper and consolidation to Subscription
   # Consolidates amount as integer value before storing on the database.
   # 1.99 (£) will be saved as 199
   # 7 (£) will be saved as 700

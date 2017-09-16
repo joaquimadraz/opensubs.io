@@ -1,6 +1,6 @@
 defmodule Subs.SubscriptionRepo do
   @moduledoc false
-
+  import Ecto.Query
   alias Subs.{Repo, Subscription}
 
   def create(params) do
@@ -12,5 +12,10 @@ defmodule Subs.SubscriptionRepo do
   def create_with_user(user, params) do
     Subscription.build_with_user(user, params)
     |> Repo.insert()
+  end
+
+  def get_user_submissions(user) do
+    query = from s in Subscription, where: s.user_id == ^user.id
+    Repo.all(query)
   end
 end

@@ -60,19 +60,19 @@ defmodule SubsWeb.Test.Controllers.SubscriptionControllerTest do
       insert_list(3, :complete_subscription, %{user_id: insert(:user).id})
       conn = get(conn, api_subscription_path(conn, :index))
 
-      assert data = json_response(conn, 400)
-      assert data["data"] == []
+      assert %{"data" => subscriptions} = json_response(conn, 200)
+      assert subscriptions == []
     end
 
     test "returns user subscriptions", %{conn: conn, user: user} do
       user_subscriptions = insert_list(3, :complete_subscription, %{user_id: user.id})
       conn = get(conn, api_subscription_path(conn, :index))
 
-      assert data = json_response(conn, 400)
-      assert Enum.count(data["data"]) == 3
+      assert %{"data" => subscriptions} = json_response(conn, 200)
+      assert Enum.count(subscriptions) == 3
 
       for subscription <- user_subscriptions do
-        assert Enum.find(data["data"], fn(sub) -> sub["id"] == subscription.id end) != nil
+        assert Enum.find(subscriptions, fn(sub) -> sub["id"] == subscription.id end) != nil
       end
     end
   end
