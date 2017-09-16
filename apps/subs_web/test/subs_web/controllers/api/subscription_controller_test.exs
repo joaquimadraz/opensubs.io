@@ -1,45 +1,66 @@
 defmodule SubsWeb.Test.Controllers.SubscriptionControllerTest do
   use SubsWeb.ConnCase
   import Subs.Test.Support.Factory
-  alias SubsWeb.Helpers.UserHelper
+  alias SubsWeb.Test.Support.ApiHelpers
 
   setup %{conn: conn} do
     {:ok, conn: put_req_header(conn, "accept", "application/json")}
   end
 
-  test "returns 401 for missing Authorization header", %{conn: conn} do
-    conn = post(conn, api_subscription_path(conn, :create))
+  describe "Authentication" do
+    test "returns 401 for missing Authorization header", %{conn: conn} do
+      conn = post(conn, api_subscription_path(conn, :create))
 
-    assert data = json_response(conn, 401)
-    assert data["message"] == "Unauthorized"
+      assert data = json_response(conn, 401)
+      assert data["message"] == "Unauthorized"
+    end
+
+    test "returns 401 for invalid Authorization token", %{conn: conn} do
+      conn = put_req_header(conn, "authorization", "Bearer auth_token")
+      conn = post(conn, api_subscription_path(conn, :create), subscription: %{})
+
+      assert data = json_response(conn, 401)
+      assert data["message"] == "Unauthorized"
+    end
+
+    test "returns 401 for invalid Authorization Bearer token", %{conn: conn} do
+      conn = put_req_header(conn, "authorization", "random_token")
+      conn = post(conn, api_subscription_path(conn, :create), subscription: %{})
+
+      assert data = json_response(conn, 401)
+      assert data["message"] == "Unauthorized"
+    end
+
+    test "returns 401 for valid token with unknown resource", %{conn: conn} do
+      conn = ApiHelpers.put_authorization_header(conn, %{id: -1})
+      conn = post(conn, api_subscription_path(conn, :create), subscription: %{})
+
+      assert data = json_response(conn, 401)
+      assert data["message"] == "Unauthorized"
+    end
+
+    test "returns 401 for valid token with unknown resource id", %{conn: conn} do
+      conn = ApiHelpers.put_authorization_header(conn, %{id: "token"})
+      conn = post(conn, api_subscription_path(conn, :create), subscription: %{})
+
+      assert data = json_response(conn, 401)
+      assert data["message"] == "Unauthorized"
+    end
   end
 
-  test "returns 401 for invalid token", %{conn: conn} do
-    conn =
-      conn
-      |> put_req_header("authorization", "Bearer token")
-      |> post(api_subscription_path(conn, :index))
+  describe "GET /api/subscriptions" do
+    setup %{conn: conn} do
+      user = insert(:user)
+      conn = ApiHelpers.put_authorization_header(conn, user)
 
-    assert data = json_response(conn, 401)
-    assert data["message"] == "Unauthorized"
-  end
-
-  test "returns 403 for valid token with invalid resource", %{conn: conn} do
-    auth_token = UserHelper.generate_auth_token(%{id: -1})
-    conn =
-      conn
-      |> put_req_header("authorization", "Bearer #{auth_token}")
-      |> post(api_subscription_path(conn, :create), subscription: %{})
-
-    assert data = json_response(conn, 401)
-    assert data["message"] == "Unauthorized"
+      [conn: conn, user: user]
+    end
   end
 
   describe "POST /api/subscriptions" do
     setup %{conn: conn} do
       user = insert(:user)
-      auth_token = UserHelper.generate_auth_token(user)
-      conn = put_req_header(conn, "authorization", "Bearer #{auth_token}")
+      conn = ApiHelpers.put_authorization_header(conn, user)
 
       [conn: conn, user: user]
     end

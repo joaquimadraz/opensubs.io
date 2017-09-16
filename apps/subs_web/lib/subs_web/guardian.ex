@@ -3,11 +3,12 @@ defmodule SubsWeb.Guardian do
   alias Subs.UseCases.Users.FindUser
 
   def subject_for_token(resource, _claims), do: {:ok, to_string(resource.id)}
-  def subject_for_token(_, _), do: {:error, :invalid_resource}
 
-  def resource_from_claims(%{"sub" => user_id}) do
-    case FindUser.perform(user_id) do
-      {:ok, %{user: user}} -> {:ok, user}
+  def resource_from_claims(%{"sub" => sub}) do
+    with {user_id, _} <- Integer.parse(sub),
+         {:ok, %{user: user}} <-  FindUser.perform(user_id) do
+      {:ok, user}
+    else
       _ -> nil
     end
   end
