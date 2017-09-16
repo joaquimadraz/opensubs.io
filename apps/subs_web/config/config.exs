@@ -26,6 +26,14 @@ config :logger, :console,
 config :subs_web, :generators,
   context_app: :subs
 
+config :subs_web, SubsWeb.Guardian,
+  issuer: "SubsWeb",
+  secret_key: "guardian_secret"
+
+config :subs_web, SubsWeb.Helpers.AuthAccessPipeline,
+  module: SubsWeb.Guardian,
+  error_handler: SubsWeb.Helpers.AuthErrorHandler
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env}.exs"

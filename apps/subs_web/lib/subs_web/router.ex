@@ -13,13 +13,17 @@ defmodule SubsWeb.Router do
     plug :accepts, ["json"]
   end
 
+  pipeline :authenticated do
+    plug SubsWeb.Helpers.AuthAccessPipeline
+  end
+
   scope "/", SubsWeb do
     pipe_through :browser # Use the default browser stack
 
     get "/", PageController, :index
   end
 
-   scope "/api", SubsWeb, as: :api do
+  scope "/api", SubsWeb, as: :api do
     pipe_through :api
 
     resources "/users", Api.UserController, only: [:create]
@@ -28,6 +32,10 @@ defmodule SubsWeb.Router do
       post "/authenticate", Api.UserController, :authenticate, as: :authenticate
       post "/confirm", Api.UserController, :confirm, as: :confirm
     end
+  end
+
+  scope "/api", SubsWeb, as: :api do
+    pipe_through [:api, :authenticated]
 
     resources "/subscriptions", Api.SubscriptionController, only: [:index, :create, :show]
   end

@@ -8,18 +8,14 @@ defmodule Subs.Test.UseCases.Users.AuthenticateUserTest do
   describe "given an user and valid credentials" do
     setup [:create_user]
     setup context do
-      {:ok, %{user: user, auth_token: auth_token}} =
+      {:ok, %{user: user}} =
         AuthenticateUser.perform(context.email, context.password)
 
-      [user: user, email: context.email, auth_token: auth_token]
+      [user: user, email: context.email]
     end
 
     test "should authenticate user", %{user: user, email: email} do
       assert user.email == email
-    end
-
-    test "generates auth_token", %{auth_token: auth_token} do
-      assert auth_token != nil
     end
   end
 

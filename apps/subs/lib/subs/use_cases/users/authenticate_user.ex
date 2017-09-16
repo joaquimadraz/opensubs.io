@@ -2,12 +2,11 @@ defmodule Subs.UseCases.Users.AuthenticateUser do
   @moduledoc false
 
   use Subs.UseCase
-  alias Subs.{User, Guardian}
+  alias Subs.User
 
   def perform(email, password) do
-    with {:ok, user} <- User.authenticate(email, password),
-         {:ok, token, _} = Guardian.encode_and_sign(user) do
-      ok!(%{user: user, auth_token: token})
+    with {:ok, user} <- User.authenticate(email, password) do
+      ok!(%{user: user})
     else
       :error -> failure!(:invalid_credentials)
     end

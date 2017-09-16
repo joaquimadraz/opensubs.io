@@ -7,7 +7,9 @@ defmodule SubsWeb.Api.UserController do
 
   def authenticate(conn, %{"email" => email, "password" => password}) do
     case AuthenticateUser.perform(email, password) do
-      {:ok, %{user: user, auth_token: auth_token}} ->
+      {:ok, %{user: user}} ->
+        auth_token = UserHelper.generate_auth_token(user)
+
         conn
         |> put_status(:ok)
         |> render("authenticate.json", user: user, auth_token: auth_token)

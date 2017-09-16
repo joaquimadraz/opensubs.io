@@ -4,6 +4,7 @@ defmodule SubsWeb.Test.Controllers.UserControllerTest do
   import Subs.Test.Support.Factory
   alias Subs.Test.Support.BCrypt
   alias Subs.UserRepo
+  alias SubsWeb.Guardian
   alias SubsWeb.Helpers.UserHelper
 
   setup %{conn: conn} do
@@ -101,7 +102,7 @@ defmodule SubsWeb.Test.Controllers.UserControllerTest do
 
       assert data = json_response(conn, 200)
 
-      {:ok, claims} = Subs.Guardian.decode_and_verify(data["meta"]["auth_token"])
+      {:ok, claims} = Guardian.decode_and_verify(data["meta"]["auth_token"])
 
       assert claims["sub"] == Integer.to_string(user.id)
     end
