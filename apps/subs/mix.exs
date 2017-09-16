@@ -43,6 +43,7 @@ defmodule Subs.Mixfile do
       {:guardian, "~> 1.0-beta"},
       {:uuid, "~> 1.1"},
       {:timex, "~> 3.1"},
+      {:notifier, in_umbrella: true},
     ]
   end
 
