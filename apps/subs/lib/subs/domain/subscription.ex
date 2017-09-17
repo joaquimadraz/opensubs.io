@@ -82,7 +82,7 @@ defmodule Subs.Subscription do
   defp populate_first_bill_date(changeset) do
     case get_change(changeset, :first_bill_date) do
       nil ->
-        put_change(changeset, :first_bill_date, Timex.to_naive_datetime(Timex.today()))
+        put_change(changeset, :first_bill_date, Timex.beginning_of_day(NaiveDateTime.utc_now()))
         _ ->
         changeset
     end
