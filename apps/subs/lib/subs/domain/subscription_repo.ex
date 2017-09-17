@@ -9,6 +9,12 @@ defmodule Subs.SubscriptionRepo do
     |> Repo.insert()
   end
 
+  def update(subscription, params) do
+    subscription
+    |> Subscription.update_changeset(params)
+    |> Repo.update()
+  end
+
   def create_with_user(user, params) do
     Subscription.build_with_user(user, params)
     |> Repo.insert()
