@@ -9,7 +9,14 @@ defmodule SubsWeb.Api.SubscriptionView do
     }
   end
 
-  def render("create.json", %{subscription: subscription}) do
+  def render("created.json", %{subscription: subscription}) do
+    %{
+      data: render_one(subscription, SubscriptionView, "subscription.json"),
+      meta: %{}
+    }
+  end
+
+  def render("updated.json", %{subscription: subscription}) do
     %{
       data: render_one(subscription, SubscriptionView, "subscription.json"),
       meta: %{}

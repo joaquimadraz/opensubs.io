@@ -2,6 +2,7 @@ defmodule SubsWeb.Api.SubscriptionController do
   use SubsWeb, :controller
   alias Subs.UseCases.Subscriptions.{
     CreateSubscription,
+    UpdateSubscription,
     FindUserSubscription,
     FindUserSubscriptions
   }
@@ -46,7 +47,7 @@ defmodule SubsWeb.Api.SubscriptionController do
       {:ok, %{subscription: subscription}} ->
         conn
         |> put_status(:created)
-        |> render("create.json", subscription: subscription)
+        |> render("created.json", subscription: subscription)
       {:error, {:invalid_params, %{changeset: changeset}}} ->
         conn
         |> put_status(:unprocessable_entity)
@@ -54,6 +55,30 @@ defmodule SubsWeb.Api.SubscriptionController do
     end
   end
   def create(conn, _) do
+    conn
+    |> put_status(:bad_request)
+    |> render(ErrorView, :"400", message: "Missing subscription params")
+  end
+
+  def update(conn, %{"id" => subscription_id, "subscription" => subscription_params}) do
+    current_user = UserHelper.current_user(conn)
+
+    case UpdateSubscription.perform(current_user, subscription_id, subscription_params) do
+      {:ok, %{subscription: subscription}} ->
+        conn
+        |> put_status(:ok)
+        |> render("updated.json", subscription: subscription)
+      {:error, {:subscription_not_found, _}} ->
+        conn
+        |> put_status(:not_found)
+        |> render(ErrorView, :"404", message: "Subscription not found")
+      {:error, {:invalid_params, %{changeset: changeset}}} ->
+        conn
+        |> put_status(:unprocessable_entity)
+        |> render(ChangesetView, "error.json", changeset: changeset)
+    end
+  end
+  def update(conn, _) do
     conn
     |> put_status(:bad_request)
     |> render(ErrorView, :"400", message: "Missing subscription params")

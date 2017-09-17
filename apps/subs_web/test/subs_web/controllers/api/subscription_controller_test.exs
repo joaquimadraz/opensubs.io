@@ -178,4 +178,62 @@ defmodule SubsWeb.Test.Controllers.SubscriptionControllerTest do
       }
     end
   end
+
+  describe "PATCH /api/subscriptions" do
+    setup %{conn: conn} do
+      user = insert(:user)
+      conn = ApiHelpers.put_authorization_header(conn, user)
+
+      [conn: conn, user: user]
+    end
+
+    test "returns bad request when requesting without subscription params",
+          %{conn: conn, user: user} do
+      subscription = insert(:complete_subscription, user_id: user.id)
+      conn = patch(conn, api_subscription_path(conn, :update, subscription.id))
+
+      assert data = json_response(conn, 400)
+      assert data["message"] == "Missing subscription params"
+    end
+
+    test "returns not found for unknown user subscription", %{conn: conn} do
+      another_users_subscription = insert(
+        :complete_subscription,
+        user_id: insert(:user).id
+      )
+
+      conn = patch(conn,
+                   api_subscription_path(conn, :update, another_users_subscription.id),
+                   subscription: %{})
+
+      assert data = json_response(conn, 404)
+      assert data["message"] == "Subscription not found"
+    end
+
+    test "returns unprocessable entity when requesting with empty subscription params",
+         %{conn: conn, user: user} do
+      subscription = insert(:complete_subscription, user_id: user.id)
+
+      conn = patch(conn,
+                   api_subscription_path(conn, :update, subscription.id),
+                   subscription: %{"name" => ""})
+
+      assert data = json_response(conn, 422)
+      assert data["data"]["errors"] == %{
+        "name" => ["can't be blank"]
+      }
+    end
+
+    test "Updates subscription and returns ok", %{conn: conn, user: user} do
+      subscription = insert(:complete_subscription, user_id: user.id)
+
+      conn = patch(conn,
+                   api_subscription_path(conn, :update, subscription.id),
+                   subscription: %{"name" => "Updated"})
+
+      assert %{"data" => data} = json_response(conn, 200)
+      assert data["id"] == subscription.id
+      assert data["name"] == "Updated"
+    end
+  end
 end
