@@ -91,9 +91,10 @@ defmodule Subs.Test.Domain.SubscriptionTest do
         first_bill_date: "2017-09-12T00:00:00Z"
       )
       changeset = build_changeset_with_user(user, params)
+      first_bill_date = Changeset.get_change(changeset, :first_bill_date)
       next_bill_date = Changeset.get_change(changeset, :next_bill_date)
 
-      assert next_bill_date == ~N[2017-10-12 00:00:00]
+      assert NaiveDateTime.diff(next_bill_date, first_bill_date) > 0
     end
 
     test "populates next_bill_date based on yearly cycle", %{user: user} do
@@ -103,9 +104,49 @@ defmodule Subs.Test.Domain.SubscriptionTest do
         first_bill_date: "2017-09-12T00:00:00Z"
       )
       changeset = build_changeset_with_user(user, params)
+      first_bill_date = Changeset.get_change(changeset, :first_bill_date)
       next_bill_date = Changeset.get_change(changeset, :next_bill_date)
 
-      assert next_bill_date == ~N[2018-09-12 00:00:00]
+      assert NaiveDateTime.diff(next_bill_date, first_bill_date) > 0
+    end
+
+    test "populates next_bill_date for next month if first_fill_date is from the past", %{user: user} do
+      params = string_params_for(
+        :subscription,
+        cycle: "monthly",
+        first_bill_date: "2017-01-01T00:00:00Z"
+      )
+      changeset = build_changeset_with_user(user, params)
+      first_bill_date = Changeset.get_change(changeset, :first_bill_date)
+      next_bill_date = Changeset.get_change(changeset, :next_bill_date)
+
+      assert NaiveDateTime.diff(next_bill_date, first_bill_date) > 0
+    end
+
+    test "populates next_bill_date for next year if first_fill_date is from the past", %{user: user} do
+      params = string_params_for(
+        :subscription,
+        cycle: "yearly",
+        first_bill_date: "2016-01-01T00:00:00Z"
+      )
+      changeset = build_changeset_with_user(user, params)
+      first_bill_date = Changeset.get_change(changeset, :first_bill_date)
+      next_bill_date = Changeset.get_change(changeset, :next_bill_date)
+
+      assert NaiveDateTime.diff(next_bill_date, first_bill_date) > 0
+    end
+
+    test "populates next_bill_date forwarding a bunch of months", %{user: user} do
+      params = string_params_for(
+        :subscription,
+        cycle: "yearly",
+        first_bill_date: "1900-01-01T00:00:00Z"
+      )
+      changeset = build_changeset_with_user(user, params)
+      first_bill_date = Changeset.get_change(changeset, :first_bill_date)
+      next_bill_date = Changeset.get_change(changeset, :next_bill_date)
+
+      assert NaiveDateTime.diff(next_bill_date, first_bill_date) > 0
     end
   end
 end

@@ -82,12 +82,13 @@ defmodule Subs.Subscription do
   defp populate_first_bill_date(changeset) do
     case get_change(changeset, :first_bill_date) do
       nil ->
-        put_change(changeset, :first_bill_date, Timex.beginning_of_day(NaiveDateTime.utc_now()))
+        put_change(changeset, :first_bill_date, today_beginning_of_day())
         _ ->
         changeset
     end
   end
 
+  # TODO: Rafactor, case -> pattern matching
   defp populate_next_bill_date(changeset = %{valid?: false}), do: changeset
   defp populate_next_bill_date(changeset) do
     case get_change(changeset, :cycle) do
@@ -95,14 +96,14 @@ defmodule Subs.Subscription do
       cycle ->
         case get_change(changeset, :first_bill_date) do
           nil -> changeset
-          date ->
+          first_bill_date ->
             case cycle do
               "monthly" ->
-                next_bill_date = Timex.shift(date, months: 1)
-                put_change(changeset, :next_bill_date, Timex.to_naive_datetime(next_bill_date))
+                next_bill_date = calculate_next_bill_date(first_bill_date, :months)
+                put_change(changeset, :next_bill_date, next_bill_date)
               "yearly" ->
-                next_bill_date = Timex.shift(date, years: 1)
-                put_change(changeset, :next_bill_date, Timex.to_naive_datetime(next_bill_date))
+                next_bill_date = calculate_next_bill_date(first_bill_date, :years)
+                put_change(changeset, :next_bill_date, next_bill_date)
               _ ->
                 changeset
             end
@@ -114,4 +115,22 @@ defmodule Subs.Subscription do
   defp currency_symbol("GBP"), do: "£"
   defp currency_symbol("USD"), do: "$"
   defp currency_symbol(_), do: nil
+
+  # TODO: Move to helper module
+  defp calculate_next_bill_date(from_date, step, until_date \\ today_beginning_of_day()) do
+    if NaiveDateTime.diff(from_date, until_date) > 0 do
+      from_date
+    else
+      from_date
+      |> do_step(step)
+      |> calculate_next_bill_date(step, until_date)
+    end
+  end
+
+  defp do_step(from_date, :months), do: Timex.shift(from_date, months: 1)
+  defp do_step(from_date, :years), do: Timex.shift(from_date, years: 1)
+
+  defp today_beginning_of_day() do
+    Timex.beginning_of_day(NaiveDateTime.utc_now())
+  end
 end
