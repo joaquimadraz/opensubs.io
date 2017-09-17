@@ -164,6 +164,7 @@ defmodule Subs.Subscription do
 
   defp try_archive(changeset = %{valid?: false}), do: changeset
   defp try_archive(changeset = %{changes: %{archived: true}}) do
-    put_change(changeset, :archived_at, DT.today_beginning_of_day())
+    put_change(changeset, :archived_at, DT.now())
   end
+  defp try_archive(changeset), do: changeset
 end

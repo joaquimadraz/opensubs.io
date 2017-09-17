@@ -39,4 +39,13 @@ defmodule Subs.Test.UseCases.Subscriptions.UpdateSubscriptionTest do
 
     assert subscription.amount == 150
   end
+
+  test "archives subscription and sets archived_at", %{user: user} do
+    subscription = insert(:complete_subscription, user_id: user.id)
+    {:ok, %{subscription: subscription}} =
+      UpdateSubscription.perform(user, subscription.id, %{"archived" => true})
+
+    assert subscription.archived == true
+    assert subscription.archived_at != nil
+  end
 end

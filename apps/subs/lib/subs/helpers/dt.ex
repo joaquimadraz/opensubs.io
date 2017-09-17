@@ -1,6 +1,8 @@
 defmodule Subs.Helpers.DT do
   @moduledoc false
 
+  def now, do: NaiveDateTime.utc_now()
+
   def today_beginning_of_day do
     Timex.beginning_of_day(NaiveDateTime.utc_now())
   end
