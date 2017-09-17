@@ -34,6 +34,23 @@ defmodule Subs.Subscription do
     first_bill_date
   )a
 
+  @required_updated_fields ~w(
+    name
+    amount
+    amount_currency
+    cycle
+  )a
+
+  @updatable_fields ~w(
+    name
+    description
+    amount
+    amount_currency
+    cycle
+    color
+    first_bill_date
+  )
+
   @currency_codes ~w(EUR GBP USD)
   @cycles ~w(monthly yearly)
   @default_color "#E2E2E2"
@@ -49,6 +66,18 @@ defmodule Subs.Subscription do
     |> cast(params, @required_create_fields ++ @optional_fields)
     |> validate_required(@required_create_fields)
     |> foreign_key_constraint(:user_id)
+    |> validate_subscription()
+  end
+
+  def update_changeset(struct, params \\ %{}) do
+    struct
+    |> cast(params, @updatable_fields)
+    |> validate_required(@required_updated_fields)
+    |> validate_subscription()
+  end
+
+  defp validate_subscription(changeset) do
+    changeset
     |> validate_number(:amount, greater_than: 0)
     |> validate_inclusion(:amount_currency, @currency_codes, message: "unknown currency")
     |> validate_inclusion(:cycle, @cycles, message: "must be one of: monthly, yearly")
@@ -91,7 +120,7 @@ defmodule Subs.Subscription do
   # TODO: Rafactor, case -> pattern matching
   defp populate_next_bill_date(changeset = %{valid?: false}), do: changeset
   defp populate_next_bill_date(changeset) do
-    case get_change(changeset, :cycle) do
+    case get_field(changeset, :cycle) do
       nil -> changeset
       cycle ->
         case get_change(changeset, :first_bill_date) do

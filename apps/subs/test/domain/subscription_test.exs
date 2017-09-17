@@ -12,6 +12,42 @@ defmodule Subs.Test.Domain.SubscriptionTest do
     Subscription.build_with_user(user, params)
   end
 
+  def update_changeset(subscription, params) do
+    Subscription.update_changeset(subscription, params)
+  end
+
+  describe("update_changeset") do
+    test "updates nothing" do
+      subscription = build(:complete_subscription)
+      changeset = update_changeset(subscription, %{})
+
+      assert changeset.valid? == true
+    end
+
+    test "returns error for invalid color format" do
+      subscription = build(:complete_subscription)
+      changeset = update_changeset(subscription, %{"amount_currency" => "HEY"})
+
+      assert changeset.valid? == false
+      assert {"unknown currency", _} = changeset.errors[:amount_currency]
+    end
+
+    test "updates first_bill_date and next_bill_date for 2020" do
+      subscription = build(:complete_subscription)
+      changeset = update_changeset(subscription, %{
+        "first_bill_date" => "2020-01-01T00:00:00Z"
+      })
+
+      first_bill_date = Changeset.get_change(changeset, :first_bill_date)
+      next_bill_date = Changeset.get_change(changeset, :next_bill_date)
+
+      assert changeset.valid? == true
+      assert first_bill_date == ~N[2020-01-01T00:00:00Z]
+      # I would love to see this test fail in January of 2020
+      assert next_bill_date == ~N[2020-01-01T00:00:00Z]
+    end
+  end
+
   describe("user") do
     test "returns error for missing user" do
       non_persisted_user = build(:user)
