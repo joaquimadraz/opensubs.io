@@ -1,0 +1,20 @@
+defmodule SubsServices.Application do
+  # See https://hexdocs.pm/elixir/Application.html
+  # for more information on OTP Applications
+  @moduledoc false
+
+  use Application
+
+  def start(_type, _args) do
+    # List all child processes to be supervised
+    children = [
+      # Starts a worker by calling: SubsServices.Worker.start_link(arg)
+      # {SubsServices.Worker, arg},
+    ]
+
+    # See https://hexdocs.pm/elixir/Supervisor.html
+    # for other strategies and supported options
+    opts = [strategy: :one_for_one, name: SubsServices.Supervisor]
+    Supervisor.start_link(children, opts)
+  end
+end
