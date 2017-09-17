@@ -1,5 +1,6 @@
 defmodule SubsWeb.Api.SubscriptionView do
   use SubsWeb, :view
+  alias Subs.Helpers.Money
   alias SubsWeb.Api.SubscriptionView
 
   def render("index.json", %{subscriptions: subscriptions}) do
@@ -45,7 +46,7 @@ defmodule SubsWeb.Api.SubscriptionView do
     }
   end
 
-  defp amount_to_human(amount), do: amount / 100
+  defp amount_to_human(amount), do: Money.to_human(amount)
 
   defp naive_to_utc_iso8601(date) do
     DateTime.from_naive!(date, "Etc/UTC") |> DateTime.to_iso8601()

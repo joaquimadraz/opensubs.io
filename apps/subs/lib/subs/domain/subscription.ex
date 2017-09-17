@@ -3,6 +3,7 @@ defmodule Subs.Subscription do
 
   use Subs.Schema
   alias Subs.User
+  alias Subs.Helpers.Money
 
   schema "subscriptions" do
     field :name, :string
@@ -62,6 +63,8 @@ defmodule Subs.Subscription do
   end
 
   def create_changeset(struct, params \\ %{}) do
+    params = consolidate_amount(params)
+
     struct
     |> cast(params, @required_create_fields ++ @optional_fields)
     |> validate_required(@required_create_fields)
@@ -70,6 +73,8 @@ defmodule Subs.Subscription do
   end
 
   def update_changeset(struct, params \\ %{}) do
+    params = consolidate_amount(params)
+
     struct
     |> cast(params, @updatable_fields)
     |> validate_required(@required_updated_fields)
@@ -161,5 +166,23 @@ defmodule Subs.Subscription do
 
   defp today_beginning_of_day() do
     Timex.beginning_of_day(NaiveDateTime.utc_now())
+  end
+
+  # Consolidates amount as integer value before storing on the database.
+  # 1.99 (£) will be saved as 199
+  # 7 (£) will be saved as 700
+  defp consolidate_amount(params = %{"amount" => amount}) when is_binary(amount) do
+    case Float.parse(amount) do
+      :error -> params # skip consolidate, fails on changeset
+      {parsed, _} -> do_consolidate_amount(%{params | "amount" => parsed})
+    end
+  end
+  defp consolidate_amount(params = %{"amount" => _amount}) do
+    do_consolidate_amount(params)
+  end
+  defp consolidate_amount(params), do: params
+
+  defp do_consolidate_amount(params = %{"amount" => amount}) do
+    %{params | "amount" => Money.consolidate(amount)}
   end
 end
