@@ -1,18 +1,11 @@
 defmodule SubsServices do
-  @moduledoc """
-  Documentation for SubsServices.
-  """
+  @moduledoc false
 
-  @doc """
-  Hello world.
+  def get_all do
 
-  ## Examples
+  end
 
-      iex> SubsServices.hello
-      :world
+  def get_by_code do
 
-  """
-  def hello do
-    :world
   end
 end
