@@ -16,7 +16,7 @@ defmodule Subs.Test.Domain.SubscriptionTest do
     Subscription.update_changeset(subscription, params)
   end
 
-  describe("update_changeset") do
+  describe "update_changeset" do
     test "updates nothing" do
       subscription = build(:complete_subscription)
       changeset = update_changeset(subscription, %{})
@@ -46,9 +46,17 @@ defmodule Subs.Test.Domain.SubscriptionTest do
       # I would love to see this test fail in January of 2020
       assert next_bill_date == ~N[2020-01-01T00:00:00Z]
     end
+
+    test "sets archived_at when archived flag is sent true on updated " do
+      subscription = build(:complete_subscription)
+      changeset = update_changeset(subscription, %{"archived" => true})
+
+      assert Changeset.get_change(changeset, :archived) == true
+      assert Changeset.get_change(changeset, :archived_at) != nil
+    end
   end
 
-  describe("user") do
+  describe "user" do
     test "returns error for missing user" do
       non_persisted_user = build(:user)
       params = string_params_for(:subscription)
@@ -66,7 +74,7 @@ defmodule Subs.Test.Domain.SubscriptionTest do
     end
   end
 
-  describe("color") do
+  describe "color" do
     test "returns error for invalid color format" do
       params = string_params_for(:subscription, color: "invalid")
       changeset = create_changeset(params)
@@ -83,7 +91,7 @@ defmodule Subs.Test.Domain.SubscriptionTest do
     end
   end
 
-  describe("amount, amount_currency and amount_currency_symbol") do
+  describe "amount, amount_currency and amount_currency_symbol" do
     test "returns error for invalid currency" do
       params = string_params_for(
         :subscription,
@@ -108,7 +116,7 @@ defmodule Subs.Test.Domain.SubscriptionTest do
     end
   end
 
-  describe("cycle") do
+  describe "cycle" do
     test "returns error for invalid cycle" do
       params = string_params_for(
         :subscription,
@@ -120,7 +128,7 @@ defmodule Subs.Test.Domain.SubscriptionTest do
     end
   end
 
-  describe("first_bill_date and next_bill_date") do
+  describe "first_bill_date and next_bill_date" do
     setup do
       [user: insert(:user)]
     end

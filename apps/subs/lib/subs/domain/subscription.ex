@@ -15,6 +15,8 @@ defmodule Subs.Subscription do
     field :color, :string
     field :first_bill_date, :naive_datetime
     field :next_bill_date, :naive_datetime
+    field :archived, :boolean
+    field :archived_at, :naive_datetime
 
     belongs_to :user, User
 
@@ -50,6 +52,7 @@ defmodule Subs.Subscription do
     cycle
     color
     first_bill_date
+    archived
   )
 
   @currency_codes Money.currency_codes()
@@ -79,6 +82,7 @@ defmodule Subs.Subscription do
     |> cast(params, @updatable_fields)
     |> validate_required(@required_updated_fields)
     |> validate_subscription()
+    |> try_archive()
   end
 
   defp validate_subscription(changeset) do
@@ -156,5 +160,10 @@ defmodule Subs.Subscription do
 
   defp do_consolidate_amount(params = %{"amount" => amount}) do
     %{params | "amount" => Money.consolidate(amount)}
+  end
+
+  defp try_archive(changeset = %{valid?: false}), do: changeset
+  defp try_archive(changeset = %{changes: %{archived: true}}) do
+    put_change(changeset, :archived_at, DT.today_beginning_of_day())
   end
 end
