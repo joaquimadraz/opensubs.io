@@ -3,7 +3,7 @@ defmodule Subs.Subscription do
 
   use Subs.Schema
   alias Subs.User
-  alias Subs.Helpers.Money
+  alias Subs.Helpers.{DT, Money}
 
   schema "subscriptions" do
     field :name, :string
@@ -52,7 +52,7 @@ defmodule Subs.Subscription do
     first_bill_date
   )
 
-  @currency_codes ~w(EUR GBP USD)
+  @currency_codes Money.currency_codes()
   @cycles ~w(monthly yearly)
   @default_color "#E2E2E2"
 
@@ -108,7 +108,7 @@ defmodule Subs.Subscription do
 
         changeset
         |> put_change(:amount_currency, amount_currency)
-        |> put_change(:amount_currency_symbol, currency_symbol(amount_currency))
+        |> put_change(:amount_currency_symbol, Money.currency_symbol(amount_currency))
     end
   end
 
@@ -116,56 +116,28 @@ defmodule Subs.Subscription do
   defp populate_first_bill_date(changeset) do
     case get_change(changeset, :first_bill_date) do
       nil ->
-        put_change(changeset, :first_bill_date, today_beginning_of_day())
-        _ ->
+        put_change(changeset, :first_bill_date, DT.today_beginning_of_day())
+      _ ->
         changeset
     end
   end
 
-  # TODO: Rafactor, case -> pattern matching
   defp populate_next_bill_date(changeset = %{valid?: false}), do: changeset
   defp populate_next_bill_date(changeset) do
-    case get_field(changeset, :cycle) do
-      nil -> changeset
-      cycle ->
-        case get_change(changeset, :first_bill_date) do
-          nil -> changeset
-          first_bill_date ->
-            case cycle do
-              "monthly" ->
-                next_bill_date = calculate_next_bill_date(first_bill_date, :months)
-                put_change(changeset, :next_bill_date, next_bill_date)
-              "yearly" ->
-                next_bill_date = calculate_next_bill_date(first_bill_date, :years)
-                put_change(changeset, :next_bill_date, next_bill_date)
-              _ ->
-                changeset
-            end
-        end
-    end
-  end
-
-  defp currency_symbol("EUR"), do: "€"
-  defp currency_symbol("GBP"), do: "£"
-  defp currency_symbol("USD"), do: "$"
-  defp currency_symbol(_), do: nil
-
-  # TODO: Move to helper module
-  defp calculate_next_bill_date(from_date, step, until_date \\ today_beginning_of_day()) do
-    if NaiveDateTime.diff(from_date, until_date) > 0 do
-      from_date
+    with {_, cycle} <- fetch_field(changeset, :cycle),
+         {:ok, first_bill_date} <- fetch_change(changeset, :first_bill_date) do
+      next_bill_date = calculate_next_bill_date(first_bill_date, cycle)
+      put_change(changeset, :next_bill_date, next_bill_date)
     else
-      from_date
-      |> do_step(step)
-      |> calculate_next_bill_date(step, until_date)
+      :error -> changeset
     end
   end
 
-  defp do_step(from_date, :months), do: Timex.shift(from_date, months: 1)
-  defp do_step(from_date, :years), do: Timex.shift(from_date, years: 1)
-
-  defp today_beginning_of_day() do
-    Timex.beginning_of_day(NaiveDateTime.utc_now())
+  defp calculate_next_bill_date(first_bill_date, "monthly") do
+    DT.calculate_next_bill_date(first_bill_date, :months)
+  end
+  defp calculate_next_bill_date(first_bill_date, "yearly") do
+    DT.calculate_next_bill_date(first_bill_date, :years)
   end
 
   # Consolidates amount as integer value before storing on the database.

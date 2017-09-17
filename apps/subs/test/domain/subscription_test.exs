@@ -108,6 +108,18 @@ defmodule Subs.Test.Domain.SubscriptionTest do
     end
   end
 
+  describe("cycle") do
+    test "returns error for invalid cycle" do
+      params = string_params_for(
+        :subscription,
+        cycle: "hourly"
+      )
+      changeset = create_changeset(params)
+
+      assert {"must be one of: monthly, yearly", _} = changeset.errors[:cycle]
+    end
+  end
+
   describe("first_bill_date and next_bill_date") do
     setup do
       [user: insert(:user)]

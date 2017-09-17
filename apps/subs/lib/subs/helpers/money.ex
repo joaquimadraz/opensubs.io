@@ -1,5 +1,11 @@
 defmodule Subs.Helpers.Money do
   @moduledoc false
+  def currency_codes, do: ~w(EUR GBP USD)
+
+  def currency_symbol("EUR"), do: "€"
+  def currency_symbol("GBP"), do: "£"
+  def currency_symbol("USD"), do: "$"
+  def currency_symbol(_), do: nil
 
   def consolidate(value), do: round(value * 100.0)
 
