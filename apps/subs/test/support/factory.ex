@@ -1,7 +1,7 @@
 defmodule Subs.Test.Support.Factory do
   @moduledoc false
-
   use ExMachina.Ecto, repo: Subs.Repo
+  alias Subs.Helpers.DT
 
   alias Subs.{User, Subscription}
 
@@ -34,5 +34,9 @@ defmodule Subs.Test.Support.Factory do
       first_bill_date: NaiveDateTime.utc_now(),
       next_bill_date: NaiveDateTime.utc_now()
     }
+  end
+
+  def archived_subscription_factory do
+    build(:complete_subscription, %{archived: true, archived_at: DT.now()})
   end
 end

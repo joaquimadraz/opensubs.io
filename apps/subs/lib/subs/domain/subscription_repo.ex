@@ -21,7 +21,9 @@ defmodule Subs.SubscriptionRepo do
   end
 
   def get_user_subscriptions(user) do
-    query = from s in Subscription, where: s.user_id == ^user.id
+    query = from s in Subscription,
+      where: s.user_id == ^user.id and s.archived == false
+
     Repo.all(query)
   end
 
