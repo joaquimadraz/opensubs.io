@@ -34,6 +34,8 @@ config :subs_web, SubsWeb.Helpers.AuthAccessPipeline,
   module: SubsWeb.Guardian,
   error_handler: SubsWeb.Helpers.AuthErrorHandler
 
+config :subs_web, :subs_services, SubsServices
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env}.exs"

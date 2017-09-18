@@ -5,3 +5,5 @@ use Mix.Config
 config :subs_web, SubsWeb.Endpoint,
   http: [port: 4001],
   server: false
+
+config :subs_web, :subs_services, Subs.Test.Support.SubsServicesMock

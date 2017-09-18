@@ -205,4 +205,43 @@ defmodule Subs.Test.Domain.SubscriptionTest do
       assert NaiveDateTime.diff(next_bill_date, first_bill_date) > 0
     end
   end
+
+  describe "service" do
+    setup do
+      changeset = create_changeset(%{
+        "service_code" => "github",
+        "amount" => 7.99,
+        "amount_currency" => "GBP",
+        "cycle" => "monthly",
+        "user_id" => 1
+      })
+
+      [changeset: changeset]
+    end
+
+    test "does not return error for missing name when sending code", %{changeset: changeset} do
+      assert changeset.valid?
+    end
+
+    test "name is populated with service data", %{changeset: changeset} do
+      assert changeset.changes.name == "Github"
+    end
+
+    test "color is populated with service data", %{changeset: changeset} do
+      assert changeset.changes.color == "#000000"
+    end
+
+    test "return error for unknown service code" do
+      changeset = create_changeset(%{
+        "service_code" => "what",
+        "amount" => 7.99,
+        "amount_currency" => "GBP",
+        "cycle" => "monthly",
+        "user_id" => 1
+      })
+
+      assert !changeset.valid?
+      assert {"unknown service", _} = changeset.errors[:service_code]
+    end
+  end
 end

@@ -1,9 +1,10 @@
 defmodule SubsWeb.Api.ServiceController do
   use SubsWeb, :controller
-  alias SubsServices.Store
+
+  @subs_services Application.get_env(:subs_web, :subs_services)
 
   def index(conn, _params) do
-    services = SubsServices.Store.get_services()
+    services = @subs_services.get_services()
 
     conn
     |> put_status(:ok)

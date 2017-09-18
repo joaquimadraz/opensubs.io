@@ -1,9 +1,8 @@
 defmodule SubsServicesTest do
   use ExUnit.Case
-  alias SubsServices.Store
 
   test "loads services from json file" do
-    data = Store.get_service("github")
+    data = SubsServices.get_service("github")
 
     assert data == %{
       "code" => "github",

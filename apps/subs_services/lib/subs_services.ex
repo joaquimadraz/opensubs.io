@@ -1,11 +1,8 @@
 defmodule SubsServices do
   @moduledoc false
+  alias SubsServices.Store
 
-  def get_all do
+  def get_services, do: Store.get_services()
 
-  end
-
-  def get_by_code do
-
-  end
+  def get_service(code), do: Store.get_service(code)
 end

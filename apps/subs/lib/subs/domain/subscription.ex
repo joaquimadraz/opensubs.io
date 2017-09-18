@@ -17,11 +17,14 @@ defmodule Subs.Subscription do
     field :next_bill_date, :naive_datetime
     field :archived, :boolean
     field :archived_at, :naive_datetime
+    field :service_code, :string
 
     belongs_to :user, User
 
     timestamps()
   end
+
+  @subs_services Application.get_env(:subs, :subs_services)
 
   @required_create_fields ~w(
     name
@@ -65,7 +68,17 @@ defmodule Subs.Subscription do
     |> create_changeset(params)
   end
 
-  def create_changeset(struct, params \\ %{}) do
+  def create_changeset(struct, params = %{"service_code" => service_code}) do
+    params = consolidate_amount(params)
+
+    struct
+    |> cast(params, @required_create_fields ++ @optional_fields)
+    |> validate_required(~w(amount amount_currency cycle user_id)a)
+    |> foreign_key_constraint(:user_id)
+    |> validate_service(service_code)
+    |> validate_subscription()
+  end
+  def create_changeset(struct, params) do
     params = consolidate_amount(params)
 
     struct
@@ -167,4 +180,15 @@ defmodule Subs.Subscription do
     put_change(changeset, :archived_at, DT.now())
   end
   defp try_archive(changeset), do: changeset
+
+  defp validate_service(changeset, service_code) do
+    case @subs_services.get_service(service_code) do
+      nil ->
+        add_error(changeset, :service_code, "unknown service")
+      service_data ->
+        changeset
+        |> put_change(:name, service_data["name"])
+        |> put_change(:color, service_data["color"])
+    end
+  end
 end
