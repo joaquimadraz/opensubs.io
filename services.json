@@ -1,13 +1,16 @@
 {
   "github": {
+    "code": "github",
     "name": "Github",
     "color": "#000000"
   },
   "spotify": {
+    "code": "spotify",
     "name": "Spotify",
     "color": "#1ED760"
   },
   "netflix": {
+    "code": "netflix",
     "name": "Netflix",
     "color": "#DB0000"
   }
