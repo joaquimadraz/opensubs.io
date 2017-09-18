@@ -1,8 +1,14 @@
 defmodule SubsServicesTest do
   use ExUnit.Case
-  doctest SubsServices
+  alias SubsServices.Store
 
-  test "greets the world" do
-    assert SubsServices.hello() == :world
+  test "loads services from json file" do
+    data = Store.get_service("github")
+
+    assert data == %{
+      "code" => "github",
+      "name" => "Github",
+      "color" => "#000000"
+    }
   end
 end
