@@ -1,4 +1,4 @@
-# Subs
+# Subs (WIP)
 ## Manage on going subscriptions :money_with_wings:
 
 #### Stack
