@@ -1,11 +1,11 @@
 # Subs (WIP)
 ## Manage on going subscriptions :money_with_wings:
 
-#### Stack
+### Stack
 Elixir backend and React frontend.
 
-#### MVP
-### Backend API
+### MVP
+#### Backend API
 - [x] User signup/authentication
 - [ ] User password recovery
 - [x] Services list
@@ -14,7 +14,7 @@ Elixir backend and React frontend.
 - [x] Subscriptions archive
 - [x] Subscriptions list
 
-### Frontend
+#### Frontend
 - [ ] User signup/authentication
 - [ ] User password recovery
 - [ ] Subscriptions create
@@ -24,10 +24,10 @@ Elixir backend and React frontend.
   - [ ] Monthly payment
   - [ ] Yearly payment
 
-#### Nice to have
+### Nice to have
 - [ ] Categorization (personal, business, services)
 - [ ] Email notifications
 - [ ] Web notifications
 
-#### Future
+### Future
 - [ ] Facebook bot
