@@ -31,3 +31,6 @@ Elixir backend and React frontend.
 
 ### Future
 - [ ] Facebook bot
+
+## License
+MIT © [Joaquim Adraz](http://joaquimadraz.com)
