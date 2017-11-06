@@ -149,6 +149,10 @@ defmodule SubsWeb.Test.Controllers.SubscriptionControllerTest do
       }
     end
 
+    # TODO: Find a better way of doing an integration test that depends on the
+    # current data. Should it be in a mock? A GenServer that holds the current
+    # date and "freezes" it for the test?
+    # This test should fail at the end of January to remind me of this again!
     test "creates custom subscription given all params", %{conn: conn} do
       conn = post(conn, api_subscription_path(conn, :create), subscription: %{
         "name" => "Custom Service",
@@ -157,7 +161,7 @@ defmodule SubsWeb.Test.Controllers.SubscriptionControllerTest do
         "amount_currency" => "GBP",
         "cycle" => "monthly",
         "color" => "#36dd30",
-        "first_bill_date" => "2017-09-12T00:00:00Z"
+        "first_bill_date" => "2018-01-31T00:00:00Z"
       })
 
       assert data = json_response(conn, 201)
@@ -173,8 +177,8 @@ defmodule SubsWeb.Test.Controllers.SubscriptionControllerTest do
         "amount_currency_symbol" => "£",
         "cycle" => "monthly",
         "color" => "#36DD30",
-        "first_bill_date" => "2017-09-12T00:00:00Z",
-        "next_bill_date" => "2017-10-12T00:00:00Z"
+        "first_bill_date" => "2018-01-31T00:00:00Z",
+        "next_bill_date" => "2018-01-31T00:00:00Z"
       }
     end
   end
