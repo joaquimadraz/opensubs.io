@@ -1,5 +1,5 @@
 defmodule Subs.Helpers.DT do
-  @moduledoc false
+  @behaviour Subs.Helpers.DTHelper
 
   def now, do: NaiveDateTime.utc_now()
 
@@ -12,11 +12,12 @@ defmodule Subs.Helpers.DT do
       from_date
     else
       from_date
-      |> step_date(step)
+      |> step_date(step, 1)
       |> calculate_next_bill_date(step, until_date)
     end
   end
 
-  def step_date(from_date, :months), do: Timex.shift(from_date, months: 1)
-  def step_date(from_date, :years), do: Timex.shift(from_date, years: 1)
+  def step_date(from_date, :hours, hours), do: Timex.shift(from_date, hours: hours)
+  def step_date(from_date, :months, months), do: Timex.shift(from_date, months: months)
+  def step_date(from_date, :years, years), do: Timex.shift(from_date, years: years)
 end

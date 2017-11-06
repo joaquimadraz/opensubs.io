@@ -3,6 +3,7 @@ defmodule Subs.User do
 
   use Subs.Schema
   alias Subs.{Subscription, UserRepo}
+  alias Subs.Helpers.DT
 
   @bcrypt Application.get_env(:subs, :bcrypt)
 
@@ -15,6 +16,9 @@ defmodule Subs.User do
     field :confirmation_token, :string
     field :confirmation_sent_at, :naive_datetime
     field :confirmed_at, :naive_datetime
+    field :password_recovery_token, :string
+    field :password_recovery_expires_at, :naive_datetime
+    field :password_recovery_used_at, :naive_datetime
 
     has_many :subscriptions, Subscription
 
@@ -59,6 +63,12 @@ defmodule Subs.User do
     |> put_change(:confirmation_token, UUID.uuid4(:hex))
     |> put_change(:confirmation_sent_at, nil)
     |> put_change(:confirmed_at, nil)
+  end
+
+  def recover_password_changeset(struct, dt \\ DT) do
+    change(struct, password_recovery_token: UUID.uuid4(:hex),
+                   password_recovery_expires_at: dt.step_date(dt.now(), :hours, 1),
+                   password_recovery_used_at: nil)
   end
 
   def authenticate(email, password) do

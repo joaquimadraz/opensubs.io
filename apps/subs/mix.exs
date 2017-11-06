@@ -43,6 +43,7 @@ defmodule Subs.Mixfile do
       {:uuid, "~> 1.1"},
       {:timex, "~> 3.1"},
       {:notifier, in_umbrella: true},
+      {:mox, "~> 0.3.0", only: :test},
     ]
   end
 
