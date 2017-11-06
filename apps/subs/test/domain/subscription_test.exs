@@ -128,6 +128,7 @@ defmodule Subs.Test.Domain.SubscriptionTest do
     end
   end
 
+  # TODO: Write proper tests for this calculations.
   describe "first_bill_date and next_bill_date" do
     setup do
       [user: insert(:user)]
