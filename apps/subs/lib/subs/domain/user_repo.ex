@@ -28,4 +28,10 @@ defmodule Subs.UserRepo do
   def get_by_confirmation_token(token) do
     Repo.get_by(User, confirmation_token: token)
   end
+
+  def reset_user_recover_password_fields(user) do
+    user
+    |> User.recover_password_changeset()
+    |> Repo.update()
+  end
 end

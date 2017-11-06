@@ -1,6 +1,11 @@
 defmodule SubsWeb.Api.UserController do
   use SubsWeb, :controller
-  alias Subs.UseCases.Users.{AuthenticateUser, CreateUser, ConfirmUser}
+  alias Subs.UseCases.Users.{
+    AuthenticateUser,
+    CreateUser,
+    ConfirmUser,
+    RecoverUserPassword
+  }
   alias Subs.Application.SendConfirmationEmail
   alias SubsWeb.Api.{ErrorView, ChangesetView}
   alias SubsWeb.Helpers.UserHelper
@@ -70,5 +75,14 @@ defmodule SubsWeb.Api.UserController do
     conn
       |> put_status(:bad_request)
       |> render(ErrorView, :"400", message: "Missing token param")
+  end
+
+  def recover_password(conn, %{"email" => email}) do
+    case RecoverUserPassword.perform(email) do
+      _ ->
+        conn
+        |> put_status(:accepted)
+        |> render("recover_password.json")
+    end
   end
 end

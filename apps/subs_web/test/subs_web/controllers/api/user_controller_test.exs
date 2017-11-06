@@ -6,6 +6,7 @@ defmodule SubsWeb.Test.Controllers.UserControllerTest do
   alias Subs.UserRepo
   alias SubsWeb.Guardian
   alias SubsWeb.Helpers.UserHelper
+  alias Subs.Helpers.DT
 
   setup %{conn: conn} do
     {:ok, conn: put_req_header(conn, "accept", "application/json")}
@@ -168,6 +169,42 @@ defmodule SubsWeb.Test.Controllers.UserControllerTest do
         "name" => user.name,
         "email" => user.email
       }
+    end
+  end
+
+  describe "POST /api/users/recover_password" do
+    setup %{conn: conn} do
+      user = insert(:user, %{
+        email: "dc@example.com",
+        password_recovery_token: nil,
+        password_recovery_expires_at: nil
+      })
+
+      [conn: conn, user: user]
+    end
+
+    test "returns ok when email to recover exists", %{conn: conn} do
+      conn = post(conn, api_user_recover_password_path(conn, :recover_password), %{
+        "email" => "dc@example.com"
+      })
+
+      assert data = json_response(conn, 202)
+      assert data["message"] == "A recover password email is on the way"
+
+      user = UserRepo.get_by_email("dc@example.com")
+
+      assert user.password_recovery_expires_at != nil
+      assert Timex.diff(user.password_recovery_expires_at, DT.now(), :minutes) == 59
+      assert user.password_recovery_token != nil
+    end
+
+    test "returns ok when email to recover does not exist", %{conn: conn} do
+      conn = post(conn, api_user_recover_password_path(conn, :recover_password), %{
+        "email" => "jonjones@example.com"
+      })
+
+      assert data = json_response(conn, 202)
+      assert data["message"] == "A recover password email is on the way"
     end
   end
 end
