@@ -6,7 +6,10 @@ defmodule SubsWeb.Api.UserController do
     ConfirmUser,
     RecoverUserPassword
   }
-  alias Subs.Application.SendConfirmationEmail
+  alias Subs.Application.{
+    SendConfirmationEmail,
+    SendRecoverPasswordEmail
+  }
   alias SubsWeb.Api.{ErrorView, ChangesetView}
   alias SubsWeb.Helpers.UserHelper
 
@@ -79,6 +82,13 @@ defmodule SubsWeb.Api.UserController do
 
   def recover_password(conn, %{"email" => email}) do
     case RecoverUserPassword.perform(email) do
+      {:ok, %{user: user}} ->
+        recover_url = UserHelper.generate_recover_password_url(user)
+        {:ok, user} = SendRecoverPasswordEmail.send(user, recover_url)
+
+        conn
+        |> put_status(:accepted)
+        |> render("recover_password.json")
       _ ->
         conn
         |> put_status(:accepted)

@@ -8,9 +8,27 @@ defmodule Notifier.Email do
     body = """
     Welcome to Subs,
 
-    Please click on this link to confirm you account:
+    Please click on this link to confirm your account:
     #{confirmation_url}
 
+
+    Thanks!
+    """
+
+    new_email()
+    |> to(to_email)
+    |> from(@from_email)
+    |> subject(subject)
+    |> text_body(body)
+  end
+
+  def recover_password_email(to_email, %{recover_url: recover_url}) do
+    subject = "Reset your Subs password"
+    body = """
+    Subs received a request to reset your password.
+
+    To reset your password, click on the link below:
+    #{recover_url}
 
     Thanks!
     """

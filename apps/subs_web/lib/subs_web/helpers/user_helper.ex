@@ -10,6 +10,14 @@ defmodule SubsWeb.Helpers.UserHelper do
     )
   end
 
+  def generate_recover_password_url(user) do
+    Helpers.reset_password_url(
+      SubsWeb.Endpoint,
+      :reset_password,
+      %{t: user.password_recovery_token}
+    )
+  end
+
   def current_user(conn), do: Guardian.Plug.current_resource(conn)
 
   def generate_auth_token(user) do
