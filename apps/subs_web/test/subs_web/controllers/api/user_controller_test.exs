@@ -215,6 +215,31 @@ defmodule SubsWeb.Test.Controllers.UserControllerTest do
       assert data = json_response(conn, 202)
       assert data["message"] == "A recover password email is on the way"
     end
+
+    test "returns unprocessable entity when sending an empty email param",
+         %{conn: conn} do
+      conn = post(
+        conn,
+        api_user_recover_password_path(conn, :recover_password)
+      )
+
+      assert data = json_response(conn, 400)
+      assert data["message"] == "Missing emails param"
+    end
+
+    test "returns unprocessable entity when sending an invalid email param",
+         %{conn: conn} do
+      conn = post(
+        conn,
+        api_user_recover_password_path(conn, :recover_password),
+        %{"email" => "invalid@"}
+      )
+
+      assert data = json_response(conn, 422)
+      assert data["data"]["errors"] == %{
+        "email" => ["has invalid format"]
+      }
+    end
   end
 end
 

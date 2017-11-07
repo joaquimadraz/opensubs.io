@@ -71,6 +71,13 @@ defmodule Subs.User do
                    password_recovery_used_at: nil)
   end
 
+  def email_changeset(struct, params = %{"email" => email}) do
+    struct
+    |> cast(params, [:email])
+    |> downcase_email()
+    |> validate_format(:email, @email_regex)
+  end
+
   def authenticate(email, password) do
     user = UserRepo.get_by_email(email)
 

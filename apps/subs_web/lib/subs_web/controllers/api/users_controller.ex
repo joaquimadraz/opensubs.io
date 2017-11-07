@@ -89,10 +89,19 @@ defmodule SubsWeb.Api.UserController do
         conn
         |> put_status(:accepted)
         |> render("recover_password.json")
+      {:error, {:invalid_email, %{changeset: changeset}}} ->
+        conn
+        |> put_status(:unprocessable_entity)
+        |> render(ChangesetView, "error.json", changeset: changeset)
       _ ->
         conn
         |> put_status(:accepted)
         |> render("recover_password.json")
     end
+  end
+  def recover_password(conn, _) do
+    conn
+      |> put_status(:bad_request)
+      |> render(ErrorView, :"400", message: "Missing emails param")
   end
 end

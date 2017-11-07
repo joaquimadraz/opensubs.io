@@ -5,11 +5,18 @@ defmodule Subs.UseCases.Users.RecoverUserPassword do
   alias Subs.{User, UserRepo}
 
   def perform(email) do
-    with {:ok, user} <- find_user_by_email(email),
-         {:ok, user} <- reset_password_fields(user) do
-      ok!(%{user: user})
-    else
-      {:error, :user_not_found} -> failure!(:user_not_found)
+    changeset = User.email_changeset(%User{}, %{"email" => email})
+
+    case changeset.valid? do
+      true ->
+        with {:ok, user} <- find_user_by_email(email),
+             {:ok, user} <- reset_password_fields(user) do
+          ok!(%{user: user})
+        else
+          {:error, :user_not_found} -> failure!(:user_not_found)
+        end
+      false ->
+        failure!(:invalid_email, %{changeset: changeset})
     end
   end
 
