@@ -10,6 +10,7 @@ import initStore from './data/store'
 
 import App from './components/App'
 import Home from './routes/Home/Home.jsx'
+import Signup from './routes/Signup'
 
 const store = initStore()
 const awesomeHistory = syncHistoryWithStore(browserHistory, store)
@@ -20,6 +21,7 @@ if (document.getElementById('app')) {
       <Router history={awesomeHistory}>
         <Route path="/" component={App}>
           <IndexRoute component={Home} />
+          <Route path="/signup" component={Signup} />
         </Route>
       </Router>
     </Provider>,

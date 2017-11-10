@@ -20,8 +20,8 @@ defmodule SubsWeb.Router do
   scope "/", SubsWeb do
     pipe_through :browser # Use the default browser stack
 
-    get "/", PageController, :index
     get "/reset_password", PageController, :reset_password, as: :reset_password
+    get "/*path", PageController, :index
   end
 
   scope "/api", SubsWeb, as: :api do
