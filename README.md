@@ -7,7 +7,7 @@ Elixir backend and React frontend.
 ### MVP
 #### Backend API
 - [x] User signup/authentication
-- [ ] User password recovery
+- [x] User password recovery
 - [x] Services list
 - [x] Subscriptions create
 - [x] Subscriptions update
