@@ -1,7 +1,6 @@
 defmodule Subs.Test.Domain.UserTest do
   use ExUnit.Case
   alias Subs.User
-  import Mox
   import Subs.Test.Support.Factory
 
   describe "given user params" do

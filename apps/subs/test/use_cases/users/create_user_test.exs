@@ -24,6 +24,7 @@ defmodule Subs.Test.UseCases.Users.CreateUserTest do
 
     test "confirmation details populated", %{user: user} do
       assert user.confirmation_token != nil
+      assert user.encrypted_confirmation_token != nil
     end
   end
 

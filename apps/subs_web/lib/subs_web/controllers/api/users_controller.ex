@@ -84,7 +84,7 @@ defmodule SubsWeb.Api.UserController do
     case RecoverUserPassword.perform(email) do
       {:ok, %{user: user}} ->
         recover_url = UserHelper.generate_recover_password_url(user)
-        {:ok, user} = SendRecoverPasswordEmail.send(user, recover_url)
+        {:ok, _} = SendRecoverPasswordEmail.send(user, recover_url)
 
         conn
         |> put_status(:accepted)

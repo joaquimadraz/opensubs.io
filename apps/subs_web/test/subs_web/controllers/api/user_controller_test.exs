@@ -2,11 +2,11 @@ defmodule SubsWeb.Test.Controllers.UserControllerTest do
   use SubsWeb.ConnCase
   use Bamboo.Test
   import Subs.Test.Support.Factory
-  alias Subs.Test.Support.BCrypt
   alias Subs.UserRepo
   alias SubsWeb.Guardian
-  alias SubsWeb.Helpers.UserHelper
-  alias Subs.Helpers.DT
+  alias Subs.Helpers.{DT, Crypto}
+
+  @bcrypt Application.get_env(:subs, :bcrypt)
 
   setup %{conn: conn} do
     {:ok, conn: put_req_header(conn, "accept", "application/json")}
@@ -54,15 +54,8 @@ defmodule SubsWeb.Test.Controllers.UserControllerTest do
         "password_confirmation" => "password"
       })
 
-      assert data = json_response(conn, 201)
-
-      user = UserRepo.get_by_id(data["data"]["id"])
-      confirmation_url = UserHelper.generate_confirmation_url(user)
-      confirmation_email = Notifier.Email.confirmation_email(email, %{
-        confirmation_url: confirmation_url
-      })
-
-      assert_delivered_email(confirmation_email)
+      assert json_response(conn, 201)
+      assert_delivered_with(subject: "Welcome to Subs, please confirm you account")
     end
   end
 
@@ -70,7 +63,7 @@ defmodule SubsWeb.Test.Controllers.UserControllerTest do
     setup %{conn: conn} do
       user_password = "password"
 
-      user = insert(:user, encrypted_password: BCrypt.hashpwsalt(user_password))
+      user = insert(:user, encrypted_password: @bcrypt.hashpwsalt(user_password))
 
       [conn: conn,
        user: user,
@@ -126,7 +119,11 @@ defmodule SubsWeb.Test.Controllers.UserControllerTest do
 
   describe "POST /api/users/confirm" do
     setup %{conn: conn} do
-      user = insert(:user, %{confirmation_sent_at: NaiveDateTime.utc_now()})
+      user = insert(:user, %{
+        confirmation_sent_at: NaiveDateTime.utc_now(),
+        confirmation_token: "111",
+        encrypted_confirmation_token: Crypto.sha1("111")
+      })
 
       [conn: conn, user: user]
     end

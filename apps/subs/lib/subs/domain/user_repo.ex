@@ -2,6 +2,7 @@ defmodule Subs.UserRepo do
   @moduledoc false
 
   alias Subs.{Repo, User}
+  alias Subs.Helpers.Crypto
 
   def create(params) do
     %User{}
@@ -26,7 +27,7 @@ defmodule Subs.UserRepo do
   def get_by_id(user_id), do: Repo.get(User, user_id)
 
   def get_by_confirmation_token(token) do
-    Repo.get_by(User, confirmation_token: token)
+    Repo.get_by(User, encrypted_confirmation_token: Crypto.sha1(token))
   end
 
   def reset_user_recover_password_fields(user) do

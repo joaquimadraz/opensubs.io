@@ -3,7 +3,7 @@ defmodule Subs.User do
 
   use Subs.Schema
   alias Subs.{Subscription, UserRepo}
-  alias Subs.Helpers.DT
+  alias Subs.Helpers.{DT, Crypto}
 
   @bcrypt Application.get_env(:subs, :bcrypt)
 
@@ -13,7 +13,8 @@ defmodule Subs.User do
     field :password, :string, virtual: true
     field :password_confirmation, :string, virtual: true
     field :encrypted_password, :string
-    field :confirmation_token, :string
+    field :confirmation_token, :string, virtual: true
+    field :encrypted_confirmation_token, :string
     field :confirmation_sent_at, :naive_datetime
     field :confirmed_at, :naive_datetime
     field :password_recovery_token, :string, virtual: true
@@ -60,17 +61,19 @@ defmodule Subs.User do
   end
 
   def confirmation_changeset(struct) do
-    struct
-    |> put_change(:confirmation_token, UUID.uuid4(:hex))
-    |> put_change(:confirmation_sent_at, nil)
-    |> put_change(:confirmed_at, nil)
+    confirmation_token = UUID.uuid4(:hex)
+
+    change(struct, confirmation_token: confirmation_token,
+                   encrypted_confirmation_token: Crypto.sha1(confirmation_token),
+                   confirmation_sent_at: nil,
+                   confirmed_at: nil)
   end
 
   def recover_password_changeset(struct, dt \\ DT) do
     password_recovery_token = UUID.uuid4(:hex)
 
     change(struct, password_recovery_token: password_recovery_token,
-                   encrypted_password_recovery_token: @bcrypt.hashpwsalt(password_recovery_token),
+                   encrypted_password_recovery_token: Crypto.sha1(password_recovery_token),
                    password_recovery_expires_at: dt.step_date(dt.now(), :hours, 1),
                    password_recovery_used_at: nil)
   end

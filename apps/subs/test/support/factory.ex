@@ -1,8 +1,7 @@
 defmodule Subs.Test.Support.Factory do
   @moduledoc false
   use ExMachina.Ecto, repo: Subs.Repo
-  alias Subs.Helpers.DT
-
+  alias Subs.Helpers.{DT, Crypto}
   alias Subs.{User, Subscription}
 
   def user_factory do
@@ -11,7 +10,8 @@ defmodule Subs.Test.Support.Factory do
       email: sequence(:email, &"jon.snow.#{&1}@email.com"),
       password: "password",
       password_confirmation: "password",
-      confirmation_token: "111xxx222yyy333zzz"
+      confirmation_token: "111xxx222yyy333zzz",
+      encrypted_confirmation_token: Crypto.sha1("111xxx222yyy333zzz")
     }
   end
 
