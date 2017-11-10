@@ -46,6 +46,7 @@ defmodule SubsWeb.Mixfile do
       {:subs, in_umbrella: true},
       {:cowboy, "~> 1.0"},
       {:guardian, "~> 1.0-beta"},
+      {:wallaby, "~> 0.19.2", only: :test},
     ]
   end
 
