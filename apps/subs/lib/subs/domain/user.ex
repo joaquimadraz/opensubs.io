@@ -16,7 +16,8 @@ defmodule Subs.User do
     field :confirmation_token, :string
     field :confirmation_sent_at, :naive_datetime
     field :confirmed_at, :naive_datetime
-    field :password_recovery_token, :string
+    field :password_recovery_token, :string, virtual: true
+    field :encrypted_password_recovery_token, :string
     field :password_recovery_expires_at, :naive_datetime
     field :password_recovery_used_at, :naive_datetime
 
@@ -41,7 +42,7 @@ defmodule Subs.User do
     |> validate_format(:email, @email_regex)
     |> validate_length(:name, min: 3)
     |> validate_length(:password, min: 6)
-    |> validate_password_confirmation_presence
+    |> validate_password_confirmation_presence()
     |> validate_confirmation(:password)
     |> unique_constraint(:email)
     |> encrypt_password()
@@ -53,7 +54,7 @@ defmodule Subs.User do
     |> cast(params, @required_update_fields ++ @optional_fields)
     |> validate_length(:name, min: 3)
     |> validate_length(:password, min: 6)
-    |> validate_password_confirmation_presence
+    |> validate_password_confirmation_presence()
     |> validate_confirmation(:password)
     |> encrypt_password()
   end
@@ -66,7 +67,10 @@ defmodule Subs.User do
   end
 
   def recover_password_changeset(struct, dt \\ DT) do
-    change(struct, password_recovery_token: UUID.uuid4(:hex),
+    password_recovery_token = UUID.uuid4(:hex)
+
+    change(struct, password_recovery_token: password_recovery_token,
+                   encrypted_password_recovery_token: @bcrypt.hashpwsalt(password_recovery_token),
                    password_recovery_expires_at: dt.step_date(dt.now(), :hours, 1),
                    password_recovery_used_at: nil)
   end

@@ -26,7 +26,7 @@ defmodule Subs.UseCases.Users.RecoverUserPassword do
   end
 
   defp reset_password_fields(user) do
-    {:ok, _} = UserRepo.reset_user_recover_password_fields(user)
+    {:ok, user} = UserRepo.reset_user_recover_password_fields(user)
   end
 
   defp find_user_by_email(email) do

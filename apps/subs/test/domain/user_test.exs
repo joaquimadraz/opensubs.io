@@ -51,26 +51,6 @@ defmodule Subs.Test.Domain.UserTest do
     end
   end
 
-  describe "#recover_password_changeset" do
-    test "populates necessary fields to recover password" do
-      now = ~N[2017-11-06 21:00:00]
-      will_expire_at = ~N[2017-11-06 21:00:00]
-
-      Test.Subs.DTMock
-      |> expect(:now, fn() -> now end)
-      |> expect(:step_date, fn(now, :hours, 1) -> will_expire_at end)
-
-      user = build(:user)
-      changeset = User.recover_password_changeset(user, Test.Subs.DTMock)
-
-      expires_at = Ecto.Changeset.get_change(changeset, :password_recovery_expires_at)
-      token = Ecto.Changeset.get_change(changeset, :password_recovery_token)
-
-      assert expires_at == will_expire_at
-      assert token != nil
-    end
-  end
-
   def create_user(params) do
     User.create_changeset(%User{}, params)
   end

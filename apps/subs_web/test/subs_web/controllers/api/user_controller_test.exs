@@ -197,14 +197,10 @@ defmodule SubsWeb.Test.Controllers.UserControllerTest do
       # Assert user password recovery data is reset
       assert user.password_recovery_expires_at != nil
       assert Timex.diff(user.password_recovery_expires_at, DT.now(), :minutes) == 59
-      assert user.password_recovery_token != nil
+      assert user.encrypted_password_recovery_token != nil
 
       # Assert recover email was delivered
-      recover_password_email = Notifier.Email.recover_password_email(
-        "dc@example.com",
-        %{recover_url: UserHelper.generate_recover_password_url(user)}
-      )
-      assert_delivered_email(recover_password_email)
+      assert_delivered_with(subject: "Reset your Subs password")
     end
 
     test "returns ok when email to recover does not exist", %{conn: conn} do
