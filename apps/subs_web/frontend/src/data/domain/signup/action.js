@@ -22,7 +22,7 @@ const signup = (params = {}) =>
   (dispatch) => {
     handleSignupStarted(dispatch)
 
-    api.postSignup(params)
+    api.postUsers(params)
       .then(response => handleSignupSuccess(dispatch, response))
       .catch(error => handleSignupFailure(dispatch, error))
   }

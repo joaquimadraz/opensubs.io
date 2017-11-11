@@ -4,6 +4,7 @@ const remoteCallObject = {
   loading: false,
   http: null,
   data: null,
+  message: null,
 }
 
 const RemoteCallRecord = Record(remoteCallObject)
@@ -14,14 +15,13 @@ class RemoteCall extends RemoteCallRecord {
 
 export function parseErrorResponse(object) {
   const { data } = object.response
-  delete object.response.data
+  const remoteCallData = data.data ? Map(data.data.errors) : Map()
 
   return new RemoteCall({
     loading: false,
     http: object.response,
-    data: Map({
-      errors: Map(data.data.errors),
-    }),
+    data: Map({ errors: remoteCallData }),
+    message: data.message
   })
 }
 

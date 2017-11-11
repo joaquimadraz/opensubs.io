@@ -1,9 +1,14 @@
 import axios from 'axios'
 
-const postSignup = (params) => {
+const postUsers = (params) => {
   return axios.post('/api/users', params)
 }
 
+const postUsersAuthenticate = (params) => {
+  return axios.post('/api/users/authenticate', params)
+}
+
 export default {
-  postSignup,
+  postUsers,
+  postUsersAuthenticate,
 }
