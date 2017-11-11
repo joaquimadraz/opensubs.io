@@ -1,23 +1,20 @@
 import { Map, OrderedSet } from 'immutable'
+import RemoteCall, { parseErrorResponse } from 'data/domain/RemoteCall'
 
-const resetState = state => (
-  state.setIn(['remoteCall', 'loading'], false)
-       .setIn(['remoteCall', 'error'], null)
-)
+const resetState = state => state.set('remoteCall', new RemoteCall())
 
-const signupStarted = (state) => (
-  resetState(state).setIn(['remoteCall', 'loading'], true)
-)
+const signupStarted = (state) => {
+  return resetState(state).setIn(['remoteCall', 'loading'], true)
+}
 
 const signupSuccess = (state, { data }) => {
-  return state
+  return resetState(state)
+    .set('signed_up_email', data.email)
+    .set('confirmation_sent_at', data.confirmation_sent_at)
 }
 
 const signupFailure = (state, { error }) => {
-  const response = error.response
-
-  return state.setIn(['remoteCall', 'loading'], false)
-              .setIn(['remoteCall', 'error'], response)
+  return state.set('remoteCall', parseErrorResponse(error))
 }
 
 export {

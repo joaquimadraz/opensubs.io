@@ -1,21 +1,25 @@
 import React, { Component } from 'react'
+import { Map } from 'immutable'
 import { connect } from 'react-redux'
 import { Link } from 'react-router'
 
 import routes from 'constants/routes'
 import signupAction from 'data/domain/signup/action'
 
+import Signup from './Signup'
+
 class SignupContainer extends Component {
   constructor() {
     super()
 
     this.handleFormSubmit = this.handleFormSubmit.bind(this)
+    this.handleFormChange = this.handleFormChange.bind(this)
 
     this.state = {
       data: {
-        email: 'hey',
-        password: 'hey',
-        password_confirmation: 'hey',
+        email: '',
+        password: '',
+        password_confirmation: '',
       }
     }
   }
@@ -26,25 +30,36 @@ class SignupContainer extends Component {
     dispatch(signupAction({user: this.state.data}))
   }
 
+  handleFormChange(attribute, value) {
+    this.setState((prevState) => {
+      prevState.data[attribute] = value
+      return prevState
+    })
+  }
+
   render() {
+    const { user, remoteCall } = this.props
+
     return (
-      <div>
-        <Link to={routes.root}>Home</Link>
-        Signup
-        <div>
-          <input id="user-email" type="email" placeholder="email" />
-          <input id="user-password" type="password" placeholder="password" />
-          <input id="user-password-confirmation" type="password" placeholder="password confirmation" />
-          <button id="signup-btn" onClick={this.handleFormSubmit}>Let's go!</button>
-        </div>
-      </div>
+      <Signup
+        user={user}
+        remoteCall={remoteCall}
+        onClick={this.handleFormSubmit}
+        onChange={this.handleFormChange}
+      />
     )
   }
 }
 
 const mapStateToProps = (state) => {
+  const user = Map({
+    signed_up_email: state.signup.get('signed_up_email'),
+    confirmation_sent_at: state.signup.get('confirmation_sent_at'),
+  })
+
   return {
-    remoteCall: state.signup['remoteCall'],
+    user,
+    remoteCall: state.signup.get('remoteCall'),
   }
 }
 

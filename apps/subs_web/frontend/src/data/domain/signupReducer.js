@@ -1,4 +1,5 @@
 import { Map, OrderedSet } from 'immutable'
+import RemoteCall from 'data/domain/RemoteCall'
 
 import {
   SIGNUP_STARTED,
@@ -13,7 +14,9 @@ import {
 } from './signup/reducer'
 
 const initialState = Map({
-  remoteCall: Map(),
+  signed_up_email: null,
+  confirmation_sent_at: null,
+  remoteCall: new RemoteCall(),
 })
 
 const signupReducer = (state = initialState, action) => {
