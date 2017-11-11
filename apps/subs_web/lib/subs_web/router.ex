@@ -17,13 +17,6 @@ defmodule SubsWeb.Router do
     plug SubsWeb.Helpers.AuthAccessPipeline
   end
 
-  scope "/", SubsWeb do
-    pipe_through :browser # Use the default browser stack
-
-    get "/reset_password", PageController, :reset_password, as: :reset_password
-    get "/*path", PageController, :index
-  end
-
   scope "/api", SubsWeb, as: :api do
     pipe_through :api
 
@@ -42,5 +35,11 @@ defmodule SubsWeb.Router do
 
     resources "/subscriptions", Api.SubscriptionController, only: [:index, :create, :show, :update]
     resources "/services", Api.ServiceController, only: [:index]
+  end
+
+  scope "/", SubsWeb do
+    pipe_through :browser # Use the default browser stack
+
+    get "/*path", PageController, :index
   end
 end

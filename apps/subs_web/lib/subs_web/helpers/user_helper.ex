@@ -3,19 +3,11 @@ defmodule SubsWeb.Helpers.UserHelper do
   alias SubsWeb.Guardian
 
   def generate_confirmation_url(user) do
-    Helpers.api_user_confirm_url(
-      SubsWeb.Endpoint,
-      :confirm,
-      %{t: user.confirmation_token}
-    )
+    SubsWeb.Endpoint.url <> "/users/confirm_signup" <> "?t=" <> user.confirmation_token
   end
 
   def generate_recover_password_url(user) do
-    Helpers.reset_password_url(
-      SubsWeb.Endpoint,
-      :reset_password,
-      %{t: user.password_recovery_token}
-    )
+    SubsWeb.Endpoint.url <> "/users/reset_password" <> "?t=" <> user.password_recovery_token
   end
 
   def current_user(conn), do: Guardian.Plug.current_resource(conn)
