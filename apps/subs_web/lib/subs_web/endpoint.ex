@@ -1,6 +1,10 @@
 defmodule SubsWeb.Endpoint do
   use Phoenix.Endpoint, otp_app: :subs_web
 
+  if Application.get_env(:subs, :sql_sandbox) do
+    plug Phoenix.Ecto.SQL.Sandbox
+  end
+
   socket "/socket", SubsWeb.UserSocket
 
   # Serve at "/" the static files from "priv/static" directory.
