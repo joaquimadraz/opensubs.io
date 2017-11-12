@@ -35,10 +35,11 @@ class LoginContainer extends Component {
   }
 
   render() {
-    const { remoteCall } = this.props
+    const { remoteCall, justConfirmed } = this.props
 
     return (
       <Login
+        justConfirmed={justConfirmed}
         remoteCall={remoteCall}
         onClick={this.handleFormSubmit}
         onChange={this.handleFormChange}
@@ -49,6 +50,7 @@ class LoginContainer extends Component {
 
 const mapStateToProps = (state) => {
   return {
+    justConfirmed: state.login.get('justConfirmed'),
     remoteCall: state.login.get('remoteCall'),
   }
 }

@@ -1,4 +1,3 @@
-import { Map, OrderedSet } from 'immutable'
 import RemoteCall, { parseErrorResponse } from 'data/domain/RemoteCall'
 
 const resetState = state => state.set('remoteCall', new RemoteCall())

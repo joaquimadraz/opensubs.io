@@ -7,6 +7,7 @@ const Home = () => (
   <div>
     Home
     <Link to={routes.signup}>Sign Up</Link>
+    <Link to={routes.login}>Login</Link>
   </div>
 )
 

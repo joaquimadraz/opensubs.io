@@ -14,6 +14,7 @@ import {
 } from './login/reducer'
 
 const initialState = Map({
+  justConfirmed: false,
   remoteCall: new RemoteCall(),
 })
 

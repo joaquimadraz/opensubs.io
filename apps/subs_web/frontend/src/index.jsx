@@ -12,6 +12,7 @@ import App from './components/App'
 import Home from './routes/Home/Home.jsx'
 import Signup from './routes/Signup'
 import Login from './routes/Login'
+import UsersConfirmSignup from './routes/Users/routes/ConfirmSignup'
 
 const store = initStore()
 const awesomeHistory = syncHistoryWithStore(browserHistory, store)
@@ -24,6 +25,9 @@ if (document.getElementById('app')) {
           <IndexRoute component={Home} />
           <Route path={routes.signup} component={Signup} />
           <Route path={routes.login} component={Login} />
+          <Route path={routes.users}>
+            <Route path={routes.usersConfirmSignup} component={UsersConfirmSignup} />
+          </Route>
         </Route>
       </Router>
     </Provider>,
