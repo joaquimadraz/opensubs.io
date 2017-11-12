@@ -9,10 +9,11 @@ import routes from 'constants/routes'
 import '../assets/css'
 import initStore from './data/store'
 import App from './components/App'
-import Home from './routes/Home/Home.jsx'
+import Home from './routes/Home'
 import Signup from './routes/Signup'
 import Login from './routes/Login'
 import UsersConfirmSignup from './routes/Users/routes/ConfirmSignup'
+import RedirectIfLogged from './routes/RedirectIfLogged'
 
 const store = initStore()
 const awesomeHistory = syncHistoryWithStore(browserHistory, store)
@@ -23,11 +24,11 @@ if (document.getElementById('app')) {
       <Router history={awesomeHistory}>
         <Route path={routes.root} component={App}>
           <IndexRoute component={Home} />
-          <Route path={routes.signup} component={Signup} />
-          <Route path={routes.login} component={Login} />
-          <Route path={routes.users}>
-            <Route path={routes.usersConfirmSignup} component={UsersConfirmSignup} />
+          <Route component={RedirectIfLogged}>
+            <Route path={routes.signup} component={Signup} />
+            <Route path={routes.login} component={Login} />
           </Route>
+          <Route path={routes.usersConfirmSignup} component={UsersConfirmSignup} />
         </Route>
       </Router>
     </Provider>,

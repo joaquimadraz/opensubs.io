@@ -11,7 +11,7 @@ const renderErrors = (remoteCall) => {
   return (<p>{remoteCall.get('message')}</p>)
 }
 
-const Login = ({ onClick, onChange, remoteCall, justConfirmed }) => {
+const Login = ({ onClick, onChange, remoteCall }) => {
   const handleChange = (event, attribute) => {
     onChange(attribute, event.target.value)
   }
@@ -21,7 +21,6 @@ const Login = ({ onClick, onChange, remoteCall, justConfirmed }) => {
       <Link to={routes.root}>Home</Link>
 
       Login
-      {justConfirmed && <p>Account confirmed, ready to login</p>}
 
       <div id="login-form">
         {renderErrors(remoteCall)}

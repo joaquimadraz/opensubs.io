@@ -3,11 +3,17 @@ import { Link } from 'react-router'
 
 import routes from 'constants/routes'
 
-const Home = () => (
+const Home = ({ currentUser }) => (
   <div>
     Home
-    <Link to={routes.signup}>Sign Up</Link>
-    <Link to={routes.login}>Login</Link>
+    {
+      currentUser
+      ? <div className="current-user">{currentUser.email}</div>
+      : <div>
+          <Link to={routes.signup}>Sign Up</Link>
+          <Link to={routes.login}>Login</Link>
+        </div>
+    }
   </div>
 )
 
