@@ -14,7 +14,6 @@ import Signup from './routes/Signup'
 import Login from './routes/Login'
 import RedirectIfLogged from './routes/RedirectIfLogged'
 import UsersConfirmSignup from './routes/Users/routes/ConfirmSignup'
-import UsersRecoverPassword from './routes/Users/routes/RecoverPassword'
 
 const store = initStore()
 const awesomeHistory = syncHistoryWithStore(browserHistory, store)
@@ -30,7 +29,6 @@ if (document.getElementById('app')) {
             <Route path={routes.login} component={Login} />
           </Route>
           <Route path={routes.usersConfirmSignup} component={UsersConfirmSignup} />
-          <Route path={routes.userRecoverPassword} component={UsersRecoverPassword} />
         </Route>
       </Router>
     </Provider>,
