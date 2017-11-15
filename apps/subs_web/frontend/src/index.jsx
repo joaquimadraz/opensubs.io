@@ -8,7 +8,7 @@ import routes from 'constants/routes'
 
 import '../assets/css'
 import initStore from './data/store'
-import App from './components/App'
+import AppContainer from './containers/AppContainer'
 import Home from './routes/Home'
 import Signup from './routes/Signup'
 import Login from './routes/Login'
@@ -22,7 +22,7 @@ if (document.getElementById('app')) {
   render(
     <Provider store={store} >
       <Router history={awesomeHistory}>
-        <Route path={routes.root} component={App}>
+        <Route path={routes.root} component={AppContainer}>
           <IndexRoute component={Home} />
           <Route component={RedirectIfLogged}>
             <Route path={routes.signup} component={Signup} />

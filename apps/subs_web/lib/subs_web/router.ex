@@ -34,6 +34,10 @@ defmodule SubsWeb.Router do
 
     resources "/subscriptions", Api.SubscriptionController, only: [:index, :create, :show, :update]
     resources "/services", Api.ServiceController, only: [:index]
+
+    scope "/users", as: :user do
+      get "/me", Api.UserController, :me, as: :me
+    end
   end
 
   scope "/", SubsWeb do

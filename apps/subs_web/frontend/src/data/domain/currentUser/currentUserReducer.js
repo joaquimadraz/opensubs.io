@@ -3,6 +3,7 @@ import RemoteCall from 'data/domain/RemoteCall'
 import Cookies from 'js-cookie'
 
 import { LOGIN_SUCCESS } from '../login/action'
+import { GET_CURRENT_USER_SUCCESS } from './getCurrentUser/action'
 
 import { setCurrentUser } from './setCurrentUser/reducer'
 
@@ -20,6 +21,8 @@ const currentUserReducer = (state = initialState, action) => {
       const currentUser = setCurrentUser(state, action)
       saveAuthToken(currentUser)
       return currentUser
+    case GET_CURRENT_USER_SUCCESS:
+      return setCurrentUser(state, action)
     default:
       return state
   }

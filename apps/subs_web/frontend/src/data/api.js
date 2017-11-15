@@ -1,24 +1,36 @@
 import axios from 'axios'
+import Cookies from 'js-cookie'
 
-const postUsers = (params) => {
-  return axios.post('/api/users', params)
+// public
+
+const postUsers = (params) =>
+  axios.post('/api/users', params)
+
+const postUsersAuthenticate = (params) =>
+  axios.post('/api/users/authenticate', params)
+
+const postUsersConfirm = (params) =>
+  axios.post('/api/users/confirm', params)
+
+const postUsersRecoverPassword = (params) =>
+  axios.post('/api/users/recover_password', params)
+
+// authenticated
+
+const authHeader = () => {
+  const token = Cookies.get('auth-token')
+
+  return token ? { Authorization: `Bearer ${token}` } : {}
 }
 
-const postUsersAuthenticate = (params) => {
-  return axios.post('/api/users/authenticate', params)
-}
-
-const postUsersConfirm = (params) => {
-  return axios.post('/api/users/confirm', params)
-}
-
-const postUsersRecoverPassword = (params) => {
-  return axios.post('/api/users/recover_password', params)
+const getUsersMe = () => {
+  return axios.get('/api/users/me', { headers: authHeader() })
 }
 
 export default {
   postUsers,
   postUsersAuthenticate,
   postUsersConfirm,
-  postUsersRecoverPassword
+  postUsersRecoverPassword,
+  getUsersMe,
 }

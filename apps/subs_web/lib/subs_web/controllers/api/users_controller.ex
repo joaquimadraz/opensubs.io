@@ -13,6 +13,21 @@ defmodule SubsWeb.Api.UserController do
   alias SubsWeb.Api.{ErrorView, ChangesetView}
   alias SubsWeb.Helpers.UserHelper
 
+  def me(conn, params) do
+    case UserHelper.current_user(conn) do
+      nil ->
+        conn
+        |> put_status(:unauthorized)
+        |> render(ErrorView, :"401", message: "Not logged")
+      user ->
+        # TODO: Do not send auth token back again on this request.
+        conn
+        |> put_status(:created)
+        |> render("authenticate.json", user: user,
+                                       auth_token: conn.private.guardian_default_token)
+    end
+  end
+
   def authenticate(conn, %{"email" => email, "password" => password}) do
     case AuthenticateUser.perform(email, password) do
       {:ok, %{user: user}} ->
