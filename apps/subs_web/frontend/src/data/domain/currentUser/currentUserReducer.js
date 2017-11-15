@@ -3,6 +3,7 @@ import RemoteCall from 'data/domain/RemoteCall'
 import Cookies from 'js-cookie'
 
 import { LOGIN_SUCCESS } from '../login/action'
+import { LOGOUT_SUCCESS } from './logout/action'
 import { GET_CURRENT_USER_SUCCESS } from './getCurrentUser/action'
 
 import { setCurrentUser } from './setCurrentUser/reducer'
@@ -15,6 +16,10 @@ const saveAuthToken = (user) => {
   })
 }
 
+const deleteAuthToken = () => {
+  Cookies.remove('auth-token')
+}
+
 const currentUserReducer = (state = initialState, action) => {
   switch (action.type) {
     case LOGIN_SUCCESS:
@@ -23,6 +28,9 @@ const currentUserReducer = (state = initialState, action) => {
       return currentUser
     case GET_CURRENT_USER_SUCCESS:
       return setCurrentUser(state, action)
+    case LOGOUT_SUCCESS:
+      deleteAuthToken()
+      return null
     default:
       return state
   }

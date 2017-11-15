@@ -71,7 +71,17 @@ defmodule SubsWeb.Test.Acceptance.UserLoginTest do
     |> assert_has(css(".current-user", text: email))
   end
 
-  defp assert_signup_and_login_user(session, email) do
+  @tag :acceptance
+  test "logout successful", %{session: session} do
+    session
+    |> assert_signup_and_login_user()
+    |> click(button("Logout"))
+    |> assert_has(css("a", text: "Login"))
+    |> visit("/")
+    |> assert_has(css("a", text: "Login"))
+  end
+
+  defp assert_signup_and_login_user(session, email \\ "joaquim@example.com") do
     password = "123456"
 
     session
