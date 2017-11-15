@@ -20,8 +20,6 @@ const Login = ({ onClick, onChange, remoteCall }) => {
     <div>
       <Link to={routes.root}>Home</Link>
 
-      Login
-
       <div id="login-form">
         {renderErrors(remoteCall)}
         <input

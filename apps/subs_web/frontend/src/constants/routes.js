@@ -5,4 +5,5 @@ export default {
   users: '/users',
   usersConfirmSignup: '/users/confirm_signup',
   usersRecoverPassword: '/users/recover_password',
+  subscriptionsNew: '/subscriptions/new',
 }

@@ -3,21 +3,23 @@ import { Link } from 'react-router'
 
 import routes from 'constants/routes'
 
-const Home = ({ currentUser, onLogoutClick }) => (
-  <div>
-    Home
-    {
-      currentUser
-      ? <div>
-          <div className="current-user">{currentUser.email}</div>
-          <button onClick={onLogoutClick}>Logout</button>
-        </div>
-      : <div>
-          <Link to={routes.signup}>Sign Up</Link>
-          <Link to={routes.login}>Login</Link>
-        </div>
-    }
-  </div>
-)
+const renderLandingPage = () => {
+  return <p>Home</p>
+}
+
+const renderLoggedPage = () => {
+  return (
+    <div>
+      <hr />
+      <Link to={routes.subscriptionsNew}>Create subscription</Link>
+    </div>
+  )
+}
+
+const Home = ({ currentUser }) => {
+  return (
+    <div>{currentUser ? renderLoggedPage() : renderLandingPage()}</div>
+  )
+}
 
 export default Home

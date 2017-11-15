@@ -14,6 +14,7 @@ import Signup from './routes/Signup'
 import Login from './routes/Login'
 import RedirectIfLogged from './routes/RedirectIfLogged'
 import UsersConfirmSignup from './routes/Users/routes/ConfirmSignup'
+import NewSubscription from './routes/Subscriptions/routes/NewSubscription'
 
 const store = initStore()
 const awesomeHistory = syncHistoryWithStore(browserHistory, store)
@@ -29,6 +30,7 @@ if (document.getElementById('app')) {
             <Route path={routes.login} component={Login} />
           </Route>
           <Route path={routes.usersConfirmSignup} component={UsersConfirmSignup} />
+          <Route path={routes.subscriptionsNew} component={NewSubscription} />
         </Route>
       </Router>
     </Provider>,
