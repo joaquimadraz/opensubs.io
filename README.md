@@ -15,7 +15,7 @@ Elixir backend and React frontend.
 - [x] Subscriptions list
 
 #### Frontend
-- [ ] User signup/authentication
+- [x] User signup/authentication
 - [ ] User password recovery
 - [ ] Subscriptions create
 - [ ] Subscriptions dashboard
