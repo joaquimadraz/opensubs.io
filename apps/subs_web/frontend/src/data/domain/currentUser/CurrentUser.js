@@ -1,9 +1,9 @@
 import { Record } from 'immutable'
 
 const currentUserObject = {
-  id: null,
   name: null,
   email: null,
+  auth_token: null,
 }
 
 const CurrentUserRecord = Record(currentUserObject)

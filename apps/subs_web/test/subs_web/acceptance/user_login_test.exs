@@ -17,38 +17,6 @@ defmodule SubsWeb.Test.Acceptance.UserLoginTest do
   end
 
   @tag :acceptance
-  test "login successful and redirects to root page with email rendered", %{session: session} do
-    email = "joaquim@example.com"
-    password = "123456"
-
-    session
-    |> visit("/signup")
-    |> assert_has(css("#app"))
-    |> fill_in(css("#signup-form .user-email"), with: email)
-    |> fill_in(css("#signup-form .user-password"), with: password)
-    |> fill_in(css("#signup-form .user-password-confirmation"), with: password)
-    |> click(css("#signup-btn"))
-    |> assert_has(css("p", text: "A confirmation email was sent to #{email}."))
-
-    # Set known confirmation token
-    user = UserRepo.get_by_email(email)
-    {:ok, user} = User.confirmation_changeset(user) |> Repo.update()
-
-    session
-    |> visit("/users/confirm_signup?t=#{user.confirmation_token}")
-    |> assert_has(css("#app"))
-    |> assert_has(css("p", text: "Account confirmed, ready to login"))
-
-    session
-    |> visit("/login")
-    |> assert_has(css("#login-form"))
-    |> fill_in(css("#login-form .user-email"), with: email)
-    |> fill_in(css("#login-form .user-password"), with: password)
-    |> click(css("#login-btn"))
-    |> assert_has(css(".current-user", text: email))
-  end
-
-  @tag :acceptance
   test "visit login page, clicks recover password and back to login", %{session: session} do
     session
     |> visit("/login")
@@ -87,5 +55,51 @@ defmodule SubsWeb.Test.Acceptance.UserLoginTest do
     |> fill_in(css("#recover-password-form .user-email"), with: email)
     |> click(css("#recover-password-btn"))
     |> assert_has(css("p", text: "A recover password email is on the way"))
+  end
+
+  @tag :acceptance
+  test "login successful and redirects to root page with email rendered", %{session: session} do
+    assert_signup_and_login_user(session, "joaquim@example.com")
+  end
+
+  @tag :acceptance
+  test "login successful and full refresh keeps user logged", %{session: session} do
+    email = "joaquim@example.com"
+    session
+    |> assert_signup_and_login_user(email)
+    |> visit("/")
+    |> assert_has(css(".current-user", text: email))
+  end
+
+  defp assert_signup_and_login_user(session, email) do
+    password = "123456"
+
+    session
+    |> visit("/signup")
+    |> assert_has(css("#app"))
+    |> fill_in(css("#signup-form .user-email"), with: email)
+    |> fill_in(css("#signup-form .user-password"), with: password)
+    |> fill_in(css("#signup-form .user-password-confirmation"), with: password)
+    |> click(css("#signup-btn"))
+    |> assert_has(css("p", text: "A confirmation email was sent to #{email}."))
+
+    # Set known confirmation token
+    user = UserRepo.get_by_email(email)
+    {:ok, user} = User.confirmation_changeset(user) |> Repo.update()
+
+    session
+    |> visit("/users/confirm_signup?t=#{user.confirmation_token}")
+    |> assert_has(css("#app"))
+    |> assert_has(css("p", text: "Account confirmed, ready to login"))
+
+    session
+    |> visit("/login")
+    |> assert_has(css("#login-form"))
+    |> fill_in(css("#login-form .user-email"), with: email)
+    |> fill_in(css("#login-form .user-password"), with: password)
+    |> click(css("#login-btn"))
+    |> assert_has(css(".current-user", text: email))
+
+    session
   end
 end
