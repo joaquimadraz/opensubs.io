@@ -1,7 +1,9 @@
 import React from 'react'
 import { Link } from 'react-router'
+
 import routes from 'constants/routes'
 import ErrorMessages from 'components/ErrorMessages'
+import ColorPicker from 'components/ColorPicker'
 
 const renderErrors = (remoteCall) => {
   if (remoteCall.loading || !remoteCall.data) { return null }
@@ -20,7 +22,7 @@ const NewSubscription = ({ subscription, onClick, onChange, remoteCall }) => {
 
       New subscription
 
-      <div id="new-subscription-form">
+      <div id="new-subscription-form" style={{ background: subscription.color, padding: 10 }}>
         {renderErrors(remoteCall)}
         <input
           className="subscription-name"
@@ -53,6 +55,9 @@ const NewSubscription = ({ subscription, onClick, onChange, remoteCall }) => {
           <option value="monthly">Monthly</option>
           <option value="yearly">Yearly</option>
         </select>
+
+        <ColorPicker onChange={color => onChange('color', color)} />
+
         <button type="submit" onClick={onClick}>Create</button>
       </div>
     </div>

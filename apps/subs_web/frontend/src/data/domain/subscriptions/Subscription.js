@@ -1,10 +1,12 @@
 import { Record } from 'immutable'
+
 import { parseAndFormatDate } from 'utils/dt'
+import colors from 'constants/colors'
 
 const remoteData = {
   id: null,
   name: '',
-  color: null,
+  color: colors.default,
   description: null,
   amount: '1',
   cycle: 'monthly',
