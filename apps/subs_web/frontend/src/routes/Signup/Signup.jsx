@@ -1,6 +1,5 @@
 import React from 'react'
 import { Link } from 'react-router'
-import { Map } from 'immutable'
 
 import routes from 'constants/routes'
 import ErrorMessages from 'components/ErrorMessages'
