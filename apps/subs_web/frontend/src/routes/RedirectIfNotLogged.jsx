@@ -28,7 +28,7 @@ class RedirectIfNotLoggedContainer extends Component {
   render() {
     const { currentUser, children } = this.props
 
-    return (!currentUser.isLogged) ? children : null
+    return (currentUser.isLogged) ? children : null
   }
 }
 

@@ -15,5 +15,4 @@ class NewSubscriptionContainer extends Component {
   }
 }
 
-
 export default connect()(NewSubscriptionContainer)

@@ -6,10 +6,18 @@ defmodule SubsWeb.Test.Acceptance.SubscriptionsNewTest do
   alias Subs.{User, UserRepo}
 
   @tag :acceptance
-  test "redirects to login if trying to access subscriptions new page", %{session: session} do
+  test "redirects to login if trying to access subscriptions new page when user is not logged", %{session: session} do
     session
     |> visit("/subscriptions/new")
     |> assert_has(css("#login-form"))
+  end
+
+  @tag :acceptance
+  test "loads new subcription page when user is logged", %{session: session} do
+    session
+    |> assert_signup_and_login_user()
+    |> visit("/subscriptions/new")
+    |> assert_has(css("#new-subscription-form"))
   end
 
   # TODO: Move to helper
