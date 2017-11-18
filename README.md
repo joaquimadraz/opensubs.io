@@ -1,4 +1,4 @@
-# Subs (WIP) [![Build Status](https://travis-ci.org/joaquimadraz/subs.svg?branch=setup-travis-ci)](https://travis-ci.org/joaquimadraz/subs)
+# Subs (WIP) [![Build Status](https://travis-ci.org/joaquimadraz/subs.svg?branch=master)](https://travis-ci.org/joaquimadraz/subs)
 ## Manage on going subscriptions :money_with_wings:
 
 ### Stack
