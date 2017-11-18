@@ -13,6 +13,18 @@ import {
   createSubscriptionFailure,
 } from './createSubscription/reducer'
 
+import {
+  GET_ALL_SUBSCRIPTIONS_STARTED,
+  GET_ALL_SUBSCRIPTIONS_SUCCESS,
+  GET_ALL_SUBSCRIPTIONS_FAILURE,
+} from './getAllSubscriptions/action'
+
+import {
+  getAllSubscriptionsStarted,
+  getAllSubscriptionsSuccess,
+  getAllSubscriptionsFailure,
+} from './getAllSubscriptions/reducer'
+
 const initialState = Map({
   entities: Map(),
   ids: OrderedSet(),
@@ -27,6 +39,12 @@ const subscriptionsReducer = (state = initialState, action) => {
       return createSubscriptionSuccess(state, action)
     case CREATE_SUBSCRIPTION_FAILURE:
       return createSubscriptionFailure(state, action)
+    case GET_ALL_SUBSCRIPTIONS_STARTED:
+      return getAllSubscriptionsStarted(state)
+    case GET_ALL_SUBSCRIPTIONS_SUCCESS:
+      return getAllSubscriptionsSuccess(state, action)
+    case GET_ALL_SUBSCRIPTIONS_FAILURE:
+      return getAllSubscriptionsFailure(state, action)
     default:
       return state
   }
