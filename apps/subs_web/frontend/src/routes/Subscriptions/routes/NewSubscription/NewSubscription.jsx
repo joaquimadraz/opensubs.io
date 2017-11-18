@@ -9,7 +9,7 @@ const renderErrors = (remoteCall) => {
   return <ErrorMessages errors={remoteCall.data.get('errors')} />
 }
 
-const NewSubscription = ({ onClick, onChange, remoteCall }) => {
+const NewSubscription = ({ subscription, onClick, onChange, remoteCall }) => {
   const handleChange = (event, attribute) => {
     onChange(attribute, event.target.value)
   }
@@ -20,23 +20,26 @@ const NewSubscription = ({ onClick, onChange, remoteCall }) => {
 
       New subscription
 
-      <form id="new-subscription-form">
+      <div id="new-subscription-form">
         {renderErrors(remoteCall)}
         <input
           className="subscription-name"
           type="text"
           placeholder="name"
+          value={subscription && subscription.name}
           onChange={(event) => handleChange(event, 'name')}
         />
         <input
           className="subscription-amount"
-          type="numeric"
+          type="number"
           placeholder="amount"
+          value={subscription && subscription.amount}
           onChange={(event) => handleChange(event, 'amount')}
         />
         <select
           className="subscription-amount-currency"
           onChange={(event) => handleChange(event, 'amount_currency')}
+          value={subscription && subscription.amount_currency}
         >
           <option value="GBP">£ (GBP)</option>
           <option value="EUR">€ (EUR)</option>
@@ -45,12 +48,13 @@ const NewSubscription = ({ onClick, onChange, remoteCall }) => {
         <select
           className="subscription-cycle"
           onChange={(event) => handleChange(event, 'cycle')}
+          value={subscription && subscription.cycle}
         >
           <option value="monthly">Monthly</option>
           <option value="yearly">Yearly</option>
         </select>
         <button type="submit" onClick={onClick}>Create</button>
-      </form>
+      </div>
     </div>
   )
 }

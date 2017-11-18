@@ -23,9 +23,11 @@ const authHeader = () => {
   return token ? { Authorization: `Bearer ${token}` } : {}
 }
 
-const getUsersMe = () => {
-  return axios.get('/api/users/me', { headers: authHeader() })
-}
+const getUsersMe = () =>
+  axios.get('/api/users/me', { headers: authHeader() })
+
+const postSubscriptions = (params) =>
+  axios.post('/api/subscriptions', params, { headers: authHeader() })
 
 export default {
   postUsers,
@@ -33,4 +35,5 @@ export default {
   postUsersConfirm,
   postUsersRecoverPassword,
   getUsersMe,
+  postSubscriptions,
 }

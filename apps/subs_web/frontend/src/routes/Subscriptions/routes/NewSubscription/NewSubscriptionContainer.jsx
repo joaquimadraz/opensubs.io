@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
+import createSubscriptionAction from 'data/domain/subscriptions/createSubscription/action'
 import NewSubscription from './NewSubscription'
 
 class NewSubscriptionContainer extends Component {
@@ -23,7 +24,7 @@ class NewSubscriptionContainer extends Component {
   handleFormSubmit() {
     const { dispatch } = this.props
 
-    dispatch(signupAction({ subscription: this.state.data }))
+    dispatch(createSubscriptionAction({ subscription: this.state.data }))
   }
 
   handleFormChange(attribute, value) {

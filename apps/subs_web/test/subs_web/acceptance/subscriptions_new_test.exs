@@ -20,6 +20,17 @@ defmodule SubsWeb.Test.Acceptance.SubscriptionsNewTest do
     |> assert_has(css("#new-subscription-form"))
   end
 
+  @tag :acceptance
+  test "renders errors when submitting an empty form", %{session: session} do
+    session
+    |> assert_signup_and_login_user()
+    |> visit("/subscriptions/new")
+    |> assert_has(css("#new-subscription-form"))
+    |> fill_in(css("#new-subscription-form .subscription-name"), with: "")
+    |> click(css("#new-subscription-form button[type=\"submit\"]"))
+    |> assert_has(css("li", text: "name: can't be blank"))
+  end
+
   # TODO: Move to helper
   def assert_signup_and_login_user(session, email \\ "joaquim@example.com") do
     password = "123456"
