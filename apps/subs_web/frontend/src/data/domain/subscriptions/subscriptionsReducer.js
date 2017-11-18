@@ -1,6 +1,8 @@
 import { Map, OrderedSet } from 'immutable'
 import RemoteCall from 'data/domain/RemoteCall'
 
+import { LOGOUT_SUCCESS } from '../currentUser/logout/action'
+
 import {
   CREATE_SUBSCRIPTION_STARTED,
   CREATE_SUBSCRIPTION_SUCCESS,
@@ -45,6 +47,8 @@ const subscriptionsReducer = (state = initialState, action) => {
       return getAllSubscriptionsSuccess(state, action)
     case GET_ALL_SUBSCRIPTIONS_FAILURE:
       return getAllSubscriptionsFailure(state, action)
+    case LOGOUT_SUCCESS:
+      return initialState
     default:
       return state
   }
