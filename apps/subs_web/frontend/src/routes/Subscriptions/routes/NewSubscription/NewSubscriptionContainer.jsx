@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import { Map } from 'immutable'
 
+import Subscription from 'data/domain/subscriptions/Subscription'
 import createSubscriptionAction from 'data/domain/subscriptions/createSubscription/action'
 import NewSubscription from './NewSubscription'
 
@@ -12,12 +14,7 @@ class NewSubscriptionContainer extends Component {
     this.handleFormChange = this.handleFormChange.bind(this)
 
     this.state = {
-      data: {
-        name: '',
-        amount: '1',
-        amount_currency: 'GBP',
-        cycle: 'monthly',
-      }
+      data: new Subscription(),
     }
   }
 
@@ -29,17 +26,19 @@ class NewSubscriptionContainer extends Component {
 
   handleFormChange(attribute, value) {
     this.setState((prevState) => {
-      prevState.data[attribute] = value
-      return prevState
+      const data = prevState.data.set(attribute, value)
+      return { ...prevState, data }
     })
   }
 
   render() {
     const { subscription, remoteCall } = this.props
+    const { data } = this.state
+    const newSubscription = subscription || data
 
     return (
       <NewSubscription
-        subscription={subscription}
+        subscription={newSubscription}
         remoteCall={remoteCall}
         onClick={this.handleFormSubmit}
         onChange={this.handleFormChange}

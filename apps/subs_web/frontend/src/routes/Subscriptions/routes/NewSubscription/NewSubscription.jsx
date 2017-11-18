@@ -26,20 +26,20 @@ const NewSubscription = ({ subscription, onClick, onChange, remoteCall }) => {
           className="subscription-name"
           type="text"
           placeholder="name"
-          value={subscription && subscription.name}
+          value={subscription.name}
           onChange={(event) => handleChange(event, 'name')}
         />
         <input
           className="subscription-amount"
           type="number"
           placeholder="amount"
-          value={subscription && subscription.amount}
+          value={subscription.amount}
           onChange={(event) => handleChange(event, 'amount')}
         />
         <select
           className="subscription-amount-currency"
           onChange={(event) => handleChange(event, 'amount_currency')}
-          value={subscription && subscription.amount_currency}
+          value={subscription.amount_currency}
         >
           <option value="GBP">£ (GBP)</option>
           <option value="EUR">€ (EUR)</option>
@@ -48,7 +48,7 @@ const NewSubscription = ({ subscription, onClick, onChange, remoteCall }) => {
         <select
           className="subscription-cycle"
           onChange={(event) => handleChange(event, 'cycle')}
-          value={subscription && subscription.cycle}
+          value={subscription.cycle}
         >
           <option value="monthly">Monthly</option>
           <option value="yearly">Yearly</option>
