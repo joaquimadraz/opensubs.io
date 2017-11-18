@@ -1,4 +1,7 @@
+import { push } from 'react-router-redux'
+
 import api from 'data/api'
+import routes from 'constants/routes'
 
 const CREATE_SUBSCRIPTION_STARTED = 'CREATE_SUBSCRIPTION_STARTED'
 const CREATE_SUBSCRIPTION_SUCCESS = 'CREATE_SUBSCRIPTION_SUCCESS'
@@ -12,6 +15,7 @@ function handleCreateSuccess(dispatch, response) {
   const { data, meta } = response.data
 
   dispatch({ type: CREATE_SUBSCRIPTION_SUCCESS, data, meta })
+  dispatch(push(routes.root))
 }
 
 function handleCreateFailure(dispatch, error) {
