@@ -8,7 +8,7 @@ class RedirectIfLoggedContainer extends Component {
   componentDidMount() {
     const { currentUser, router } = this.props
 
-    if (currentUser) {
+    if (currentUser.isLogged) {
       router.push(routes.root)
     }
   }
@@ -16,7 +16,7 @@ class RedirectIfLoggedContainer extends Component {
   componentWillReceiveProps(nextProps) {
     const { currentUser, router } = nextProps
 
-    if (currentUser) {
+    if (currentUser.isLogged) {
       router.push(routes.root)
     }
   }
@@ -24,7 +24,7 @@ class RedirectIfLoggedContainer extends Component {
   render() {
     const { currentUser, children } = this.props
 
-    return (!currentUser) ? children : null
+    return (!currentUser.isLogged) ? children : null
   }
 }
 

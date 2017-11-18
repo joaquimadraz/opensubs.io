@@ -28,6 +28,8 @@ class AppContainer extends Component {
   render() {
     const { currentUser, children } = this.props
 
+    if (!currentUser.wasRequested) { return <p>Booting the systems...</p> }
+
     return (
       <App currentUser={currentUser} onLogoutClick={this.handleLogoutClick}>
         {children}

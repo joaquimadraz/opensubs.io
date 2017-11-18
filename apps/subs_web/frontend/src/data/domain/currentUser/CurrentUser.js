@@ -3,7 +3,9 @@ import { Record } from 'immutable'
 const currentUserObject = {
   name: null,
   email: null,
-  auth_token: null,
+  authToken: null,
+  isLogged: false,
+  wasRequested: false,
 }
 
 const CurrentUserRecord = Record(currentUserObject)

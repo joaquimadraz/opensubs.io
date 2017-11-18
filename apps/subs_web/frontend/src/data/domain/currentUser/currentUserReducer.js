@@ -1,17 +1,21 @@
 import { Map, OrderedSet } from 'immutable'
 import RemoteCall from 'data/domain/RemoteCall'
+import CurrentUser from 'data/domain/currentUser/CurrentUser'
 import Cookies from 'js-cookie'
 
 import { LOGIN_SUCCESS } from '../login/action'
 import { LOGOUT_SUCCESS } from './logout/action'
-import { GET_CURRENT_USER_SUCCESS } from './getCurrentUser/action'
+import {
+  GET_CURRENT_USER_SUCCESS,
+  GET_CURRENT_USER_FAILURE,
+} from './getCurrentUser/action'
 
 import { setCurrentUser } from './setCurrentUser/reducer'
 
-const initialState = null
+const initialState = new CurrentUser()
 
 const saveAuthToken = (user) => {
-  Cookies.set('auth-token', user.auth_token, {
+  Cookies.set('auth-token', user.authToken, {
     expires: Number(process.env.AUTH_TOKEN_EXPIRES || 10),
   })
 }
@@ -28,9 +32,11 @@ const currentUserReducer = (state = initialState, action) => {
       return currentUser
     case GET_CURRENT_USER_SUCCESS:
       return setCurrentUser(state, action)
+    case GET_CURRENT_USER_FAILURE:
+      return new CurrentUser({ wasRequested: true })
     case LOGOUT_SUCCESS:
       deleteAuthToken()
-      return null
+      return new CurrentUser({ wasRequested: true })
     default:
       return state
   }

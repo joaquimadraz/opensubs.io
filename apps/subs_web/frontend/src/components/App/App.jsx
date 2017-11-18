@@ -20,7 +20,7 @@ const App = ({ currentUser, onLogoutClick, children }) => {
 
   return (
     <div>
-      <div> {currentUser ? renderLogged() : renderNotLogged()}</div>
+      <div> {currentUser.isLogged  ? renderLogged() : renderNotLogged()}</div>
       {children}
     </div>
   )
