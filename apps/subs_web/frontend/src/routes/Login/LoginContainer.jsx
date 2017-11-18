@@ -33,10 +33,10 @@ class LoginContainer extends Component {
   }
 
   handleFormSubmit() {
-    const { dispatch } = this.props
+    const { dispatch, location: { query: { r: redirectUrl } } } = this.props
     const { email, password } = this.state.loginData
 
-    dispatch(loginAction(email, password))
+    dispatch(loginAction(email, password, { redirectUrl }))
   }
 
   handleFormChange(attribute, value) {

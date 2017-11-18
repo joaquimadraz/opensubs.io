@@ -10,9 +10,13 @@ import '../assets/css'
 import initStore from './data/store'
 import AppContainer from './containers/AppContainer'
 import Home from './routes/Home'
+import NotFound from './components/NotFound'
+
+import RedirectIfLogged from './routes/RedirectIfLogged'
 import Signup from './routes/Signup'
 import Login from './routes/Login'
-import RedirectIfLogged from './routes/RedirectIfLogged'
+
+import RedirectIfNotLogged from './routes/RedirectIfNotLogged'
 import UsersConfirmSignup from './routes/Users/routes/ConfirmSignup'
 import NewSubscription from './routes/Subscriptions/routes/NewSubscription'
 
@@ -25,13 +29,18 @@ if (document.getElementById('app')) {
       <Router history={awesomeHistory}>
         <Route path={routes.root} component={AppContainer}>
           <IndexRoute component={Home} />
+          {/* Public routes */}
           <Route component={RedirectIfLogged}>
             <Route path={routes.signup} component={Signup} />
             <Route path={routes.login} component={Login} />
+            <Route path={routes.usersConfirmSignup} component={UsersConfirmSignup} />
           </Route>
-          <Route path={routes.usersConfirmSignup} component={UsersConfirmSignup} />
-          <Route path={routes.subscriptionsNew} component={NewSubscription} />
+          {/* Protected routes */}
+          <Route component={RedirectIfNotLogged}>
+            <Route path={routes.subscriptionsNew} component={NewSubscription} />
+          </Route>
         </Route>
+        <Route path="*" component={NotFound} />
       </Router>
     </Provider>,
     document.getElementById('app'),

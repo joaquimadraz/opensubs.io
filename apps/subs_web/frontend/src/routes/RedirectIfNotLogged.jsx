@@ -4,20 +4,24 @@ import { connect } from 'react-redux'
 import routes from 'constants/routes'
 
 // TODO: Remove duplication
-class RedirectIfLoggedContainer extends Component {
+class RedirectIfNotLoggedContainer extends Component {
   componentDidMount() {
     const { currentUser, router } = this.props
 
-    if (currentUser) {
-      router.push(routes.root)
+    if (!currentUser) {
+      const pathname = this.props.location.pathname
+
+      router.push(`${routes.login}?r=${pathname}`)
     }
   }
 
   componentWillReceiveProps(nextProps) {
     const { currentUser, router } = nextProps
 
-    if (currentUser) {
-      router.push(routes.root)
+    if (!currentUser) {
+      const pathname = this.props.location.pathname
+
+      router.push(`${routes.login}?r=${pathname}`)
     }
   }
 
@@ -34,4 +38,4 @@ const mapStateToProps = (state) => {
   }
 }
 
-export default connect(mapStateToProps)(RedirectIfLoggedContainer)
+export default connect(mapStateToProps)(RedirectIfNotLoggedContainer)
