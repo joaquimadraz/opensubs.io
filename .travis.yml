@@ -1,0 +1,23 @@
+language: elixir
+
+env:
+  - MIX_ENV=test
+
+elixir:
+  - 1.5
+
+otp_release:
+  - 20.0
+
+services:
+  - postgresql
+addons:
+  postgresql: "9.6"
+
+before_script:
+  - yarn global add chromedriver
+  - mix compile
+  - mix ecto.setup
+
+script:
+  - mix test
