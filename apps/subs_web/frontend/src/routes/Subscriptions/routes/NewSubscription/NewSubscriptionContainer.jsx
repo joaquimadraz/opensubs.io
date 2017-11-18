@@ -35,9 +35,7 @@ class NewSubscriptionContainer extends Component {
 
   render() {
     const { subscription, remoteCall } = this.props
-  }
 
-  render() {
     return (
       <NewSubscription
         subscription={subscription}
@@ -50,7 +48,7 @@ class NewSubscriptionContainer extends Component {
 }
 
 const mapStateToProps = (state) => {
-  const subscription = state.subscriptions.entities.get('new')
+  const subscription = state.subscriptions.getIn(['entities', 'new'])
 
   return {
     subscription,
@@ -59,4 +57,4 @@ const mapStateToProps = (state) => {
 }
 
 
-export default connect()(NewSubscriptionContainer)
+export default connect(mapStateToProps)(NewSubscriptionContainer)
