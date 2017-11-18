@@ -78,7 +78,7 @@ defmodule Subs.User do
                    password_recovery_used_at: nil)
   end
 
-  def email_changeset(struct, params = %{"email" => email}) do
+  def email_changeset(struct, params) do
     struct
     |> cast(params, [:email])
     |> downcase_email()

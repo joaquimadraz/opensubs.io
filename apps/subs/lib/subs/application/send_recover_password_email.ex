@@ -1,5 +1,4 @@
 defmodule Subs.Application.SendRecoverPasswordEmail do
-  alias Subs.UserRepo
   alias Subs.Outbound.Email
 
   def send(user, recover_url) do
