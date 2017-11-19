@@ -10,7 +10,7 @@ const ColorPicker = ({ value, onChange }) => {
   return (
     <div>
       <GithubPicker
-        triangle='hide'
+        triangle="hide"
         color={color}
         colors={colors.available}
         onChangeComplete={handleChange}

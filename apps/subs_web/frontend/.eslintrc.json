@@ -1,0 +1,38 @@
+{
+  "env": {
+    "browser": true
+  },
+  "parser": "babel-eslint",
+  "settings": {
+    "import/resolver": {
+      "babel-module": {}
+    }
+  },
+  "rules": {
+    "semi": [
+      "error",
+      "never"
+    ],
+    "global-require": 0,
+    "react/forbid-prop-types": 0,
+    "react/require-default-props": 0,
+    "jsx-a11y/no-static-element-interactions": 1,
+    "class-methods-use-this": 1,
+    "no-console": 0,
+    "no-underscore-dangle": 0,
+    "import/no-extraneous-dependencies": [
+      2,
+      {
+        "devDependencies": true
+      }
+    ],
+    "import/no-named-as-default-member": 0,
+    "arrow-body-style": 0
+  },
+  "extends": "airbnb",
+  "plugins": [
+    "react",
+    "jsx-a11y",
+    "import"
+  ]
+}
