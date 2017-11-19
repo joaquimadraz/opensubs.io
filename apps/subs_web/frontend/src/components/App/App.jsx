@@ -1,7 +1,10 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { Link } from 'react-router'
 
+import CurrentUser from 'data/domain/currentUser/CurrentUser'
 import routes from 'constants/routes'
+import Styles from './Styles'
 
 const App = ({ currentUser, onLogoutClick, children }) => {
   const renderLogged = () => (
@@ -19,11 +22,17 @@ const App = ({ currentUser, onLogoutClick, children }) => {
   )
 
   return (
-    <div>
-      <div> {currentUser.isLogged  ? renderLogged() : renderNotLogged()}</div>
+    <Styles>
+      <div> {currentUser.isLogged ? renderLogged() : renderNotLogged()}</div>
       {children}
-    </div>
+    </Styles>
   )
+}
+
+App.propTypes = {
+  currentUser: PropTypes.instanceOf(CurrentUser).isRequired,
+  onLogoutClick: PropTypes.func.isRequired,
+  children: PropTypes.object.isRequired,
 }
 
 export default App

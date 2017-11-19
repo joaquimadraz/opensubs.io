@@ -29,8 +29,8 @@ class Subscription extends SubscriptionRecord {
   }
 }
 
-export function parseSubscription(remoteData) {
-  return new Subscription(remoteData)
+export function parseSubscription(data) {
+  return new Subscription(data)
 }
 
 export default Subscription

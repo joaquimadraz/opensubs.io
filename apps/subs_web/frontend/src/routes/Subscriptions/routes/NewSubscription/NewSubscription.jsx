@@ -1,9 +1,14 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { Link } from 'react-router'
+
+import RemoteCall from 'data/domain/RemoteCall'
+import Subscription from 'data/domain/subscriptions/Subscription'
 
 import routes from 'constants/routes'
 import ErrorMessages from 'components/ErrorMessages'
 import ColorPicker from 'components/ColorPicker'
+import DatePicker from 'components/DatePicker'
 
 const renderErrors = (remoteCall) => {
   if (remoteCall.loading || !remoteCall.data) { return null }
@@ -30,7 +35,7 @@ const NewSubscription = ({ subscription, onClick, onChange, remoteCall }) => {
             type="text"
             placeholder="name"
             value={subscription.name}
-            onChange={(event) => handleChange(event, 'name')}
+            onChange={event => handleChange(event, 'name')}
           />
         </div>
         <div>
@@ -39,13 +44,13 @@ const NewSubscription = ({ subscription, onClick, onChange, remoteCall }) => {
             type="number"
             placeholder="amount"
             value={subscription.amount}
-            onChange={(event) => handleChange(event, 'amount')}
+            onChange={event => handleChange(event, 'amount')}
           />
         </div>
         <div>
           <select
             className="subscription-amount-currency"
-            onChange={(event) => handleChange(event, 'amount_currency')}
+            onChange={event => handleChange(event, 'amount_currency')}
             value={subscription.amount_currency}
           >
             <option value="GBP">£ (GBP)</option>
@@ -56,7 +61,7 @@ const NewSubscription = ({ subscription, onClick, onChange, remoteCall }) => {
         <div>
           <select
             className="subscription-cycle"
-            onChange={(event) => handleChange(event, 'cycle')}
+            onChange={event => handleChange(event, 'cycle')}
             value={subscription.cycle}
           >
             <option value="monthly">Monthly</option>
@@ -66,13 +71,25 @@ const NewSubscription = ({ subscription, onClick, onChange, remoteCall }) => {
         <div>
           <ColorPicker onChange={color => onChange('color', color)} />
         </div>
-        {/* first_bill_date */}
+        <div>
+          <DatePicker
+            value={subscription.first_bill_date}
+            onChange={date => onChange('first_bill_date', date)}
+          />
+        </div>
         <div>
           <button type="submit" onClick={onClick}>Create</button>
         </div>
       </div>
     </div>
   )
+}
+
+NewSubscription.propTypes = {
+  subscription: PropTypes.instanceOf(Subscription),
+  onClick: PropTypes.func,
+  onChange: PropTypes.func,
+  remoteCall: PropTypes.instanceOf(RemoteCall),
 }
 
 export default NewSubscription
