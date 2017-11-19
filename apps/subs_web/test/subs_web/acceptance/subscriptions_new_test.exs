@@ -43,7 +43,7 @@ defmodule SubsWeb.Test.Acceptance.SubscriptionsNewTest do
     |> fill_in(css("#new-subscription-form .subscription-cycle"), with: "yearly")
     |> click(css("#new-subscription-form button[type=\"submit\"]"))
     |> assert_has(css("h3", text: "Your subscriptions"))
-    |> assert_has(css("p", text: "Dropbox"))
+    |> assert_has(css(".subscription-name", text: "Dropbox"))
   end
 
   # TODO: Move to helper

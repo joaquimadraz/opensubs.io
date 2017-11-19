@@ -5,7 +5,7 @@ export default styled('div') `
   padding: 5px;
   margin: 5px 0;
 
-  .amount {
+  .subscription-amount {
     disaply: inline-block;
     margin-left: 10px;
   }
