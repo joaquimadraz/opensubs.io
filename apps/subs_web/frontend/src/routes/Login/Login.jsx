@@ -1,9 +1,4 @@
 import React from 'react'
-import { Link } from 'react-router'
-import { Map } from 'immutable'
-
-import routes from 'constants/routes'
-import ErrorMessages from 'components/ErrorMessages'
 
 const renderErrors = (remoteCall) => {
   if (remoteCall.loading || !remoteCall.data) { return null }
@@ -18,8 +13,6 @@ const Login = ({ onClick, onChange, remoteCall }) => {
 
   return (
     <div>
-      <Link to={routes.root}>Home</Link>
-
       <div id="login-form">
         {renderErrors(remoteCall)}
         <input

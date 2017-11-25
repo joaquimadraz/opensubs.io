@@ -4,13 +4,14 @@ import { Link } from 'react-router'
 
 import CurrentUser from 'data/domain/currentUser/CurrentUser'
 import routes from 'constants/routes'
+import Button from 'components/Button'
 import Styles from './Styles'
 
 const App = ({ currentUser, onLogoutClick, children }) => {
   const renderLogged = () => (
     <div>
       <div className="current-user">{currentUser.email}</div>
-      <button onClick={onLogoutClick}>Logout</button>
+      <Button onClick={onLogoutClick}>Logout</Button>
     </div>
   )
 
@@ -23,8 +24,23 @@ const App = ({ currentUser, onLogoutClick, children }) => {
 
   return (
     <Styles>
-      <div> {currentUser.isLogged ? renderLogged() : renderNotLogged()}</div>
-      {children}
+      <div className="bg-near-white">
+        <section className="mw8-ns center pa3 ph3-m ph5-ns">
+          <div className="mw9 center">
+            <div className="cf">
+              <div className="fl w-100 w-75-ns">
+                <Link to={routes.root} className="f1 mt0 no-underline">Subs</Link>
+              </div>
+              <div className="fl w-100 w-25-ns tr">
+                {currentUser.isLogged ? renderLogged() : renderNotLogged()}
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+      <section className="mw8-ns center pa3 ph3-m ph5-ns">
+        {children}
+      </section>
     </Styles>
   )
 }

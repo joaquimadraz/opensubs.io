@@ -12,9 +12,7 @@ const renderLandingPage = () => {
 const renderLoggedPage = (subscriptions, remoteCall) => {
   return (
     <div>
-      <hr />
       <Link to={routes.subscriptionsNew}>Create subscription</Link>
-      <hr />
       <ListSubscriptions
         subscriptions={subscriptions}
         remoteCall={remoteCall}

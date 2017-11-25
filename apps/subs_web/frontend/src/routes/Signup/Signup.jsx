@@ -1,7 +1,5 @@
 import React from 'react'
-import { Link } from 'react-router'
 
-import routes from 'constants/routes'
 import ErrorMessages from 'components/ErrorMessages'
 
 const renderErrors = (remoteCall) => {
@@ -28,8 +26,6 @@ const Signup = ({ onClick, onChange, user, remoteCall }) => {
 
   return (
     <div>
-      <Link to={routes.root}>Home</Link>
-
       Signup
 
       <div id="signup-form">

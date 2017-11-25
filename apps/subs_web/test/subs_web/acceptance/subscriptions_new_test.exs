@@ -42,7 +42,7 @@ defmodule SubsWeb.Test.Acceptance.SubscriptionsNewTest do
     |> fill_in(css("#new-subscription-form .subscription-amount-currency"), with: "GBP")
     |> fill_in(css("#new-subscription-form .subscription-cycle"), with: "yearly")
     |> click(css("#new-subscription-form button[type=\"submit\"]"))
-    |> assert_has(css("h3", text: "Your subscriptions"))
+    |> assert_has(css("h3", text: "Next payments"))
     |> assert_has(css(".SubscriptionListItem--name", text: "Dropbox"))
   end
 
