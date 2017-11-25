@@ -6,6 +6,7 @@ import { browserHistory, Router, Route, IndexRoute } from 'react-router'
 import { syncHistoryWithStore } from 'react-router-redux'
 import routes from 'constants/routes'
 
+import './assets/css'
 import initStore from './data/store'
 import AppContainer from './containers/AppContainer'
 import Home from './routes/Home'
