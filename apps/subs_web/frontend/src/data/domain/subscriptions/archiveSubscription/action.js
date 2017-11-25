@@ -1,7 +1,4 @@
-import { push } from 'react-router-redux'
-
 import api from 'data/api'
-import routes from 'constants/routes'
 
 const ARCHIVE_SUBSCRIPTION_STARTED = 'ARCHIVE_SUBSCRIPTION_STARTED'
 const ARCHIVE_SUBSCRIPTION_SUCCESS = 'ARCHIVE_SUBSCRIPTION_SUCCESS'
