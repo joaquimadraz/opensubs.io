@@ -4,4 +4,5 @@ import styled from 'react-emotion'
 
 export default styled('li') `
   background: ${props => props.background || 'none'};
+  color: ${props => props.textColor || '#000'};
 `

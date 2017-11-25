@@ -9,6 +9,7 @@ const SubscriptionListItem = ({ subscription, onArchiveClick }) => (
   <Styles
     className="SubscriptionListItem flex justify-around items-center br2 lh-copy ph0-l mb2 dim pointer"
     background={subscription.color}
+    textColor={subscription.textColor}
   >
     <div className="w-30 w-40-ns pa2 pa3-ns">
       <span className="SubscriptionListItem--name">

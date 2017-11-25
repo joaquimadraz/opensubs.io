@@ -1,22 +1,21 @@
-const lightGray = { hex: '#e2e2e2' }
-const red = { hex: '#ff4444' }
-const turquoise = { hex: '#1abc9c' }
-const emerald = { hex: '#2ecc71' }
-const peterriver = { hex: '#3498db' }
-const wetasphalt = { hex: '#34495e' }
-const pumpking = { hex: '#d35400' }
-const concrete = { hex: '#95a5a6' }
+const available = [
+  { bg: '#E2E2E2', text: '#333333' },
+  { bg: '#FF4444', text: '#FFFFFF' },
+  { bg: '#1ABC9C', text: '#FFFFFF' },
+  { bg: '#2ECC71', text: '#FFFFFF' },
+  { bg: '#3498DB', text: '#FFFFFF' },
+  { bg: '#34495E', text: '#FFFFFF' },
+  { bg: '#D35400', text: '#FFFFFF' },
+  { bg: '#95A5A6', text: '#FFFFFF' },
+]
+
+const textColorForBg = available.reduce((acc, color) => {
+  acc[color.bg] = color.text
+  return acc
+}, {})
 
 export default {
-  default: lightGray.hex,
-  available: [
-    turquoise.hex,
-    emerald.hex,
-    peterriver.hex,
-    wetasphalt.hex,
-    pumpking.hex,
-    red.hex,
-    concrete.hex,
-    lightGray.hex,
-  ],
+  default: available[0].bg,
+  available: available.map(color => color.bg),
+  textColorForBg,
 }

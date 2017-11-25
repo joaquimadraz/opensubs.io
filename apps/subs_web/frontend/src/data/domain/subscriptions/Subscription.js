@@ -27,6 +27,10 @@ class Subscription extends SubscriptionRecord {
   get humanNextBillDate() {
     return parseAndFormatDate(this.next_bill_date)
   }
+
+  get textColor() {
+    return colors.textColorForBg[this.color]
+  }
 }
 
 export function parseSubscription(data) {
