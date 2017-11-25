@@ -16,9 +16,9 @@ addons:
 
 before_script:
   - yarn global add chromedriver
+  - cd apps/subs_web/frontend && yarn install && node_modules/.bin/webpack --config webpack.config.js
   - mix compile
   - mix ecto.setup
-  - cd frontend && yarn install && node_modules/.bin/webpack --config webpack.config.js
 
 script:
   - mix test
