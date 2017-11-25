@@ -1,5 +1,5 @@
 defmodule SubsWeb.Test.Acceptance.LandingPageTest do
-  use SubsWeb.FeatureCase, async: true
+  use SubsWeb.FeatureCase
 
   import Wallaby.Query, only: [css: 1]
 

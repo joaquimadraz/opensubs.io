@@ -1,5 +1,5 @@
 defmodule SubsWeb.Test.Acceptance.UserSignupTest do
-  use SubsWeb.FeatureCase, async: true
+  use SubsWeb.FeatureCase
 
   import Wallaby.Query
 

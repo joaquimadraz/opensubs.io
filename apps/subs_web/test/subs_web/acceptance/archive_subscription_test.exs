@@ -1,5 +1,5 @@
 defmodule SubsWeb.Test.Acceptance.ArchiveSubscriptionTest do
-  use SubsWeb.FeatureCase, async: true
+  use SubsWeb.FeatureCase
 
   import Wallaby.Query
 
