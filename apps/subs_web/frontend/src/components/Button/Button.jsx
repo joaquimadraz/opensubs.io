@@ -4,16 +4,20 @@ import cx from 'classnames'
 
 const colorClass = color => `bg-${color}`
 
-const Button = ({ onClick, children, color }) => (
-  <button
-    className={cx('f7 dim bn ph3 pv2 dib white pointer', [colorClass(color)])}
-    onClick={onClick}
-  >
-    {children}
-  </button>
-)
+// TODO: Deconstruct props to <button>
+const Button = props => {
+  const { children, color, className, ...buttonProps } = props
+  const classNames = cx(
+    className,
+    colorClass(color),
+    'f7 dim bn ph3 pv2 dib white pointer',
+  )
+
+  return (<button className={classNames} {...buttonProps}>{children}</button>)
+}
 
 Button.propTypes = {
+  className: PropTypes.string,
   onClick: PropTypes.func,
   children: PropTypes.any,
   color: PropTypes.string,

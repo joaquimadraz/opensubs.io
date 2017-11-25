@@ -7,7 +7,7 @@ import Styles from './Styles'
 
 const SubscriptionListItem = ({ subscription, onArchiveClick }) => (
   <Styles
-    className="flex justify-around items-center br2 lh-copy ph0-l mb2 dim pointer"
+    className="SubscriptionListItem flex justify-around items-center br2 lh-copy ph0-l mb2 dim pointer"
     background={subscription.color}
   >
     <div className="w-30 w-40-ns pa2 pa3-ns">
@@ -26,7 +26,12 @@ const SubscriptionListItem = ({ subscription, onArchiveClick }) => (
       </span>
     </div>
     <div className="w-10 w-20-ns pa2 pa3-ns tr">
-      <Button onClick={() => onArchiveClick(subscription.id)}>Archive</Button>
+      <Button
+        className="SubscriptionListItem--archive-button"
+        onClick={() => onArchiveClick(subscription.id)}
+      >
+        Archive
+      </Button>
     </div>
   </Styles>
 )
