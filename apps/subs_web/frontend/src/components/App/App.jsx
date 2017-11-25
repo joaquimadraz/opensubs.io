@@ -24,12 +24,19 @@ const App = ({ currentUser, onLogoutClick, children }) => {
 
   return (
     <Styles>
+      {/* Header */}
       <div className="bg-near-white">
         <section className="mw8-ns center pa3 ph3-m ph5-ns">
           <div className="mw9 center">
             <div className="cf">
               <div className="fl w-100 w-75-ns">
-                <Link to={routes.root} className="f1 mt0 no-underline">Subs</Link>
+                <span className="logo dib v-mid" />
+                <Link
+                  to={routes.root}
+                  className="App--logo-title f1 mt0 no-underline black b-ns tracked-tight v-mid ml5 dark-gray"
+                >
+                  Subs
+                </Link>
               </div>
               <div className="fl w-100 w-25-ns tr">
                 {currentUser.isLogged ? renderLogged() : renderNotLogged()}
@@ -38,8 +45,15 @@ const App = ({ currentUser, onLogoutClick, children }) => {
           </div>
         </section>
       </div>
+      {/* Main */}
       <section className="mw8-ns center pa3 ph3-m ph5-ns">
         {children}
+      </section>
+      {/* Footer */}
+      <section className="mw8-ns center pa3 ph3-m ph5-ns">
+        <div className="tc">
+          <div className="f6">Logo made by <a className="no-underline navy f6" href="https://www.flaticon.com/authors/twitter" title="Twitter">Twitter</a> from <a className="no-underline dark-gray f6" href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a className="no-underline dark-gray f6" href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
+        </div>
       </section>
     </Styles>
   )

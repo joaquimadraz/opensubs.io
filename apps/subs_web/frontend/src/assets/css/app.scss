@@ -1,5 +1,12 @@
 @import '../../../node_modules/tachyons/css/tachyons.css';
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
 
 body {
-  font-family: 'helvetica neue', helvetica, sans-serif;
+  font-family: 'Open Sans', sans-serif;
+}
+
+.logo {
+  width: 70px;
+  height: 70px;
+  background: url('../images/dollar.svg');
 }
