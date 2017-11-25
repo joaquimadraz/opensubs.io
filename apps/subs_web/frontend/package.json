@@ -5,6 +5,7 @@
   "license": "MIT",
   "dependencies": {
     "axios": "^0.17.0",
+    "classnames": "^2.2.5",
     "emotion": "^8.0.10",
     "immutable": "^3.8.1",
     "js-cookie": "^2.2.0",

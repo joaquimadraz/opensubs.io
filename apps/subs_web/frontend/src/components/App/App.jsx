@@ -11,7 +11,7 @@ const App = ({ currentUser, onLogoutClick, children }) => {
   const renderLogged = () => (
     <div>
       <div className="current-user">{currentUser.email}</div>
-      <Button onClick={onLogoutClick}>Logout</Button>
+      <Button onClick={onLogoutClick} color="red">Logout</Button>
     </div>
   )
 
