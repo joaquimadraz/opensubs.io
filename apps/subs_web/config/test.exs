@@ -12,3 +12,4 @@ config :subs, :sql_sandbox, true
 
 config :wallaby, phantomjs: "frontend/node_modules/phantomjs-prebuilt/bin/phantomjs"
 config :wallaby, driver: Wallaby.Experimental.Chrome
+config :wallaby, max_wait_time: 5000
