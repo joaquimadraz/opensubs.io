@@ -10,7 +10,7 @@ const Button = props => {
   const classNames = cx(
     className,
     colorClass(color),
-    'f7 dim bn ph3 pv2 dib white pointer',
+    'f7 bn ph3 pv2 dib white pointer b dim br2',
   )
 
   return (<button className={classNames} {...buttonProps}>{children}</button>)

@@ -17,7 +17,6 @@ const App = ({ currentUser, onLogoutClick, children }) => {
 
   const renderNotLogged = () => (
     <div>
-      <Link to={routes.signup}>Sign Up</Link>
       <Link to={routes.login}>Login</Link>
     </div>
   )
