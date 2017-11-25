@@ -16,7 +16,6 @@ addons:
 
 before_script:
   - yarn global add chromedriver
-  - cd apps/subs_web/frontend && yarn install && node_modules/.bin/webpack --config webpack.config.js && cd $TRAVIS_BUILD_DIR
   - mix compile
   - mix ecto.setup
 
