@@ -1,6 +1,10 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import { OrderedSet } from 'immutable'
 import { connect } from 'react-redux'
 
+import RemoteCall from 'data/domain/RemoteCall'
+import CurrentUser from 'data/domain/currentUser/CurrentUser'
 import getAllSubscriptionsAction from 'data/domain/subscriptions/getAllSubscriptions/action'
 import archiveSubscriptionAction from 'data/domain/subscriptions/archiveSubscription/action'
 import Home from './Home'
@@ -25,12 +29,13 @@ class HomeContainer extends Component {
   }
 
   render() {
-    const { currentUser, subscriptions } = this.props
+    const { currentUser, subscriptions, remoteCall } = this.props
 
     return (
       <Home
         currentUser={currentUser}
         subscriptions={subscriptions}
+        remoteCall={remoteCall}
         onSubscriptionArchiveClick={this.handleSubscriptionArchiveClick}
       />
     )
@@ -49,6 +54,13 @@ const mapStateToProps = (state) => {
     subscriptions: subscriptionsRecords,
     remoteCall: subscriptions.get('remoteCall'),
   }
+}
+
+HomeContainer.propTypes = {
+  dispatch: PropTypes.func.isRequired,
+  currentUser: PropTypes.instanceOf(CurrentUser).isRequired,
+  subscriptions: PropTypes.instanceOf(OrderedSet).isRequired,
+  remoteCall: PropTypes.instanceOf(RemoteCall).isRequired,
 }
 
 export default connect(mapStateToProps)(HomeContainer)
