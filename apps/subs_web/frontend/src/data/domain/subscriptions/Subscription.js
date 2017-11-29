@@ -14,6 +14,7 @@ const remoteData = {
   amount_currency_symbol: null,
   first_bill_date: null,
   next_bill_date: null,
+  service_code: '',
 }
 
 const SubscriptionRecord = Record(remoteData)

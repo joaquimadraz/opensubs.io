@@ -7,6 +7,9 @@ const available = [
   { bg: '#34495E', text: '#FFFFFF' },
   { bg: '#D35400', text: '#FFFFFF' },
   { bg: '#95A5A6', text: '#FFFFFF' },
+  { bg: '#DB0000', text: '#FFFFFF' },
+  { bg: '#000000', text: '#FFFFFF' },
+  { bg: '#1ED760', text: '#FFFFFF' },
 ]
 
 const textColorForBg = available.reduce((acc, color) => {

@@ -20,8 +20,13 @@ class NewSubscriptionContainer extends Component {
 
   handleFormSubmit() {
     const { dispatch } = this.props
+    let data = this.state.data.toMap()
 
-    dispatch(createSubscriptionAction({ subscription: this.state.data }))
+    if (!data.get('service_code')) {
+      data = data.delete('service_code')
+    }
+
+    dispatch(createSubscriptionAction({ subscription: data }))
   }
 
   handleFormChange(attribute, value) {

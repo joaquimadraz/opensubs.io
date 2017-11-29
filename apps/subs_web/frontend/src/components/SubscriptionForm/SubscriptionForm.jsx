@@ -7,6 +7,7 @@ import Subscription from 'data/domain/subscriptions/Subscription'
 import ErrorMessages from 'components/ErrorMessages'
 import ColorPicker from 'components/ColorPicker'
 import DatePicker from 'components/DatePicker'
+import ServiceSelector from 'components/ServiceSelector'
 
 const renderErrors = (remoteCall) => {
   if (remoteCall.loading || !remoteCall.data) { return null }
@@ -19,6 +20,11 @@ const SubscriptionForm = ({ subscription, onClick, onChange, remoteCall }) => {
     onChange(attribute, event.target.value)
   }
 
+  const handleServiceChange = (option) => {
+    onChange('color', option.color)
+    onChange('service_code', (option.value === 'custom' ? null : option.value))
+  }
+
   return (
     <div
       id="new-subscription-form"
@@ -26,13 +32,20 @@ const SubscriptionForm = ({ subscription, onClick, onChange, remoteCall }) => {
     >
       {renderErrors(remoteCall)}
       <div>
-        <input
-          className="subscription-name"
-          type="text"
-          placeholder="name"
-          value={subscription.name}
-          onChange={event => handleChange(event, 'name')}
+        <ServiceSelector
+          value={subscription.service_code || 'custom'}
+          onChange={handleServiceChange}
         />
+      </div>
+      <div>
+        {!subscription.service_code &&
+          <input
+            className="subscription-name"
+            type="text"
+            placeholder="name"
+            value={subscription.name}
+            onChange={event => handleChange(event, 'name')}
+          />}
       </div>
       <div>
         <input
@@ -65,7 +78,8 @@ const SubscriptionForm = ({ subscription, onClick, onChange, remoteCall }) => {
         </select>
       </div>
       <div>
-        <ColorPicker onChange={color => onChange('color', color)} />
+        {!subscription.service_code &&
+          <ColorPicker onChange={color => onChange('color', color)} />}
       </div>
       <div>
         <DatePicker
