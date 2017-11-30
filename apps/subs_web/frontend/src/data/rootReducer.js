@@ -5,6 +5,7 @@ import signupReducer from 'data/domain/signupReducer'
 import loginReducer from 'data/domain/loginReducer'
 import currentUserReduder from 'data/domain/currentUser/currentUserReducer'
 import subscriptionsReducer from 'data/domain/subscriptions/subscriptionsReducer'
+import servicesReducer from 'data/domain/services/servicesReducer'
 
 const rootReducer = combineReducers({
   routing: routerReducer,
@@ -12,6 +13,7 @@ const rootReducer = combineReducers({
   login: loginReducer,
   currentUser: currentUserReduder,
   subscriptions: subscriptionsReducer,
+  services: servicesReducer,
 })
 
 export default rootReducer
