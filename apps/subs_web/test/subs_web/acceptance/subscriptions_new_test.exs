@@ -46,6 +46,19 @@ defmodule SubsWeb.Test.Acceptance.SubscriptionsNewTest do
     |> assert_has(css(".SubscriptionListItem--name", text: "Dropbox"))
   end
 
+  @tag :acceptance
+  test "creates subscription from service and renders it on the page", %{session: session} do
+    session
+    |> assert_signup_and_login_user()
+    |> visit("/subscriptions/new")
+    |> assert_has(css("#new-subscription-form"))
+    |> click(css("#new-subscription-form .subscription-service"))
+    |> click(css(".Select .Select-option:first-child"))
+    |> click(css("#new-subscription-form button[type=\"submit\"]"))
+    |> assert_has(css("h3", text: "Next payments"))
+    |> assert_has(css(".SubscriptionListItem--name", text: "Github"))
+  end
+
   # TODO: Move to helper
   def assert_signup_and_login_user(session, email \\ "joaquim@example.com") do
     password = "123456"

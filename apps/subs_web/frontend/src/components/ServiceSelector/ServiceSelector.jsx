@@ -40,12 +40,12 @@ class SelectorOption extends Component {
 
     const style = {
       background: option.color,
-      color: colors.textColorForBg[option.color]
+      color: colors.textColorForBg[option.color],
     }
 
     return (
       <div
-        className={className}
+        className="Select-option"
         onMouseDown={this.handleMouseDown}
         onMouseEnter={this.handleMouseEnter}
         onMouseMove={this.handleMouseMove}
@@ -93,14 +93,10 @@ SelectorValue.defaultProps = {
   onSelect: () => { },
 }
 
-const ServiceSelector = ({ value, onChange }) => (
+const ServiceSelector = ({ className, options, value, onChange }) => (
   <Select
-    options={[
-      { value: 'netflix', color: '#DB0000', label: 'Netflix' },
-      { value: 'spotify', color: '#1ED760', label: 'Spotify' },
-      { value: 'github', color: '#000000', label: 'Github' },
-      { value: 'custom', color: '#E2E2E2', label: 'Custom' },
-    ]}
+    className={className}
+    options={options}
     value={value}
     onChange={option => onChange(option)}
     optionComponent={SelectorOption}
@@ -110,11 +106,14 @@ const ServiceSelector = ({ value, onChange }) => (
 
 ServiceSelector.propTypes = {
   value: PropTypes.string,
+  options: PropTypes.array,
   onChange: PropTypes.func,
+  className: PropTypes.string,
 }
 
 ServiceSelector.defaultProps = {
   value: 'custom',
+  options: [],
   onChange: () => {},
 }
 

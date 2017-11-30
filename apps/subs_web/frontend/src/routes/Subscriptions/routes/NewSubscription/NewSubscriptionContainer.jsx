@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Map } from 'immutable'
 
 import Subscription from 'data/domain/subscriptions/Subscription'
 import createSubscriptionAction from 'data/domain/subscriptions/createSubscription/action'
+import getAllServicesAction from 'data/domain/services/getAllServices/action'
 import NewSubscription from './NewSubscription'
 
 class NewSubscriptionContainer extends Component {
@@ -15,6 +15,14 @@ class NewSubscriptionContainer extends Component {
 
     this.state = {
       data: new Subscription(),
+    }
+  }
+
+  componentDidMount() {
+    const { dispatch, services } = this.props
+
+    if (services.size === 0) {
+      dispatch(getAllServicesAction())
     }
   }
 
@@ -37,12 +45,13 @@ class NewSubscriptionContainer extends Component {
   }
 
   render() {
-    const { subscription, remoteCall } = this.props
+    const { subscription, services, remoteCall } = this.props
     const { data } = this.state
     const newSubscription = subscription || data
 
     return (
       <NewSubscription
+        services={services}
         subscription={newSubscription}
         remoteCall={remoteCall}
         onClick={this.handleFormSubmit}
@@ -53,13 +62,19 @@ class NewSubscriptionContainer extends Component {
 }
 
 const mapStateToProps = (state) => {
-  const subscription = state.subscriptions.getIn(['entities', 'new'])
+  const { services, subscriptions } = state
+
+  const subscription = subscriptions.getIn(['entities', 'new'])
+
+  const servicesRecords = services.get('ids').map(id => (
+    services.getIn(['entities', id])
+  ))
 
   return {
     subscription,
+    services: servicesRecords,
     remoteCall: state.subscriptions.get('remoteCall'),
   }
 }
-
 
 export default connect(mapStateToProps)(NewSubscriptionContainer)

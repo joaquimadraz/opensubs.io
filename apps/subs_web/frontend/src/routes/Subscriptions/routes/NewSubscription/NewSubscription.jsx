@@ -6,7 +6,11 @@ import Subscription from 'data/domain/subscriptions/Subscription'
 
 import SubscriptionForm from 'components/SubscriptionForm'
 
-const NewSubscription = ({ subscription, onClick, onChange, remoteCall }) => {
+const NewSubscription = ({ subscription, services, onClick, onChange, remoteCall }) => {
+  if (services.size === 0) {
+    return (<p>Loading services...</p>)
+  }
+
   return (
     <div>
       New subscription
@@ -16,6 +20,7 @@ const NewSubscription = ({ subscription, onClick, onChange, remoteCall }) => {
         onChange={onChange}
         remoteCall={remoteCall}
         subscription={subscription}
+        services={services}
       />
     </div>
   )

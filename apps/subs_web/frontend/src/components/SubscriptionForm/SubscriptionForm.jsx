@@ -1,8 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { OrderedSet } from 'immutable'
 
 import RemoteCall from 'data/domain/RemoteCall'
 import Subscription from 'data/domain/subscriptions/Subscription'
+import colors from 'constants/colors'
 
 import ErrorMessages from 'components/ErrorMessages'
 import ColorPicker from 'components/ColorPicker'
@@ -15,7 +17,23 @@ const renderErrors = (remoteCall) => {
   return <ErrorMessages errors={remoteCall.data.get('errors')} />
 }
 
-const SubscriptionForm = ({ subscription, onClick, onChange, remoteCall }) => {
+const buildServiceOptions = (services) => {
+  const servicesOptions = services.map(service => ({
+    value: service.code,
+    color: service.color,
+    label: service.name,
+  })).toJS()
+
+  servicesOptions.push({
+    value: 'custom',
+    color: colors.default,
+    label: 'Custom',
+  })
+
+  return servicesOptions
+}
+
+const SubscriptionForm = ({ subscription, services, onClick, onChange, remoteCall }) => {
   const handleChange = (event, attribute) => {
     onChange(attribute, event.target.value)
   }
@@ -25,6 +43,8 @@ const SubscriptionForm = ({ subscription, onClick, onChange, remoteCall }) => {
     onChange('service_code', (option.value === 'custom' ? null : option.value))
   }
 
+  const servicesOptions = buildServiceOptions(services)
+
   return (
     <div
       id="new-subscription-form"
@@ -33,7 +53,9 @@ const SubscriptionForm = ({ subscription, onClick, onChange, remoteCall }) => {
       {renderErrors(remoteCall)}
       <div>
         <ServiceSelector
+          className="subscription-service"
           value={subscription.service_code || 'custom'}
+          options={servicesOptions}
           onChange={handleServiceChange}
         />
       </div>
@@ -96,6 +118,7 @@ const SubscriptionForm = ({ subscription, onClick, onChange, remoteCall }) => {
 
 SubscriptionForm.propTypes = {
   subscription: PropTypes.instanceOf(Subscription),
+  services: PropTypes.instanceOf(OrderedSet),
   onClick: PropTypes.func,
   onChange: PropTypes.func,
   remoteCall: PropTypes.instanceOf(RemoteCall),
