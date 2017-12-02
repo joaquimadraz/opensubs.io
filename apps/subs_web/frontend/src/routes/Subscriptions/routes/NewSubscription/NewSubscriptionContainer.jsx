@@ -1,6 +1,9 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import { OrderedSet } from 'immutable'
 
+import RemoteCall from 'data/domain/RemoteCall'
 import Subscription from 'data/domain/subscriptions/Subscription'
 import createSubscriptionAction from 'data/domain/subscriptions/createSubscription/action'
 import getAllServicesAction from 'data/domain/services/getAllServices/action'
@@ -75,6 +78,13 @@ const mapStateToProps = (state) => {
     services: servicesRecords,
     remoteCall: state.subscriptions.get('remoteCall'),
   }
+}
+
+NewSubscriptionContainer.propTypes = {
+  dispatch: PropTypes.func.isRequired,
+  services: PropTypes.instanceOf(OrderedSet),
+  remoteCall: PropTypes.instanceOf(RemoteCall),
+  subscription: PropTypes.instanceOf(Subscription).isRequired,
 }
 
 export default connect(mapStateToProps)(NewSubscriptionContainer)
