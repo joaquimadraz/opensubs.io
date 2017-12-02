@@ -4,6 +4,7 @@ import Select from 'react-select'
 import 'react-select/dist/react-select.css'
 
 import colors from 'constants/colors'
+import Styles from './Styles'
 
 class SelectorOption extends Component {
   constructor() {
@@ -94,14 +95,16 @@ SelectorValue.defaultProps = {
 }
 
 const ServiceSelector = ({ className, options, value, onChange }) => (
-  <Select
-    className={className}
-    options={options}
-    value={value}
-    onChange={option => onChange(option)}
-    optionComponent={SelectorOption}
-    valueComponent={SelectorValue}
-  />
+  <Styles>
+    <Select
+      className={className}
+      options={options}
+      value={value}
+      onChange={option => onChange(option)}
+      optionComponent={SelectorOption}
+      valueComponent={SelectorValue}
+    />
+  </Styles>
 )
 
 ServiceSelector.propTypes = {
