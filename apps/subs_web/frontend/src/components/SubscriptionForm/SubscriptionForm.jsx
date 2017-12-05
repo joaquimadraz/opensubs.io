@@ -51,14 +51,16 @@ const SubscriptionForm = ({ subscription, services, onClick, onChange, remoteCal
       style={{ background: subscription.color, padding: 10 }}
     >
       {renderErrors(remoteCall)}
-      <div>
-        <ServiceSelector
-          className="subscription-service"
-          value={subscription.service_code || 'custom'}
-          options={servicesOptions}
-          onChange={handleServiceChange}
-        />
-      </div>
+      {!subscription.id &&
+        <div>
+          <ServiceSelector
+            className="subscription-service"
+            value={subscription.service_code || 'custom'}
+            options={servicesOptions}
+            onChange={handleServiceChange}
+          />
+        </div>
+      }
       <div>
         {!subscription.service_code &&
           <input

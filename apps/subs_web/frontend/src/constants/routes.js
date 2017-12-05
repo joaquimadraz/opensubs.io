@@ -6,4 +6,5 @@ export default {
   usersConfirmSignup: '/users/confirm_signup',
   usersRecoverPassword: '/users/recover_password',
   subscriptionsNew: '/subscriptions/new',
+  subscriptionsShow: (subscriptionId) => (`/subscriptions/${subscriptionId}`),
 }

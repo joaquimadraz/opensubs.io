@@ -35,6 +35,9 @@ const getSubscriptions = (params) =>
 const patchSubscription = (subscriptionId, params) =>
   axios.patch(`/api/subscriptions/${subscriptionId}`, params, { headers: authHeader() })
 
+const getSubscription = (subscriptionId) =>
+  axios.get(`/api/subscriptions/${subscriptionId}`, { headers: authHeader() })
+
 const getServices = (params) =>
   axios.get('/api/services', { headers: authHeader() })
 
@@ -47,5 +50,6 @@ export default {
   postSubscriptions,
   getSubscriptions,
   patchSubscription,
+  getSubscription,
   getServices,
 }

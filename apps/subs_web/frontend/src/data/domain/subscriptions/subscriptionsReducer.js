@@ -39,6 +39,18 @@ import {
   archiveSubscriptionFailure,
 } from './archiveSubscription/reducer'
 
+import {
+  GET_SUBSCRIPTION_STARTED,
+  GET_SUBSCRIPTION_SUCCESS,
+  GET_SUBSCRIPTION_FAILURE,
+} from './getSubscription/action'
+
+import {
+  getSubscriptionStarted,
+  getSubscriptionSuccess,
+  getSubscriptionFailure,
+} from './getSubscription/reducer'
+
 const initialState = Map({
   entities: Map(),
   ids: OrderedSet(),
@@ -65,6 +77,12 @@ const subscriptionsReducer = (state = initialState, action) => {
       return archiveSubscriptionSuccess(state, action)
     case ARCHIVE_SUBSCRIPTION_FAILURE:
       return archiveSubscriptionFailure(state, action)
+    case GET_SUBSCRIPTION_STARTED:
+      return getSubscriptionStarted(state)
+    case GET_SUBSCRIPTION_SUCCESS:
+      return getSubscriptionSuccess(state, action)
+    case GET_SUBSCRIPTION_FAILURE:
+      return getSubscriptionFailure(state, action)
     case LOGOUT_SUCCESS:
       return initialState
     default:

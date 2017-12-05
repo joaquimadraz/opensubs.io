@@ -5,11 +5,10 @@ import { OrderedSet } from 'immutable'
 
 import RemoteCall from 'data/domain/RemoteCall'
 import Subscription from 'data/domain/subscriptions/Subscription'
-import createSubscriptionAction from 'data/domain/subscriptions/createSubscription/action'
-import getAllServicesAction from 'data/domain/services/getAllServices/action'
-import NewSubscription from './NewSubscription'
+import getSubscriptionAction from 'data/domain/subscriptions/getSubscription/action'
+import ShowSubscription from './ShowSubscription'
 
-class NewSubscriptionContainer extends Component {
+class ShowsSubscriptionContainer extends Component {
   constructor() {
     super()
 
@@ -22,22 +21,19 @@ class NewSubscriptionContainer extends Component {
   }
 
   componentDidMount() {
-    const { dispatch, services } = this.props
+    const { dispatch } = this.props
 
-    if (services.size === 0) {
-      dispatch(getAllServicesAction())
+    dispatch(getSubscriptionAction(1))
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (this.state.data.id !== nextProps.subscription.id) {
+      this.setState({ data: nextProps.subscription })
     }
   }
 
   handleFormSubmit() {
-    const { dispatch } = this.props
-    let data = this.state.data.toMap()
-
-    if (!data.get('service_code')) {
-      data = data.delete('service_code')
-    }
-
-    dispatch(createSubscriptionAction({ subscription: data }))
+    // TODO
   }
 
   handleFormChange(attribute, value) {
@@ -48,14 +44,13 @@ class NewSubscriptionContainer extends Component {
   }
 
   render() {
-    const { subscription, services, remoteCall } = this.props
+    const { remoteCall } = this.props
     const { data } = this.state
-    const newSubscription = subscription || data
 
     return (
-      <NewSubscription
-        services={services}
-        subscription={newSubscription}
+      <ShowSubscription
+        services={OrderedSet()}
+        subscription={data}
         remoteCall={remoteCall}
         onClick={this.handleFormSubmit}
         onChange={this.handleFormChange}
@@ -64,10 +59,11 @@ class NewSubscriptionContainer extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, props) => {
   const { services, subscriptions } = state
+  const { params: { subscriptionId } } = props
 
-  const subscription = subscriptions.getIn(['entities', 'new'])
+  const subscription = subscriptions.getIn(['entities', parseInt(subscriptionId, 10)])
 
   const servicesRecords = services.get('ids').map(id => (
     services.getIn(['entities', id])
@@ -80,11 +76,11 @@ const mapStateToProps = (state) => {
   }
 }
 
-NewSubscriptionContainer.propTypes = {
+ShowsSubscriptionContainer.propTypes = {
   dispatch: PropTypes.func.isRequired,
   services: PropTypes.instanceOf(OrderedSet),
   remoteCall: PropTypes.instanceOf(RemoteCall),
-  subscription: PropTypes.instanceOf(Subscription),
+  subscription: PropTypes.instanceOf(Subscription).isRequired,
 }
 
-export default connect(mapStateToProps)(NewSubscriptionContainer)
+export default connect(mapStateToProps)(ShowsSubscriptionContainer)
