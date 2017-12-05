@@ -43,6 +43,7 @@ defmodule SubsWeb.Api.SubscriptionView do
       color: subscription.color,
       first_bill_date: naive_to_utc_iso8601(subscription.first_bill_date),
       next_bill_date: naive_to_utc_iso8601(subscription.next_bill_date),
+      service_code: subscription.service_code,
     }
   end
 

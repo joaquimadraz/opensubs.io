@@ -21,15 +21,13 @@ class ShowsSubscriptionContainer extends Component {
   }
 
   componentDidMount() {
-    const { dispatch } = this.props
+    const { dispatch, params: { subscriptionId } } = this.props
 
-    dispatch(getSubscriptionAction(1))
+    dispatch(getSubscriptionAction(subscriptionId))
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.state.data.id !== nextProps.subscription.id) {
-      this.setState({ data: nextProps.subscription })
-    }
+    this.setState({ data: nextProps.subscription })
   }
 
   handleFormSubmit() {
@@ -77,6 +75,7 @@ const mapStateToProps = (state, props) => {
 }
 
 ShowsSubscriptionContainer.propTypes = {
+  params: PropTypes.object,
   dispatch: PropTypes.func.isRequired,
   services: PropTypes.instanceOf(OrderedSet),
   remoteCall: PropTypes.instanceOf(RemoteCall),

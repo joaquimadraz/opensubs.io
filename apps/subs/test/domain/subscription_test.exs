@@ -24,7 +24,7 @@ defmodule Subs.Test.Domain.SubscriptionTest do
       assert changeset.valid? == true
     end
 
-    test "returns error for invalid color format" do
+    test "returns error for invalid currency" do
       subscription = build(:complete_subscription)
       changeset = update_changeset(subscription, %{"amount_currency" => "HEY"})
 

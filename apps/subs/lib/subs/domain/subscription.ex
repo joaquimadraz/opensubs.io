@@ -72,7 +72,7 @@ defmodule Subs.Subscription do
     params = consolidate_amount(params)
 
     struct
-    |> cast(params, @required_create_fields ++ @optional_fields)
+    |> cast(params, @required_create_fields ++ @optional_fields ++ ~w(service_code))
     |> validate_required(~w(amount amount_currency cycle user_id)a)
     |> foreign_key_constraint(:user_id)
     |> validate_service(service_code)
@@ -86,6 +86,7 @@ defmodule Subs.Subscription do
     |> validate_required(@required_create_fields)
     |> foreign_key_constraint(:user_id)
     |> validate_subscription()
+    |> sanitize_color(:create)
   end
 
   def update_changeset(struct, params \\ %{}) do
@@ -95,6 +96,7 @@ defmodule Subs.Subscription do
     |> cast(params, @updatable_fields)
     |> validate_required(@required_updated_fields)
     |> validate_subscription()
+    |> sanitize_color(:update)
     |> try_archive()
   end
 
@@ -104,15 +106,21 @@ defmodule Subs.Subscription do
     |> validate_inclusion(:amount_currency, @currency_codes, message: "unknown currency")
     |> validate_inclusion(:cycle, @cycles, message: "must be one of: monthly, yearly")
     |> validate_format(:color, ~r/^#(?:[0-9a-fA-F]{3}){1,2}$/, message: "invalid format, must be HEX format, ex: #FF0000")
-    |> sanitize_color()
     |> sanitize_amount_currency()
     |> populate_first_bill_date()
     |> populate_next_bill_date()
   end
 
-  defp sanitize_color(changeset) do
+  defp sanitize_color(changeset, :create) do
     case get_change(changeset, :color) do
       nil -> put_change(changeset, :color, @default_color)
+      value -> put_change(changeset, :color, String.upcase(value))
+    end
+  end
+
+  defp sanitize_color(changeset, :update) do
+    case get_change(changeset, :color) do
+      nil -> changeset
       value -> put_change(changeset, :color, String.upcase(value))
     end
   end
