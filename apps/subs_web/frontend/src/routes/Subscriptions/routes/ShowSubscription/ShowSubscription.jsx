@@ -14,7 +14,7 @@ const ShowSubscription = ({
   onChange,
   remoteCall,
 }) => {
-  if (!subscription.id) {
+  if (!subscription) {
     return (<p>Loading...</p>)
   }
 

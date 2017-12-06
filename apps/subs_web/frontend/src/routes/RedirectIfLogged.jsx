@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
+import CurrentUser from 'data/domain/currentUser/CurrentUser'
 import routes from 'constants/routes'
 
-// TODO: Remove duplication
 class RedirectIfLoggedContainer extends Component {
   componentDidMount() {
     const { currentUser, router } = this.props
@@ -32,6 +33,12 @@ const mapStateToProps = (state) => {
   return {
     currentUser: state.currentUser,
   }
+}
+
+RedirectIfLoggedContainer.propTypes = {
+  currentUser: PropTypes.instanceOf(CurrentUser).isRequired,
+  router: PropTypes.object.isRequired,
+  children: PropTypes.object.isRequired,
 }
 
 export default connect(mapStateToProps)(RedirectIfLoggedContainer)

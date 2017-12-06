@@ -83,7 +83,6 @@ ShowsSubscriptionContainer.propTypes = {
   dispatch: PropTypes.func.isRequired,
   services: PropTypes.instanceOf(OrderedSet),
   remoteCall: PropTypes.instanceOf(RemoteCall),
-  subscription: PropTypes.instanceOf(Subscription).isRequired,
 }
 
 export default connect(mapStateToProps)(ShowsSubscriptionContainer)
