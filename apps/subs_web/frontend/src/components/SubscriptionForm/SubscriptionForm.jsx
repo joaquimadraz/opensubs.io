@@ -126,4 +126,8 @@ SubscriptionForm.propTypes = {
   remoteCall: PropTypes.instanceOf(RemoteCall),
 }
 
+SubscriptionForm.defaultProps = {
+  services: OrderedSet(),
+}
+
 export default SubscriptionForm

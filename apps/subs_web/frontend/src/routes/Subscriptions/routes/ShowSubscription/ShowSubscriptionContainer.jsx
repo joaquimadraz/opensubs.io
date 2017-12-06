@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { OrderedSet } from 'immutable'
 
 import RemoteCall from 'data/domain/RemoteCall'
 import Subscription from 'data/domain/subscriptions/Subscription'
@@ -51,7 +50,6 @@ class ShowsSubscriptionContainer extends Component {
 
     return (
       <ShowSubscription
-        services={OrderedSet()}
         subscription={data}
         remoteCall={remoteCall}
         onClick={this.handleFormSubmit}
@@ -81,8 +79,8 @@ const mapStateToProps = (state, props) => {
 ShowsSubscriptionContainer.propTypes = {
   params: PropTypes.object,
   dispatch: PropTypes.func.isRequired,
-  services: PropTypes.instanceOf(OrderedSet),
   remoteCall: PropTypes.instanceOf(RemoteCall),
+  subscription: PropTypes.instanceOf(Subscription),
 }
 
 export default connect(mapStateToProps)(ShowsSubscriptionContainer)
