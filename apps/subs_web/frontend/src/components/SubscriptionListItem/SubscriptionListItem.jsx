@@ -4,16 +4,9 @@ import { Link } from 'react-router'
 
 import routes from 'constants/routes'
 import Subscription from 'data/domain/subscriptions/Subscription'
-import Button from 'components/Button'
 import Styles from './Styles'
 
-const SubscriptionListItem = ({ subscription, onArchiveClick }) => {
-  const handleArchiveClick = (event) => {
-    event.preventDefault()
-
-    onArchiveClick(subscription.id)
-  }
-
+const SubscriptionListItem = ({ subscription }) => {
   return (
     <Styles
       className="SubscriptionListItem br2 mb2 list"
@@ -39,14 +32,7 @@ const SubscriptionListItem = ({ subscription, onArchiveClick }) => {
             {subscription.humanNextBillDate}
           </span>
         </div>
-        <div className="w-10 w-20-ns pa2 pa3-ns tr">
-          <Button
-            className="SubscriptionListItem--archive-button"
-            onClick={handleArchiveClick}
-          >
-            Archive
-          </Button>
-        </div>
+        <div className="w-10 w-20-ns pa2 pa3-ns tr" />
       </Link>
     </Styles>
   )
@@ -54,11 +40,6 @@ const SubscriptionListItem = ({ subscription, onArchiveClick }) => {
 
 SubscriptionListItem.propTypes = {
   subscription: PropTypes.instanceOf(Subscription).isRequired,
-  onArchiveClick: PropTypes.func,
-}
-
-SubscriptionListItem.defaultProps = {
-  onArchiveClick: () => {},
 }
 
 export default SubscriptionListItem

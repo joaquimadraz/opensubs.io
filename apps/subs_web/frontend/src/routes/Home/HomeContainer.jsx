@@ -6,26 +6,13 @@ import { connect } from 'react-redux'
 import RemoteCall from 'data/domain/RemoteCall'
 import CurrentUser from 'data/domain/currentUser/CurrentUser'
 import getAllSubscriptionsAction from 'data/domain/subscriptions/getAllSubscriptions/action'
-import archiveSubscriptionAction from 'data/domain/subscriptions/archiveSubscription/action'
 import Home from './Home'
 
 class HomeContainer extends Component {
-  constructor() {
-    super()
-
-    this.handleSubscriptionArchiveClick = this.handleSubscriptionArchiveClick.bind(this)
-  }
-
   componentDidMount() {
     const { dispatch } = this.props
 
     dispatch(getAllSubscriptionsAction())
-  }
-
-  handleSubscriptionArchiveClick(subscriptionId) {
-    const { dispatch } = this.props
-
-    dispatch(archiveSubscriptionAction(subscriptionId, { archived: true }))
   }
 
   render() {
@@ -36,7 +23,6 @@ class HomeContainer extends Component {
         currentUser={currentUser}
         subscriptions={subscriptions}
         remoteCall={remoteCall}
-        onSubscriptionArchiveClick={this.handleSubscriptionArchiveClick}
       />
     )
   }

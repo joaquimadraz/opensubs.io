@@ -5,6 +5,7 @@ import { OrderedSet } from 'immutable'
 import RemoteCall from 'data/domain/RemoteCall'
 import Subscription from 'data/domain/subscriptions/Subscription'
 
+import Button from 'components/Button'
 import SubscriptionForm from 'components/SubscriptionForm'
 
 const ShowSubscription = ({
@@ -13,10 +14,17 @@ const ShowSubscription = ({
   services,
   onClick,
   onChange,
+  onArchiveClick,
   remoteCall,
 }) => {
   if (!subscription) {
     return (<p>Loading...</p>)
+  }
+
+  const handleArchiveClick = (event) => {
+    event.preventDefault()
+
+    onArchiveClick(subscription.id)
   }
 
   return (
@@ -30,6 +38,13 @@ const ShowSubscription = ({
         subscription={data}
         services={services}
       />
+
+      <Button
+        className="SubscriptionListItem--archive-button"
+        onClick={handleArchiveClick}
+      >
+        Archive
+      </Button>
     </div>
   )
 }
@@ -39,6 +54,7 @@ ShowSubscription.propTypes = {
   subscription: PropTypes.instanceOf(Subscription),
   onClick: PropTypes.func,
   onChange: PropTypes.func,
+  onArchiveClick: PropTypes.func,
   remoteCall: PropTypes.instanceOf(RemoteCall),
   services: PropTypes.instanceOf(OrderedSet),
 }

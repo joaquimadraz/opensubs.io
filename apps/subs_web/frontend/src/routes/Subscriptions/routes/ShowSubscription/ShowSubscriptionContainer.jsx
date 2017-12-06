@@ -6,6 +6,7 @@ import RemoteCall from 'data/domain/RemoteCall'
 import Subscription from 'data/domain/subscriptions/Subscription'
 import getSubscriptionAction from 'data/domain/subscriptions/getSubscription/action'
 import updateSubscriptionAction from 'data/domain/subscriptions/updateSubscription/action'
+import archiveSubscriptionAction from 'data/domain/subscriptions/archiveSubscription/action'
 import ShowSubscription from './ShowSubscription'
 
 class ShowsSubscriptionContainer extends Component {
@@ -14,6 +15,7 @@ class ShowsSubscriptionContainer extends Component {
 
     this.handleFormSubmit = this.handleFormSubmit.bind(this)
     this.handleFormChange = this.handleFormChange.bind(this)
+    this.handleArchiveClick = this.handleArchiveClick.bind(this)
 
     this.state = {
       data: new Subscription(),
@@ -48,6 +50,12 @@ class ShowsSubscriptionContainer extends Component {
     })
   }
 
+  handleArchiveClick(subscriptionId) {
+    const { dispatch } = this.props
+
+    dispatch(archiveSubscriptionAction(subscriptionId, { archived: true }))
+  }
+
   render() {
     const { remoteCall, subscription } = this.props
     const { data } = this.state
@@ -59,6 +67,7 @@ class ShowsSubscriptionContainer extends Component {
         remoteCall={remoteCall}
         onClick={this.handleFormSubmit}
         onChange={this.handleFormChange}
+        onArchiveClick={this.handleArchiveClick}
       />
     )
   }
