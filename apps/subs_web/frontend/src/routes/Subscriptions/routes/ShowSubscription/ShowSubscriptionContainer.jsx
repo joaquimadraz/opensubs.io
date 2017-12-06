@@ -6,6 +6,7 @@ import { OrderedSet } from 'immutable'
 import RemoteCall from 'data/domain/RemoteCall'
 import Subscription from 'data/domain/subscriptions/Subscription'
 import getSubscriptionAction from 'data/domain/subscriptions/getSubscription/action'
+import updateSubscriptionAction from 'data/domain/subscriptions/updateSubscription/action'
 import ShowSubscription from './ShowSubscription'
 
 class ShowsSubscriptionContainer extends Component {
@@ -31,7 +32,10 @@ class ShowsSubscriptionContainer extends Component {
   }
 
   handleFormSubmit() {
-    // TODO
+    const { dispatch, params: { subscriptionId } } = this.props
+    const data = this.state.data.toMap()
+
+    dispatch(updateSubscriptionAction(subscriptionId, { subscription: data }))
   }
 
   handleFormChange(attribute, value) {

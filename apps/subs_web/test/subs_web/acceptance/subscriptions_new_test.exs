@@ -17,7 +17,7 @@ defmodule SubsWeb.Test.Acceptance.SubscriptionsNewTest do
     session
     |> assert_signup_and_login_user()
     |> visit("/subscriptions/new")
-    |> assert_has(css("#new-subscription-form"))
+    |> assert_has(css("#subscription-form"))
   end
 
   @tag :acceptance
@@ -25,9 +25,9 @@ defmodule SubsWeb.Test.Acceptance.SubscriptionsNewTest do
     session
     |> assert_signup_and_login_user()
     |> visit("/subscriptions/new")
-    |> assert_has(css("#new-subscription-form"))
-    |> fill_in(css("#new-subscription-form .subscription-name"), with: "")
-    |> click(css("#new-subscription-form button[type=\"submit\"]"))
+    |> assert_has(css("#subscription-form"))
+    |> fill_in(css("#subscription-form .subscription-name"), with: "")
+    |> click(css("#subscription-form button[type=\"submit\"]"))
     |> assert_has(css("li", text: "name: can't be blank"))
   end
 
@@ -36,12 +36,12 @@ defmodule SubsWeb.Test.Acceptance.SubscriptionsNewTest do
     session
     |> assert_signup_and_login_user()
     |> visit("/subscriptions/new")
-    |> assert_has(css("#new-subscription-form"))
-    |> fill_in(css("#new-subscription-form .subscription-name"), with: "Dropbox")
-    |> fill_in(css("#new-subscription-form .subscription-amount"), with: "1")
-    |> fill_in(css("#new-subscription-form .subscription-amount-currency"), with: "GBP")
-    |> fill_in(css("#new-subscription-form .subscription-cycle"), with: "yearly")
-    |> click(css("#new-subscription-form button[type=\"submit\"]"))
+    |> assert_has(css("#subscription-form"))
+    |> fill_in(css("#subscription-form .subscription-name"), with: "Dropbox")
+    |> fill_in(css("#subscription-form .subscription-amount"), with: "1")
+    |> fill_in(css("#subscription-form .subscription-amount-currency"), with: "GBP")
+    |> fill_in(css("#subscription-form .subscription-cycle"), with: "yearly")
+    |> click(css("#subscription-form button[type=\"submit\"]"))
     |> assert_has(css("h3", text: "Next payments"))
     |> assert_has(css(".SubscriptionListItem--name", text: "Dropbox"))
   end
@@ -51,12 +51,32 @@ defmodule SubsWeb.Test.Acceptance.SubscriptionsNewTest do
     session
     |> assert_signup_and_login_user()
     |> visit("/subscriptions/new")
-    |> assert_has(css("#new-subscription-form"))
-    |> click(css("#new-subscription-form .subscription-service"))
+    |> assert_has(css("#subscription-form"))
+    |> click(css("#subscription-form .subscription-service"))
     |> click(css(".Select .Select-option:first-child"))
-    |> click(css("#new-subscription-form button[type=\"submit\"]"))
+    |> click(css("#subscription-form button[type=\"submit\"]"))
     |> assert_has(css("h3", text: "Next payments"))
     |> assert_has(css(".SubscriptionListItem--name", text: "Github"))
+  end
+
+  @tag :acceptance
+  test "creates subscription from service and updates amount", %{session: session} do
+    session
+    |> assert_signup_and_login_user()
+    |> visit("/subscriptions/new")
+    |> assert_has(css("#subscription-form"))
+    |> fill_in(css("#subscription-form .subscription-name"), with: "Dropbox")
+    |> fill_in(css("#subscription-form .subscription-amount"), with: "1")
+    |> fill_in(css("#subscription-form .subscription-amount-currency"), with: "GBP")
+    |> fill_in(css("#subscription-form .subscription-cycle"), with: "yearly")
+    |> click(css("#subscription-form button[type=\"submit\"]"))
+    |> assert_has(css("h3", text: "Next payments"))
+    |> assert_has(css(".SubscriptionListItem--name", text: "Dropbox"))
+    |> click(css(".SubscriptionListItem a"))
+    |> fill_in(css("#subscription-form .subscription-amount"), with: "2")
+    |> click(css("#subscription-form button[type=\"submit\"]"))
+    |> visit("/")
+    |> assert_has(css(".SubscriptionListItem--amount", text: "2"))
   end
 
   # TODO: Move to helper

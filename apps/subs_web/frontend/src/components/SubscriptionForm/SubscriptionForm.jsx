@@ -47,7 +47,7 @@ const SubscriptionForm = ({ subscription, services, onClick, onChange, remoteCal
 
   return (
     <div
-      id="new-subscription-form"
+      id="subscription-form"
       style={{ background: subscription.color, padding: 10 }}
     >
       {renderErrors(remoteCall)}

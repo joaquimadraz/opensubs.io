@@ -20,7 +20,7 @@ const ShowSubscription = ({
 
   return (
     <div>
-      Subscription
+      <h1>{subscription.name}</h1>
 
       <SubscriptionForm
         onClick={onClick}
