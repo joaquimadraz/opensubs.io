@@ -8,6 +8,7 @@ import Subscription from 'data/domain/subscriptions/Subscription'
 import SubscriptionForm from 'components/SubscriptionForm'
 
 const ShowSubscription = ({
+  data,
   subscription,
   services,
   onClick,
@@ -26,7 +27,7 @@ const ShowSubscription = ({
         onClick={onClick}
         onChange={onChange}
         remoteCall={remoteCall}
-        subscription={subscription}
+        subscription={data}
         services={services}
       />
     </div>
@@ -34,6 +35,7 @@ const ShowSubscription = ({
 }
 
 ShowSubscription.propTypes = {
+  data: PropTypes.instanceOf(Subscription),
   subscription: PropTypes.instanceOf(Subscription),
   onClick: PropTypes.func,
   onChange: PropTypes.func,

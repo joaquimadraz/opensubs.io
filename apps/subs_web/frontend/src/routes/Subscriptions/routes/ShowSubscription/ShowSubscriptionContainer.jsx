@@ -27,7 +27,11 @@ class ShowsSubscriptionContainer extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    this.setState({ data: nextProps.subscription })
+    const { data } = this.state
+
+    if (!data || !data.id) {
+      this.setState(() => ({ data: nextProps.subscription }))
+    }
   }
 
   handleFormSubmit() {
@@ -45,12 +49,13 @@ class ShowsSubscriptionContainer extends Component {
   }
 
   render() {
-    const { remoteCall } = this.props
+    const { remoteCall, subscription } = this.props
     const { data } = this.state
 
     return (
       <ShowSubscription
-        subscription={data}
+        data={data}
+        subscription={subscription}
         remoteCall={remoteCall}
         onClick={this.handleFormSubmit}
         onChange={this.handleFormChange}
