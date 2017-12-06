@@ -4131,6 +4131,12 @@ react-portal@^3.1.0:
   dependencies:
     prop-types "^15.5.8"
 
+react-redux-loading-bar@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/react-redux-loading-bar/-/react-redux-loading-bar-3.0.0.tgz#1f338b82a24b86dd87077268459e11b3ddc79bc9"
+  dependencies:
+    prop-types "^15.5.6"
+
 react-redux@^5.0.6:
   version "5.0.6"
   resolved "https://registry.yarnpkg.com/react-redux/-/react-redux-5.0.6.tgz#23ed3a4f986359d68b5212eaaa681e60d6574946"

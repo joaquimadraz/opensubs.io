@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux'
 import { routerReducer } from 'react-router-redux'
+import { loadingBarReducer } from 'react-redux-loading-bar'
 
 import signupReducer from 'data/domain/signupReducer'
 import loginReducer from 'data/domain/loginReducer'
@@ -14,6 +15,7 @@ const rootReducer = combineReducers({
   currentUser: currentUserReduder,
   subscriptions: subscriptionsReducer,
   services: servicesReducer,
+  loadingBar: loadingBarReducer,
 })
 
 export default rootReducer

@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router'
+import LoadingBar from 'react-redux-loading-bar'
 
 import CurrentUser from 'data/domain/currentUser/CurrentUser'
 import routes from 'constants/routes'
@@ -44,6 +45,7 @@ const App = ({ currentUser, onLogoutClick, children }) => {
           </div>
         </section>
       </div>
+      <LoadingBar style={{ backgroundColor: '#95A5A6' }} />
       {/* Main */}
       <section className="mw8-ns center pa3 ph3-m ph5-ns">
         {children}

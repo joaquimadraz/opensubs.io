@@ -17,6 +17,7 @@
     "react/forbid-prop-types": 0,
     "react/require-default-props": 0,
     "class-methods-use-this": 1,
+    "jsx-a11y/anchor-is-valid": 0, // Disables warning for <Link> to have href
     "no-console": 0,
     "no-underscore-dangle": 0,
     "import/no-extraneous-dependencies": [
