@@ -21,7 +21,7 @@ export function parseErrorResponse(object) {
     loading: false,
     http: object.response,
     data: Map({ errors: remoteCallData }),
-    message: data.message
+    message: data.message,
   })
 }
 

@@ -3,16 +3,16 @@ import Cookies from 'js-cookie'
 
 // public
 
-const postUsers = (params) =>
+const postUsers = params =>
   axios.post('/api/users', params)
 
-const postUsersAuthenticate = (params) =>
+const postUsersAuthenticate = params =>
   axios.post('/api/users/authenticate', params)
 
-const postUsersConfirm = (params) =>
+const postUsersConfirm = params =>
   axios.post('/api/users/confirm', params)
 
-const postUsersRecoverPassword = (params) =>
+const postUsersRecoverPassword = params =>
   axios.post('/api/users/recover_password', params)
 
 // authenticated
@@ -26,19 +26,19 @@ const authHeader = () => {
 const getUsersMe = () =>
   axios.get('/api/users/me', { headers: authHeader() })
 
-const postSubscriptions = (params) =>
+const postSubscriptions = params =>
   axios.post('/api/subscriptions', params, { headers: authHeader() })
 
-const getSubscriptions = (params) =>
+const getSubscriptions = () =>
   axios.get('/api/subscriptions', { headers: authHeader() })
 
 const patchSubscription = (subscriptionId, params) =>
   axios.patch(`/api/subscriptions/${subscriptionId}`, params, { headers: authHeader() })
 
-const getSubscription = (subscriptionId) =>
+const getSubscription = subscriptionId =>
   axios.get(`/api/subscriptions/${subscriptionId}`, { headers: authHeader() })
 
-const getServices = (params) =>
+const getServices = () =>
   axios.get('/api/services', { headers: authHeader() })
 
 export default {

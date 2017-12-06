@@ -1,4 +1,4 @@
-import { Map, OrderedSet } from 'immutable'
+import { Map } from 'immutable'
 import RemoteCall from 'data/domain/RemoteCall'
 
 import {

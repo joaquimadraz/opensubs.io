@@ -7,12 +7,10 @@ import routes from 'constants/routes'
 
 class RedirectIfNotLoggedContainer extends Component {
   componentDidMount() {
-    const { currentUser, router } = this.props
+    const { currentUser, router, location } = this.props
 
     if (!currentUser.isLogged) {
-      const pathname = this.props.location.pathname
-
-      router.push(`${routes.login}?r=${pathname}`)
+      router.push(`${routes.login}?r=${location.pathname}`)
     }
   }
 
@@ -32,6 +30,7 @@ const mapStateToProps = (state) => {
 RedirectIfNotLoggedContainer.propTypes = {
   currentUser: PropTypes.instanceOf(CurrentUser).isRequired,
   router: PropTypes.object.isRequired,
+  location: PropTypes.object.isRequired,
   children: PropTypes.object.isRequired,
 }
 

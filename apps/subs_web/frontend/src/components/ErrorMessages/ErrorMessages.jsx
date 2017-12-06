@@ -20,7 +20,7 @@ const ErrorMessages = ({ errors }) => {
     <div>
       <h4>Something went wrong</h4>
       <ul>
-        {messageList.map(message => <li>{message}</li>)}
+        {messageList.map(message => <li key={message}>{message}</li>)}
       </ul>
     </div>
   )
