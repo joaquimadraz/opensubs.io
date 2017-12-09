@@ -107,7 +107,7 @@ defmodule SubsWeb.Test.Acceptance.SubscriptionsNewTest do
     |> fill_in(css("#login-form .user-email"), with: email)
     |> fill_in(css("#login-form .user-password"), with: password)
     |> click(css("#login-btn"))
-    |> assert_has(css(".current-user", text: email))
+    |> assert_has(css(".Header--menu-trigger"))
 
     session
   end

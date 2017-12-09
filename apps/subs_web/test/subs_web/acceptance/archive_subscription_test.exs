@@ -18,6 +18,7 @@ defmodule SubsWeb.Test.Acceptance.ArchiveSubscriptionTest do
     |> click(css("#subscription-form button[type=\"submit\"]"))
     |> assert_has(css("h3", text: "Next payments"))
     |> assert_has(css(".SubscriptionListItem--name", text: "Dropbox"))
+    |> click(css(".SubscriptionListItem--name"))
     |> click(css(".SubscriptionListItem--archive-button"))
     |> find(css(".SubscriptionListItem", count: 0))
   end
@@ -50,7 +51,7 @@ defmodule SubsWeb.Test.Acceptance.ArchiveSubscriptionTest do
     |> fill_in(css("#login-form .user-email"), with: email)
     |> fill_in(css("#login-form .user-password"), with: password)
     |> click(css("#login-btn"))
-    |> assert_has(css(".current-user", text: email))
+    |> assert_has(css(".Header--menu-trigger"))
 
     session
   end

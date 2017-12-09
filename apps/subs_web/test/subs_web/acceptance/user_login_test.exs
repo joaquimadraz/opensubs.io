@@ -68,14 +68,15 @@ defmodule SubsWeb.Test.Acceptance.UserLoginTest do
     session
     |> assert_signup_and_login_user(email)
     |> visit("/")
-    |> assert_has(css(".current-user", text: email))
+    |> assert_has(css(".Header--menu-trigger"))
   end
 
   @tag :acceptance
   test "logout successful", %{session: session} do
     session
     |> assert_signup_and_login_user()
-    |> click(button("Logout"))
+    |> click(css(".Header--menu-trigger"))
+    |> click(css(".Header--logout-button"))
     |> assert_has(css("a", text: "Login"))
     |> visit("/")
     |> assert_has(css("a", text: "Login"))
@@ -108,7 +109,7 @@ defmodule SubsWeb.Test.Acceptance.UserLoginTest do
     |> fill_in(css("#login-form .user-email"), with: email)
     |> fill_in(css("#login-form .user-password"), with: password)
     |> click(css("#login-btn"))
-    |> assert_has(css(".current-user", text: email))
+    |> assert_has(css(".Header--menu-trigger"))
 
     session
   end

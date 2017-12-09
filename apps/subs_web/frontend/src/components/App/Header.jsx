@@ -31,7 +31,7 @@ const Header = ({ currentUser, onLogoutClick }) => {
             </Link>
           </div>
           <div className="cf mt4">
-            <div className="fl w-100 w-75-ns">
+            <div className="fl w-50">
               <HeaderLink to={routes.root} active>
                 Up Next
               </HeaderLink>
@@ -39,7 +39,8 @@ const Header = ({ currentUser, onLogoutClick }) => {
                 All Payments
               </HeaderLink>
             </div>
-            <div className="fl w-100 w-25-ns tr">
+            <div className="fl w-50 tr">
+              <HeaderLink to={routes.subscriptionsNew}>New payment</HeaderLink>
               {currentUser.isLogged
                 ? <HeaderMenu onLogoutClick={onLogoutClick} />
                 : renderNotLogged()}

@@ -26,9 +26,6 @@ const Home = (props) => {
       <div>
         <div className="flex bb b--light-gray">
           <h3 className="f4 w-50 pb2">Next payments</h3>
-          <div className="w-50 tr mt3 pt2">
-            <Link className="f5 no-underline dark-gray dim" to={routes.subscriptionsNew}>New payment</Link>
-          </div>
         </div>
         <ListSubscriptions
           subscriptions={subscriptions}
