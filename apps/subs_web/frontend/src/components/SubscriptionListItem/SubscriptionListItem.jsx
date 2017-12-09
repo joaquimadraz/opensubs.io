@@ -9,7 +9,7 @@ import Styles from './Styles'
 const SubscriptionListItem = ({ subscription }) => {
   return (
     <Styles
-      className="SubscriptionListItem br2 mb2 list"
+      className="SubscriptionListItem mb2 list"
       background={subscription.color}
       textColor={subscription.textColor}
     >
@@ -22,17 +22,17 @@ const SubscriptionListItem = ({ subscription }) => {
             {subscription.name}
           </span>
         </div>
-        <div className="w-30 w-20-ns pa2 pa3-ns tc">
-          <span className="SubscriptionListItem--amount">
-            {subscription.amount_currency_symbol}{subscription.amount}
-          </span>
-        </div>
-        <div className="w-30 w-20-ns pa2 pa3-ns tc">
+        <div className="w-30 w-30-ns pa2 pa3-ns tc">
           <span className="SubscriptionListItem--next-bill-date">
             {subscription.humanNextBillDate}
           </span>
         </div>
-        <div className="w-10 w-20-ns pa2 pa3-ns tr" />
+        <div className="w-10 w-20-ns pa2 pa3-ns tc" />
+        <div className="w-30 w-10-ns pa2 pa3-ns tr">
+          <span className="SubscriptionListItem--amount">
+            {subscription.amount_currency_symbol}{subscription.amount}
+          </span>
+        </div>
       </Link>
     </Styles>
   )
