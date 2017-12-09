@@ -10,6 +10,9 @@ import ErrorMessages from 'components/ErrorMessages'
 import ColorPicker from 'components/ColorPicker'
 import DatePicker from 'components/DatePicker'
 import ServiceSelector from 'components/ServiceSelector'
+import Button from 'components/Button'
+import InputText from 'components/InputText'
+import InputNumber from 'components/InputNumber'
 
 const renderErrors = (remoteCall) => {
   if (remoteCall.loading || !remoteCall.data) { return null }
@@ -48,71 +51,68 @@ const SubscriptionForm = ({ subscription, services, onClick, onChange, remoteCal
   return (
     <div
       id="subscription-form"
-      style={{ background: subscription.color, padding: 10 }}
+      className="w-40"
     >
-      {renderErrors(remoteCall)}
-      {!subscription.id &&
-        <div>
+      <div className="pa3" style={{ background: subscription.color }}>
+        {renderErrors(remoteCall)}
+        <div className="f5 b dark-gray mb2">What’s the payment about?</div>
+        {!subscription.id &&
           <ServiceSelector
-            className="subscription-service"
+            className="subscription-service w-50"
             value={subscription.service_code || 'custom'}
             options={servicesOptions}
             onChange={handleServiceChange}
           />
-        </div>
-      }
-      <div>
+        }
         {!subscription.service_code &&
-          <input
-            className="subscription-name"
-            type="text"
-            placeholder="name"
+          <InputText
+            name="name"
+            placeholder="Name"
+            className="subscription-name mt2 w-100"
             value={subscription.name}
             onChange={event => handleChange(event, 'name')}
           />}
-      </div>
-      <div>
-        <input
-          className="subscription-amount"
-          type="number"
-          placeholder="amount"
-          value={subscription.amount}
-          onChange={event => handleChange(event, 'amount')}
-        />
-      </div>
-      <div>
-        <select
-          className="subscription-amount-currency"
-          onChange={event => handleChange(event, 'amount_currency')}
-          value={subscription.amount_currency}
-        >
-          <option value="GBP">£ (GBP)</option>
-          <option value="EUR">€ (EUR)</option>
-          <option value="USD">$ (USD)</option>
-        </select>
-      </div>
-      <div>
-        <select
-          className="subscription-cycle"
-          onChange={event => handleChange(event, 'cycle')}
-          value={subscription.cycle}
-        >
-          <option value="monthly">Monthly</option>
-          <option value="yearly">Yearly</option>
-        </select>
-      </div>
-      <div>
-        {!subscription.service_code &&
-          <ColorPicker onChange={color => onChange('color', color)} />}
-      </div>
-      <div>
+        <div className="f5 b dark-gray mb2 mt3">Amount</div>
+        <div>
+          <select
+            style={{ height: 35 }}
+            className="subscription-amount-currency"
+            onChange={event => handleChange(event, 'amount_currency')}
+            value={subscription.amount_currency}
+          >
+            <option value="GBP">£</option>
+            <option value="EUR">€</option>
+            <option value="USD">$</option>
+          </select>
+          <InputNumber
+            name="amount"
+            className="subscription-amount w-30"
+            value={subscription.amount}
+            onChange={event => handleChange(event, 'amount')}
+          />
+          <select
+            style={{ height: 35 }}
+            className="subscription-cycle"
+            onChange={event => handleChange(event, 'cycle')}
+            value={subscription.cycle}
+          >
+            <option value="monthly">Monthly</option>
+            <option value="yearly">Yearly</option>
+          </select>
+        </div>
+        <div className="f5 b dark-gray mb2 mt3">First bill</div>
         <DatePicker
           value={subscription.first_bill_date}
           onChange={date => onChange('first_bill_date', date)}
         />
+        {!subscription.service_code &&
+          <div>
+            <div className="f5 b dark-gray mb2 mt3">Colors</div>
+            <ColorPicker onChange={color => onChange('color', color)} />
+          </div>}
       </div>
-      <div>
-        <button type="submit" onClick={onClick}>Save</button>
+      <div className="pa3">
+        <Button type="submit" onClick={onClick}>Save</Button>
       </div>
     </div>
   )

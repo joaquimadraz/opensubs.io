@@ -37,7 +37,7 @@ class SelectorOption extends Component {
   }
 
   render() {
-    const { className, option, children } = this.props
+    const { option, children } = this.props
 
     const style = {
       background: option.color,
@@ -63,7 +63,6 @@ SelectorOption.propTypes = {
   option: PropTypes.object.isRequired,
   onFocus: PropTypes.func,
   onSelect: PropTypes.func,
-  className: PropTypes.string,
   children: PropTypes.string.isRequired,
 }
 
@@ -87,11 +86,6 @@ const SelectorValue = ({ value, children }) => (
 SelectorValue.propTypes = {
   value: PropTypes.object.isRequired,
   children: PropTypes.string.isRequired,
-}
-
-SelectorValue.defaultProps = {
-  onFocus: () => { },
-  onSelect: () => { },
 }
 
 const ServiceSelector = ({ className, options, value, onChange }) => (

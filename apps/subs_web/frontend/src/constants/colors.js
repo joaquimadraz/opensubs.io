@@ -1,5 +1,5 @@
 const available = [
-  { bg: '#E2E2E2', text: '#333333' },
+  { bg: '#F8F8F8', text: '#333333' },
   { bg: '#FF4444', text: '#FFFFFF' },
   { bg: '#1ABC9C', text: '#FFFFFF' },
   { bg: '#2ECC71', text: '#FFFFFF' },
