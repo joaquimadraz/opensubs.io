@@ -11,8 +11,32 @@ import HeaderMenu from './HeaderMenu'
 import Styles from './Styles'
 
 const Header = ({ currentUser, onLogoutClick }) => {
+  const renderLogged = () => (
+    <div>
+      <div className="fl w-50">
+        <span>
+          <HeaderLink to={routes.root} index>
+            Up Next
+          </HeaderLink>
+          <HeaderLink>
+            All Payments
+          </HeaderLink>
+        </span>
+      </div>
+      <div className="fl w-50 tr fr">
+        <HeaderLink
+          to={routes.subscriptionsNew}
+          className="Header--new-payment"
+        >
+          + New payment
+        </HeaderLink>
+        <HeaderMenu onLogoutClick={onLogoutClick} />
+      </div>
+    </div>
+  )
+
   const renderNotLogged = () => (
-    <HeaderLink to={routes.login}>
+    <HeaderLink to={routes.login} className="fr">
       Login
     </HeaderLink>
   )
@@ -30,25 +54,12 @@ const Header = ({ currentUser, onLogoutClick }) => {
               Subs
             </Link>
           </div>
-          <div className="cf mt4">
-            <div className="fl w-50">
-              <HeaderLink to={routes.root} active>
-                Up Next
-              </HeaderLink>
-              <HeaderLink to={routes.root}>
-                All Payments
-              </HeaderLink>
-            </div>
-            <div className="fl w-50 tr">
-              <HeaderLink to={routes.subscriptionsNew}>New payment</HeaderLink>
-              {currentUser.isLogged
-                ? <HeaderMenu onLogoutClick={onLogoutClick} />
-                : renderNotLogged()}
-            </div>
+          <div className="cf mt3">
+            {currentUser.isLogged ? renderLogged() : renderNotLogged()}
           </div>
         </section>
       </div>
-      <LoadingBar style={{ backgroundColor: '#E35077', marginTop: -4, height: 4 }} />
+      <LoadingBar style={{ backgroundColor: '#BC274E', marginTop: -4, height: 4 }} />
     </Styles>
   )
 }

@@ -8,7 +8,7 @@ export default styled('span') `
   }
 
   a:hover, a.active {
-    color: #E35077;
-    border-bottom-color: #E35077;
+    color: #EF4370;
+    border-bottom-color: #EF4370;
   }
 `
