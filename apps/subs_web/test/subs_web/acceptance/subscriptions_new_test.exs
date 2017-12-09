@@ -42,7 +42,7 @@ defmodule SubsWeb.Test.Acceptance.SubscriptionsNewTest do
     |> fill_in(css("#subscription-form .subscription-amount-currency"), with: "GBP")
     |> fill_in(css("#subscription-form .subscription-cycle"), with: "yearly")
     |> click(css("#subscription-form button[type=\"submit\"]"))
-    |> assert_has(css("h3", text: "Next payments"))
+    |> assert_has(css("h3", text: "Payments"))
     |> assert_has(css(".SubscriptionListItem--name", text: "Dropbox"))
   end
 
@@ -55,7 +55,7 @@ defmodule SubsWeb.Test.Acceptance.SubscriptionsNewTest do
     |> click(css("#subscription-form .subscription-service"))
     |> click(css(".Select .Select-option:first-child"))
     |> click(css("#subscription-form button[type=\"submit\"]"))
-    |> assert_has(css("h3", text: "Next payments"))
+    |> assert_has(css("h3", text: "Payments"))
     |> assert_has(css(".SubscriptionListItem--name", text: "Github"))
   end
 
@@ -70,13 +70,13 @@ defmodule SubsWeb.Test.Acceptance.SubscriptionsNewTest do
     |> fill_in(css("#subscription-form .subscription-amount-currency"), with: "GBP")
     |> fill_in(css("#subscription-form .subscription-cycle"), with: "yearly")
     |> click(css("#subscription-form button[type=\"submit\"]"))
-    |> assert_has(css("h3", text: "Next payments"))
+    |> assert_has(css("h3", text: "Payments"))
     |> assert_has(css(".SubscriptionListItem--name", text: "Dropbox"))
     |> click(css(".SubscriptionListItem a"))
     |> fill_in(css("#subscription-form .subscription-amount"), with: "2")
     |> click(css("#subscription-form button[type=\"submit\"]"))
-    |> visit("/")
-    |> assert_has(css(".SubscriptionListItem--amount", text: "2"))
+    |> visit("/subscriptions")
+    |> assert_has(css(".SubscriptionListItem--amount", text: "£2"))
   end
 
   # TODO: Move to helper

@@ -18,15 +18,18 @@ const Subscriptions = ({ subscriptions, remoteCall }) => {
   )
 
   return (
-    <ul className="pl0 mt0">
-      <li className="flex justify-around items-center br2 lh-copy ph0-l silver">
-        <div className="w-40 pa3 f6">Name</div>
-        <div className="w-20 pa3 f6 tc">Amount</div>
-        <div className="w-20 pa3 f6 tc">Next bill date</div>
-        <div className="w-20 pa3 f6 tr" />
-      </li>
-      {subscriptions.map(renderSubscription)}
-    </ul>
+    <div>
+      <h3>Payments</h3>
+      <ul className="pl0 mt0">
+        <li className="flex justify-around items-center br2 lh-copy ph0-l silver">
+          <div className="w-40 pa3 f6">Name</div>
+          <div className="w-20 pa3 f6 tc">Amount</div>
+          <div className="w-20 pa3 f6 tc">Next bill date</div>
+          <div className="w-20 pa3 f6 tr" />
+        </li>
+        {subscriptions.map(renderSubscription)}
+      </ul>
+    </div>
   )
 }
 

@@ -4,7 +4,7 @@ import routes from 'constants/routes'
 
 const LOGOUT_SUCCESS = 'LOGOUT_SUCCESS'
 
-const logout = () => dispatch => {
+const logout = () => (dispatch) => {
   dispatch({ type: LOGOUT_SUCCESS })
   dispatch(push(routes.root))
 }

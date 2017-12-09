@@ -15,7 +15,7 @@ function handleCreateSuccess(dispatch, response) {
   const { data, meta } = response.data
 
   dispatch({ type: CREATE_SUBSCRIPTION_SUCCESS, data, meta })
-  dispatch(push(routes.root))
+  dispatch(push(routes.subscriptions))
 }
 
 function handleCreateFailure(dispatch, error) {

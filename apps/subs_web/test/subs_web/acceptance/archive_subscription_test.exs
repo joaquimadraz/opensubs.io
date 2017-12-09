@@ -16,7 +16,7 @@ defmodule SubsWeb.Test.Acceptance.ArchiveSubscriptionTest do
     |> fill_in(css("#subscription-form .subscription-amount-currency"), with: "GBP")
     |> fill_in(css("#subscription-form .subscription-cycle"), with: "yearly")
     |> click(css("#subscription-form button[type=\"submit\"]"))
-    |> assert_has(css("h3", text: "Next payments"))
+    |> assert_has(css("h3", text: "Payments"))
     |> assert_has(css(".SubscriptionListItem--name", text: "Dropbox"))
     |> click(css(".SubscriptionListItem--name"))
     |> click(css(".SubscriptionListItem--archive-button"))
