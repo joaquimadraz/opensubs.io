@@ -1,9 +1,14 @@
 @import '../../../node_modules/tachyons/css/tachyons.css';
-@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+
+$subs-pink: #E35077;
+$subs-pink-darker: #BC274E;
 
 body {
-  font-family: 'Open Sans', sans-serif;
+  font-family: sans-serif;
 }
+
+.subs-pink { color: $subs-pink }
+.subs-pink-darker { color: $subs-pink-darker }
 
 .logo {
   width: 70px;

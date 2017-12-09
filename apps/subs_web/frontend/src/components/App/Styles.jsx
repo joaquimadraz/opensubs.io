@@ -1,11 +1,23 @@
 import styled from 'react-emotion'
 
+// TODO: Reuse colors inside emotion css
 export default styled('div') `
-  .logo {
-    margin: -3.6rem;
+  .Header--top-menu {
+    margin-bottom: -4px;
   }
 
-  .App--logo-title {
-    margin-left: 2.7rem
+  .Header--menu-trigger, .Header--menu-button {
+    min-width: 125px;
+    padding: 15px;
+  }
+
+  .Header--logout-button {
+    border-bottom-width: 4px;
+    border-bottom-color: #EAEAEA;
+  }
+
+  .Header--logout-button:hover {
+    color: #FF4444;
+    border-bottom-color: #FF4444;
   }
 `
