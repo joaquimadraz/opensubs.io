@@ -18,7 +18,7 @@ const Header = ({ currentUser, onLogoutClick }) => {
           <HeaderLink to={routes.root} index>
             Up Next
           </HeaderLink>
-          <HeaderLink>
+          <HeaderLink to={routes.subscriptions}>
             All Payments
           </HeaderLink>
         </span>

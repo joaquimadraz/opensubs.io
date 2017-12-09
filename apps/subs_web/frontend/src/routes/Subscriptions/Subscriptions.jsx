@@ -5,7 +5,7 @@ import { OrderedSet } from 'immutable'
 import RemoteCall from 'data/domain/RemoteCall'
 import SubscriptionListItem from 'components/SubscriptionListItem'
 
-const ListSubscriptions = ({ subscriptions, remoteCall, onArchiveClick }) => {
+const Subscriptions = ({ subscriptions, remoteCall }) => {
   if (remoteCall.loading) {
     return (<p>Loading...</p>)
   }
@@ -14,7 +14,6 @@ const ListSubscriptions = ({ subscriptions, remoteCall, onArchiveClick }) => {
     <SubscriptionListItem
       key={subscription.id}
       subscription={subscription}
-      onArchiveClick={onArchiveClick}
     />
   )
 
@@ -31,10 +30,9 @@ const ListSubscriptions = ({ subscriptions, remoteCall, onArchiveClick }) => {
   )
 }
 
-ListSubscriptions.propTypes = {
+Subscriptions.propTypes = {
   subscriptions: PropTypes.instanceOf(OrderedSet).isRequired,
-  onArchiveClick: PropTypes.func.isRequired,
   remoteCall: PropTypes.instanceOf(RemoteCall).isRequired,
 }
 
-export default ListSubscriptions
+export default Subscriptions

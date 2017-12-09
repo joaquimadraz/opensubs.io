@@ -20,6 +20,7 @@ import RedirectIfNotLogged from './routes/RedirectIfNotLogged'
 import UsersConfirmSignup from './routes/Users/routes/ConfirmSignup'
 import NewSubscription from './routes/Subscriptions/routes/NewSubscription'
 import ShowSubscription from './routes/Subscriptions/routes/ShowSubscription'
+import Subscriptions from './routes/Subscriptions'
 
 const store = initStore()
 const awesomeHistory = syncHistoryWithStore(browserHistory, store)
@@ -38,6 +39,7 @@ if (document.getElementById('app')) {
           </Route>
           {/* Protected routes */}
           <Route component={RedirectIfNotLogged}>
+            <Route path={routes.subscriptions} component={Subscriptions} />
             <Route path={routes.subscriptionsNew} component={NewSubscription} />
             <Route path={routes.subscriptionsShow(':subscriptionId')} component={ShowSubscription} />
           </Route>
