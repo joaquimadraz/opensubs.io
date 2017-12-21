@@ -15,6 +15,7 @@
 - `cd apps/subs_web/frontend && node_modules/.bin/webpack --config webpack.config.js`, to build the frontend manually
 
 #### Running tests
+- `brew install chromedriver`, to run acceptance tests
 - `mix test`, to un all tests
 - `mix test --only acceptance`, to run only acceptance tests
 
