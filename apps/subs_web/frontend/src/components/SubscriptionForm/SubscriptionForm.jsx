@@ -47,6 +47,7 @@ const SubscriptionForm = ({ subscription, services, onClick, onChange, remoteCal
   }
 
   const servicesOptions = buildServiceOptions(services)
+  const textColor = colors.textColorForBg(subscription.color)
 
   return (
     <div
@@ -55,7 +56,12 @@ const SubscriptionForm = ({ subscription, services, onClick, onChange, remoteCal
     >
       <div className="pa3" style={{ background: subscription.color }}>
         {renderErrors(remoteCall)}
-        <div className="f5 b dark-gray mb2">What’s the payment about?</div>
+        <div
+          className="f5 b dark-gray mb2"
+          style={{ color: textColor }}
+        >
+          What’s the payment about?
+        </div>
         {!subscription.id &&
           <ServiceSelector
             className="subscription-service w-50"
@@ -72,7 +78,12 @@ const SubscriptionForm = ({ subscription, services, onClick, onChange, remoteCal
             value={subscription.name}
             onChange={event => handleChange(event, 'name')}
           />}
-        <div className="f5 b dark-gray mb2 mt3">Amount</div>
+        <div
+          className="f5 b dark-gray mb2 mt3"
+          style={{ color: textColor }}
+        >
+          Amount
+        </div>
         <div>
           <select
             style={{ height: 35 }}
@@ -100,15 +111,22 @@ const SubscriptionForm = ({ subscription, services, onClick, onChange, remoteCal
             <option value="yearly">Yearly</option>
           </select>
         </div>
-        <div className="f5 b dark-gray mb2 mt3">First bill</div>
+        <div
+          className="f5 b dark-gray mb2 mt3"
+          style={{ color: textColor }}
+        >
+          First bill
+        </div>
         <DatePicker
           value={subscription.first_bill_date}
           onChange={date => onChange('first_bill_date', date)}
         />
         {!subscription.service_code &&
           <div>
-            <div className="f5 b dark-gray mb2 mt3">Colors</div>
-            <ColorPicker onChange={color => onChange('color', color)} />
+            <div className="f5 b dark-gray mb2 mt3" style={{ color: textColor }}>Colors</div>
+            <div className="center dt">
+              <ColorPicker onChange={color => onChange('color', color)} />
+            </div>
           </div>}
       </div>
       <div className="pa3">

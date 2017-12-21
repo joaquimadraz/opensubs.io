@@ -13,7 +13,7 @@ const ServiceRecord = Record(remoteData)
 class Service extends ServiceRecord {
   // Extend immutable js Record
   get textColor() {
-    return colors.textColorForBg[this.color]
+    return colors.textColorForBg(this.color)
   }
 }
 

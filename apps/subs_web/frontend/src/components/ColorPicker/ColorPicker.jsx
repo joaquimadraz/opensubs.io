@@ -9,7 +9,7 @@ const ColorPicker = ({ value, onChange }) => {
   return (
     <GithubPicker
       triangle="hide"
-      width="100%"
+      width="312px"
       color={value}
       colors={colors.available}
       onChangeComplete={handleChange}

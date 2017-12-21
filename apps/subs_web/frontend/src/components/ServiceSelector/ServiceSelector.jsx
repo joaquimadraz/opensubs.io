@@ -41,7 +41,7 @@ class SelectorOption extends Component {
 
     const style = {
       background: option.color,
-      color: colors.textColorForBg[option.color],
+      color: colors.textColorForBg(option.color),
     }
 
     return (
@@ -77,7 +77,7 @@ const SelectorValue = ({ value, children }) => (
     title={value.value}
     style={{ background: value.color }}
   >
-    <span className="Select-value-label" style={{ color: colors.textColorForBg[value.color] }}>
+    <span className="Select-value-label" style={{ color: colors.textColorForBg(value.color) }}>
       {children}
     </span>
   </div>

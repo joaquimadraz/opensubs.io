@@ -30,7 +30,7 @@ class Subscription extends SubscriptionRecord {
   }
 
   get textColor() {
-    return colors.textColorForBg[this.color]
+    return colors.textColorForBg(this.color)
   }
 }
 
