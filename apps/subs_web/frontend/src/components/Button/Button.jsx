@@ -8,7 +8,13 @@ const colorClass = color => `bg-${color}`
 
 // TODO: Deconstruct props to <button>
 const Button = (props) => {
-  const { children, color, className, ...buttonProps } = props
+  const {
+    children,
+    color,
+    className,
+    ...buttonProps
+  } = props
+
   const classNames = cx(
     className,
     colorClass(color),

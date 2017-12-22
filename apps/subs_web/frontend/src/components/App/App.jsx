@@ -10,7 +10,7 @@ const App = ({ currentUser, onLogoutClick, children }) => {
     <Styles>
       <Header currentUser={currentUser} onLogoutClick={onLogoutClick} />
       {/* Main */}
-      <section className="mw8-ns center pa4 ph4-m ph5-ns">
+      <section className="mw8-ns center pa3">
         {children}
       </section>
     </Styles>
