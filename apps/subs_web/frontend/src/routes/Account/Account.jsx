@@ -7,8 +7,8 @@ import InputSelect from 'components/InputSelect'
 
 const Account = ({ currentUser }) => {
   return (
-    <div className="w-40 center">
-      <div className="pa3 bg-near-white">
+    <div className="w-50 center">
+      <div className="pa3 br2 bg-near-white">
         <div className="f5 b dark-gray mb2">
           Timezone
         </div>

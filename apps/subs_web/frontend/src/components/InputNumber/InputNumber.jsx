@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import classNames from 'classnames'
 
 const cx = className =>
-  classNames(className, 'pa2 gray ba b--black-20')
+  classNames(className, 'pa2 gray ba b--black-20 br2')
 
 const InputNumber = ({
   className,

@@ -14,6 +14,7 @@ import ServiceSelector from 'components/ServiceSelector'
 import Button from 'components/Button'
 import InputText from 'components/InputText'
 import InputNumber from 'components/InputNumber'
+import InputSelect from 'components/InputSelect'
 
 const renderErrors = (remoteCall) => {
   if (remoteCall.loading || !remoteCall.data) { return null }
@@ -70,7 +71,7 @@ const SubscriptionForm = ({ subscription, services, onClick, onChange, remoteCal
         <InputText
           name="name"
           placeholder="Name"
-          className="subscription-name mt2 w-100"
+          className="subscription-name mt2 w-70"
           value={subscription.name}
           onChange={event => handleChange(event, 'name')}
         />
@@ -119,9 +120,7 @@ const SubscriptionForm = ({ subscription, services, onClick, onChange, remoteCal
         />
         <div>
           <div className="f5 b dark-gray mb2 mt3" style={{ color: textColor }}>Colors</div>
-          <div className="center dt">
-            <ColorPicker onChange={color => onChange('color', color)} />
-          </div>
+          <ColorPicker onChange={color => onChange('color', color)} />
         </div>
       </div>
     )
@@ -199,12 +198,12 @@ const SubscriptionForm = ({ subscription, services, onClick, onChange, remoteCal
   }
 
   return (
-    <div id="subscription-form"> 
-      <div className="pa3" style={{ background: subscription.color }}>
+    <div id="subscription-form">
+      <div className="pa3 br2" style={{ background: subscription.color }}>
         {renderErrors(remoteCall)}
         {
-          subscription.service_code 
-            ? renderServiceForm() 
+          subscription.service_code
+            ? renderServiceForm()
             : renderCustomServiceForm()
         }
       </div>

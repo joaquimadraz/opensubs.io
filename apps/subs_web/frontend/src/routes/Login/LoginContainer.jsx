@@ -73,10 +73,12 @@ class LoginContainer extends Component {
 
   renderLogin() {
     const { remoteCall } = this.props
+    const { loginData } = this.state
 
     return (
       <div>
         <Login
+          data={loginData}
           remoteCall={remoteCall}
           onClick={this.handleFormSubmit}
           onChange={this.handleFormChange}

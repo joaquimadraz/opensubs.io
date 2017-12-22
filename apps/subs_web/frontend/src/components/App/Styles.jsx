@@ -2,6 +2,10 @@ import styled from 'react-emotion'
 
 // TODO: Reuse colors inside emotion css
 export default styled('div') `
+  .Header {
+    background: #FDFDFD;
+  }
+
   .Header--top-menu {
     margin-bottom: -4px;
   }

@@ -31,7 +31,7 @@ const ShowSubscription = ({
     <div>
       <h1>{subscription.name}</h1>
       <div className="flex">
-        <div className="w-40">
+        <div className="w-50">
           <SubscriptionForm
             onClick={onClick}
             onChange={onChange}

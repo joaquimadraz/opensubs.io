@@ -44,7 +44,7 @@ const Header = ({ currentUser, onLogoutClick }) => {
   return (
     <Styles>
       {/* Header */}
-      <div className="bb bw2 b--near-white">
+      <div className="Header bb bw2 b--near-white">
         <section className="Header--top-menu mw8-ns center pa4 pb0">
           <div className="ma2 mh0">
             <Link
