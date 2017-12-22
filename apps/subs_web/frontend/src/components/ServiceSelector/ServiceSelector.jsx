@@ -75,7 +75,7 @@ const SelectorValue = ({ value, children }) => (
   <div
     className="Select-value"
     title={value.value}
-    style={{ background: value.color }}
+    style={{ background: value.color, borderRadius: 4 }}
   >
     <span className="Select-value-label" style={{ color: colors.textColorForBg(value.color) }}>
       {children}

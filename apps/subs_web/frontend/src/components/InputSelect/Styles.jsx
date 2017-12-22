@@ -8,8 +8,6 @@ export default styled('div') `
 
   .Select-control {
     background: rgb(248, 248, 248);
-    border-radius: 0;
-    border: 1px solid rgba(0,0,0,0.2);
   }
 
   .Select-clear-zone {

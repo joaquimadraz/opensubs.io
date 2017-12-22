@@ -18,7 +18,7 @@ const Button = (props) => {
   const classNames = cx(
     className,
     colorClass(color),
-    'f6 bn white pointer b br0 bb--silver',
+    'f6 bn white pointer b br0 bb--silver br2',
   )
 
   return (
