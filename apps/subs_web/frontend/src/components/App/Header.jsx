@@ -45,7 +45,7 @@ const Header = ({ currentUser, onLogoutClick }) => {
     <Styles>
       {/* Header */}
       <div className="bb bw2 b--near-white">
-        <section className="Header--top-menu mw8-ns center pa3 pb0">
+        <section className="Header--top-menu mw8-ns center pa4 pb0">
           <div className="ma2 mh0">
             <Link
               to={routes.root}
