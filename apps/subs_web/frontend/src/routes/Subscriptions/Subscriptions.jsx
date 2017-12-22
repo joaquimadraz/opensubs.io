@@ -5,7 +5,7 @@ import { OrderedSet } from 'immutable'
 import RemoteCall from 'data/domain/RemoteCall'
 import SubscriptionListItem from 'components/SubscriptionListItem'
 
-const Subscriptions = ({ subscriptions, remoteCall }) => {
+const Subscriptions = ({ subscriptions, avgs, remoteCall }) => {
   if (remoteCall.loading) {
     return (<p>Loading...</p>)
   }
@@ -21,8 +21,8 @@ const Subscriptions = ({ subscriptions, remoteCall }) => {
     <div>
       <h3 className="black-70 f5">Average Expenses</h3>
       <div>
-        <span className="black-70 f2 b dib">£1661 <small className="light-silver f5">per month</small></span>
-        <span className="black-70 f2 b dib ml4">£19561 <small className="light-silver f5">per year</small></span>
+        <span className="black-70 f2 b dib">{avgs.get('monthly')} <small className="light-silver f5">per month</small></span>
+        <span className="black-70 f2 b dib ml4">{avgs.get('yearly')} <small className="light-silver f5">per year</small></span>
       </div>
       <div className="mv4 bb bw2 b--near-white" />
       <h3 className="black-70 f5 mb2 mt3">Payments</h3>

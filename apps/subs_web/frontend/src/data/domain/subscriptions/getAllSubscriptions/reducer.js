@@ -7,11 +7,15 @@ const getAllSubscriptionsStarted = (state) => {
   return resetState(state).setIn(['remoteCall', 'loading'], true)
 }
 
-const getAllSubscriptionsSuccess = (state, { data }) => {
+const getAllSubscriptionsSuccess = (state, { data, meta }) => {
+  const newState = resetState(state)
+    .setIn(['avgs', 'monthly'], meta.avg.monthly)
+    .setIn(['avgs', 'yearly'], meta.avg.yearly)
+
   return data.reduce((result, subscription) => (
     result.update('ids', value => value.add(subscription.id))
       .setIn(['entities', subscription.id], parseSubscription(subscription))
-  ), resetState(state))
+  ), newState)
 }
 
 const getAllSubscriptionsFailure = (state, { error }) => {

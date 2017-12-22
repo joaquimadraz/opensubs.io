@@ -15,10 +15,11 @@ class SubscriptionsContainer extends Component {
   }
 
   render() {
-    const { subscriptions, remoteCall } = this.props
+    const { subscriptions, avgs, remoteCall } = this.props
 
     return (
       <Subscriptions
+        avgs={avgs}
         subscriptions={subscriptions}
         remoteCall={remoteCall}
       />
@@ -34,6 +35,7 @@ const mapStateToProps = (state) => {
   ))
 
   return {
+    avgs: subscriptions.get('avgs'),
     subscriptions: subscriptionsRecords,
     remoteCall: subscriptions.get('remoteCall'),
   }

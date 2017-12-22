@@ -66,6 +66,10 @@ import {
 const initialState = Map({
   entities: Map(),
   ids: OrderedSet(),
+  avgs: Map({
+    monthly: 0,
+    yearly: 0,
+  }),
   remoteCall: new RemoteCall(),
 })
 

@@ -83,8 +83,8 @@ defmodule SubsWeb.Test.Controllers.SubscriptionControllerTest do
       conn = get(conn, api_subscription_path(conn, :index))
       assert %{"meta" => meta} = json_response(conn, 200)
 
-      assert meta["avg"]["monthly"] == 10.84
-      assert meta["avg"]["yearly"] == 130.0
+      assert meta["avg"]["monthly"] == "£10.83"
+      assert meta["avg"]["yearly"] == "£130.00"
     end
   end
 
@@ -183,7 +183,7 @@ defmodule SubsWeb.Test.Controllers.SubscriptionControllerTest do
       assert data == %{
         "name" => "Custom Service",
         "description" => "Custom Service Subscription",
-        "amount" => 7.99,
+        "amount" => "7.99",
         "amount_currency" => "GBP",
         "amount_currency_symbol" => "£",
         "cycle" => "monthly",
