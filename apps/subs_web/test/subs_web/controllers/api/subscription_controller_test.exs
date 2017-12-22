@@ -75,6 +75,17 @@ defmodule SubsWeb.Test.Controllers.SubscriptionControllerTest do
         assert Enum.find(subscriptions, fn(sub) -> sub["id"] == subscription.id end) != nil
       end
     end
+
+    test "returns 200 with subscriptions metadata", %{conn: conn, user: user} do
+      insert(:complete_subscription, %{amount: 1000, cycle: "monthly", user_id: user.id})
+      insert(:complete_subscription, %{amount: 1000, cycle: "yearly", user_id: user.id})
+
+      conn = get(conn, api_subscription_path(conn, :index))
+      assert %{"meta" => meta} = json_response(conn, 200)
+
+      assert meta["avg"]["monthly"] == 10.84
+      assert meta["avg"]["yearly"] == 130.0
+    end
   end
 
   describe "GET /api/subscriptions:id" do
