@@ -66,7 +66,7 @@ defmodule SubsWeb.Api.SubscriptionView do
     montly_avg = Enum.reduce(monthly_subscriptions, 0.0, fn(subscription, acc) -> acc + subscription.amount end) * 1.0
     yearly_avg = Enum.reduce(yearly_subscriptions, 0.0, fn(subscription, acc) -> acc + subscription.amount / 12.0 end)
 
-    Float.ceil(amount_to_human(montly_avg + yearly_avg), 2)
+    Float.round(amount_to_human(montly_avg + yearly_avg), 2)
   end
 
   defp calculate_yearly_avg(subscriptions) do
@@ -76,6 +76,6 @@ defmodule SubsWeb.Api.SubscriptionView do
     montly_avg = Enum.reduce(monthly_subscriptions, 0.0, fn(subscription, acc) -> acc + subscription.amount * 12.0 end)
     yearly_avg = Enum.reduce(yearly_subscriptions, 0.0, fn(subscription, acc) -> acc + subscription.amount end) * 1.0
 
-    Float.ceil(amount_to_human(montly_avg + yearly_avg), 2)
+    Float.round(amount_to_human(montly_avg + yearly_avg), 2)
   end
 end
