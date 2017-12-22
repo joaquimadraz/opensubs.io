@@ -37,7 +37,7 @@ const buildServiceOptions = (services) => {
   return servicesOptions
 }
 
-const SubscriptionForm = ({ subscription, services, onClick, onChange, remoteCall }) => {
+const SubscriptionForm = ({ subscription, services, onClick, onChange, remoteCall, children }) => {
   const handleChange = (event, attribute) => {
     onChange(attribute, event.target.value)
   }
@@ -199,10 +199,7 @@ const SubscriptionForm = ({ subscription, services, onClick, onChange, remoteCal
   }
 
   return (
-    <div
-      id="subscription-form"
-      className="w-40"
-    >
+    <div id="subscription-form"> 
       <div className="pa3" style={{ background: subscription.color }}>
         {renderErrors(remoteCall)}
         {
@@ -212,7 +209,8 @@ const SubscriptionForm = ({ subscription, services, onClick, onChange, remoteCal
         }
       </div>
       <div className="pa3">
-        <Button type="submit" onClick={onClick}>Save</Button>
+        <Button type="submit" onClick={onClick} className="mr3">Save</Button>
+        {children}
       </div>
     </div>
   )

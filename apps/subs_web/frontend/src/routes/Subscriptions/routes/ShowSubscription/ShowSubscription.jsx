@@ -30,21 +30,39 @@ const ShowSubscription = ({
   return (
     <div>
       <h1>{subscription.name}</h1>
-
-      <SubscriptionForm
-        onClick={onClick}
-        onChange={onChange}
-        remoteCall={remoteCall}
-        subscription={data}
-        services={services}
-      />
-
-      <Button
-        className="SubscriptionListItem--archive-button"
-        onClick={handleArchiveClick}
-      >
-        Archive
-      </Button>
+      <div className="flex">
+        <div className="w-40">
+          <SubscriptionForm
+            onClick={onClick}
+            onChange={onChange}
+            remoteCall={remoteCall}
+            subscription={data}
+            services={services}
+          >
+            <Button
+              className="SubscriptionListItem--archive-button"
+              onClick={handleArchiveClick}
+            >
+              Archive
+            </Button>
+          </SubscriptionForm>
+        </div>
+        <div className="w-60 pa3">
+          <div className="f5 b dark-gray mt0 mb2">Payments</div>
+          <ul className="pl0 mt0 light-silver">
+            <li className="flex justify-around lh-copy mb2">
+              <div className="w-20">12/08/2017</div>
+              <div className="w-60 tc" />
+              <div className="w-20 tr">7.99£</div>
+            </li>
+            <li className="flex justify-around lh-copy mb2">
+              <div className="w-20">12/08/2017</div>
+              <div className="w-60 tc" />
+              <div className="w-20 tr">7.99£</div>
+            </li>
+          </ul>
+        </div>
+      </div>
     </div>
   )
 }

@@ -19,13 +19,15 @@ const NewSubscription = ({
   }
 
   return (
-    <SubscriptionForm
-      onClick={onClick}
-      onChange={onChange}
-      remoteCall={remoteCall}
-      subscription={subscription}
-      services={services}
-    />
+    <div className="w-40">
+      <SubscriptionForm
+        onClick={onClick}
+        onChange={onChange}
+        remoteCall={remoteCall}
+        subscription={subscription}
+        services={services}
+      />
+    </div>
   )
 }
 
