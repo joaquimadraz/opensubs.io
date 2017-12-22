@@ -42,6 +42,7 @@ const ShowSubscription = ({
             <Button
               className="SubscriptionListItem--archive-button"
               onClick={handleArchiveClick}
+              color="red"
             >
               Archive
             </Button>

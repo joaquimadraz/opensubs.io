@@ -40,7 +40,7 @@ Button.propTypes = {
 
 Button.defaultProps = {
   onClick: () => {},
-  color: 'gray',
+  color: 'subs-pink',
 }
 
 export default Button
