@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
+import routes from 'constants/routes'
 import HeaderLink from 'components/HeaderLink'
 import Styles from './Styles'
 
@@ -16,15 +17,15 @@ const HeaderMenu = ({
     onMouseLeave={onMouseLeave}
     open={open}
   >
-    <HeaderLink className="Header--menu-trigger" active={open}>
+    <HeaderLink to={routes.account} className="Header--menu-trigger" active={open}>
       My Account
     </HeaderLink>
     <div className="Header--menu">
-      <div>
-        <HeaderLink className="Header--menu-button bg-near-white b--white">
+      {/* <div>
+        <HeaderLink to={routes.account} className="Header--menu-button bg-near-white b--white">
           Settings
         </HeaderLink>
-      </div>
+      </div> */}
       <div>
         <button
           className="Header--menu-button Header--logout-button bg-near-white pointer b f5 bb br0 b--near-white light-silver no-underline tc dib"

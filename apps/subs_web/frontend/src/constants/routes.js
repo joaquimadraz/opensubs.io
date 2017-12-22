@@ -8,4 +8,5 @@ export default {
   subscriptions: '/subscriptions',
   subscriptionsNew: '/subscriptions/new',
   subscriptionsShow: subscriptionId => (`/subscriptions/${subscriptionId}`),
+  account: '/account',
 }
