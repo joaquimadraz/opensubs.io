@@ -59,23 +59,31 @@ defmodule SubsWeb.Api.SubscriptionView do
     DateTime.from_naive!(date, "Etc/UTC") |> DateTime.to_iso8601()
   end
 
-  # TODO: Refactor. Convert amounts to user currency
+  # TODO: Refactor. Convert amounts to user currency. One iteration for both calculations.
   defp calculate_monthly_avg(subscriptions) do
-    monthly_subscriptions = Enum.filter(subscriptions, fn(subscription) -> subscription.cycle == "monthly" end)
-    yearly_subscriptions = Enum.filter(subscriptions, fn(subscription) -> subscription.cycle == "yearly" end)
+    montly_avg =
+      subscriptions
+      |> Enum.filter(fn(subscription) -> subscription.cycle == "monthly" end)
+      |> Enum.reduce(0.0, fn(subscription, acc) -> acc + subscription.amount end)
 
-    montly_avg = Enum.reduce(monthly_subscriptions, 0.0, fn(subscription, acc) -> acc + subscription.amount end) * 1.0
-    yearly_avg = Enum.reduce(yearly_subscriptions, 0.0, fn(subscription, acc) -> acc + subscription.amount / 12.0 end)
+    yearly_avg =
+      subscriptions
+      |> Enum.filter(fn(subscription) -> subscription.cycle == "yearly" end)
+      |> Enum.reduce(0.0, fn(subscription, acc) -> acc + subscription.amount / 12.0 end)
 
     amount_to_human_formated(montly_avg + yearly_avg)
   end
 
   defp calculate_yearly_avg(subscriptions) do
-    monthly_subscriptions = Enum.filter(subscriptions, fn(subscription) -> subscription.cycle == "monthly" end)
-    yearly_subscriptions = Enum.filter(subscriptions, fn(subscription) -> subscription.cycle == "yearly" end)
+    montly_avg =
+      subscriptions
+      |> Enum.filter(fn(subscription) -> subscription.cycle == "monthly" end)
+      |> Enum.reduce(0.0, fn(subscription, acc) -> acc + subscription.amount * 12.0 end)
 
-    montly_avg = Enum.reduce(monthly_subscriptions, 0.0, fn(subscription, acc) -> acc + subscription.amount * 12.0 end)
-    yearly_avg = Enum.reduce(yearly_subscriptions, 0.0, fn(subscription, acc) -> acc + subscription.amount end) * 1.0
+    yearly_avg =
+      subscriptions
+      |> Enum.filter(fn(subscription) -> subscription.cycle == "yearly" end)
+      |> Enum.reduce(0.0, fn(subscription, acc) -> acc + subscription.amount end)
 
     amount_to_human_formated(montly_avg + yearly_avg)
   end

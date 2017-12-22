@@ -43,6 +43,7 @@ const mapStateToProps = (state) => {
 
 SubscriptionsContainer.propTypes = {
   dispatch: PropTypes.func.isRequired,
+  avgs: PropTypes.instanceOf(Map).isRequired,
   subscriptions: PropTypes.instanceOf(OrderedSet).isRequired,
   remoteCall: PropTypes.instanceOf(RemoteCall).isRequired,
 }
