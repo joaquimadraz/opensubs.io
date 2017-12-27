@@ -34,9 +34,11 @@ defmodule Subs.Test.Domain.SubscriptionTest do
 
     test "updates first_bill_date and next_bill_date for 2020" do
       subscription = build(:complete_subscription)
-      changeset = update_changeset(subscription, %{
-        "first_bill_date" => "2020-01-01T00:00:00Z"
-      })
+
+      changeset =
+        update_changeset(subscription, %{
+          "first_bill_date" => "2020-01-01T00:00:00Z"
+        })
 
       first_bill_date = Changeset.get_change(changeset, :first_bill_date)
       next_bill_date = Changeset.get_change(changeset, :next_bill_date)
@@ -93,22 +95,26 @@ defmodule Subs.Test.Domain.SubscriptionTest do
 
   describe "amount, amount_currency and amount_currency_symbol" do
     test "returns error for invalid currency" do
-      params = string_params_for(
-        :subscription,
-        amount: 799,
-        amount_currency: "WHAT",
-      )
+      params =
+        string_params_for(
+          :subscription,
+          amount: 799,
+          amount_currency: "WHAT"
+        )
+
       changeset = create_changeset(params)
 
       assert {"unknown currency", _} = changeset.errors[:amount_currency]
     end
 
     test "populates amount_currency_symbol" do
-      params = string_params_for(
-        :subscription,
-        amount: 799,
-        amount_currency: "GBP",
-      )
+      params =
+        string_params_for(
+          :subscription,
+          amount: 799,
+          amount_currency: "GBP"
+        )
+
       changeset = create_changeset(params)
       symbol = Changeset.get_change(changeset, :amount_currency_symbol)
 
@@ -118,10 +124,12 @@ defmodule Subs.Test.Domain.SubscriptionTest do
 
   describe "cycle" do
     test "returns error for invalid cycle" do
-      params = string_params_for(
-        :subscription,
-        cycle: "hourly"
-      )
+      params =
+        string_params_for(
+          :subscription,
+          cycle: "hourly"
+        )
+
       changeset = create_changeset(params)
 
       assert {"must be one of: monthly, yearly", _} = changeset.errors[:cycle]
@@ -143,10 +151,12 @@ defmodule Subs.Test.Domain.SubscriptionTest do
     end
 
     test "populates next_bill_date based on monthly cycle", %{user: user} do
-      params = string_params_for(
-        :subscription,
-        first_bill_date: "2017-09-12T00:00:00Z"
-      )
+      params =
+        string_params_for(
+          :subscription,
+          first_bill_date: "2017-09-12T00:00:00Z"
+        )
+
       changeset = build_changeset_with_user(user, params)
       first_bill_date = Changeset.get_change(changeset, :first_bill_date)
       next_bill_date = Changeset.get_change(changeset, :next_bill_date)
@@ -155,11 +165,13 @@ defmodule Subs.Test.Domain.SubscriptionTest do
     end
 
     test "populates next_bill_date based on yearly cycle", %{user: user} do
-      params = string_params_for(
-        :subscription,
-        cycle: "yearly",
-        first_bill_date: "2017-09-12T00:00:00Z"
-      )
+      params =
+        string_params_for(
+          :subscription,
+          cycle: "yearly",
+          first_bill_date: "2017-09-12T00:00:00Z"
+        )
+
       changeset = build_changeset_with_user(user, params)
       first_bill_date = Changeset.get_change(changeset, :first_bill_date)
       next_bill_date = Changeset.get_change(changeset, :next_bill_date)
@@ -167,12 +179,16 @@ defmodule Subs.Test.Domain.SubscriptionTest do
       assert NaiveDateTime.diff(next_bill_date, first_bill_date) > 0
     end
 
-    test "populates next_bill_date for next month if first_fill_date is from the past", %{user: user} do
-      params = string_params_for(
-        :subscription,
-        cycle: "monthly",
-        first_bill_date: "2017-01-01T00:00:00Z"
-      )
+    test "populates next_bill_date for next month if first_fill_date is from the past", %{
+      user: user
+    } do
+      params =
+        string_params_for(
+          :subscription,
+          cycle: "monthly",
+          first_bill_date: "2017-01-01T00:00:00Z"
+        )
+
       changeset = build_changeset_with_user(user, params)
       first_bill_date = Changeset.get_change(changeset, :first_bill_date)
       next_bill_date = Changeset.get_change(changeset, :next_bill_date)
@@ -180,12 +196,16 @@ defmodule Subs.Test.Domain.SubscriptionTest do
       assert NaiveDateTime.diff(next_bill_date, first_bill_date) > 0
     end
 
-    test "populates next_bill_date for next year if first_fill_date is from the past", %{user: user} do
-      params = string_params_for(
-        :subscription,
-        cycle: "yearly",
-        first_bill_date: "2016-01-01T00:00:00Z"
-      )
+    test "populates next_bill_date for next year if first_fill_date is from the past", %{
+      user: user
+    } do
+      params =
+        string_params_for(
+          :subscription,
+          cycle: "yearly",
+          first_bill_date: "2016-01-01T00:00:00Z"
+        )
+
       changeset = build_changeset_with_user(user, params)
       first_bill_date = Changeset.get_change(changeset, :first_bill_date)
       next_bill_date = Changeset.get_change(changeset, :next_bill_date)
@@ -194,11 +214,13 @@ defmodule Subs.Test.Domain.SubscriptionTest do
     end
 
     test "populates next_bill_date forwarding a bunch of months", %{user: user} do
-      params = string_params_for(
-        :subscription,
-        cycle: "yearly",
-        first_bill_date: "1900-01-01T00:00:00Z"
-      )
+      params =
+        string_params_for(
+          :subscription,
+          cycle: "yearly",
+          first_bill_date: "1900-01-01T00:00:00Z"
+        )
+
       changeset = build_changeset_with_user(user, params)
       first_bill_date = Changeset.get_change(changeset, :first_bill_date)
       next_bill_date = Changeset.get_change(changeset, :next_bill_date)
@@ -209,13 +231,14 @@ defmodule Subs.Test.Domain.SubscriptionTest do
 
   describe "service" do
     setup do
-      changeset = create_changeset(%{
-        "service_code" => "github",
-        "amount" => 7.99,
-        "amount_currency" => "GBP",
-        "cycle" => "monthly",
-        "user_id" => 1
-      })
+      changeset =
+        create_changeset(%{
+          "service_code" => "github",
+          "amount" => 7.99,
+          "amount_currency" => "GBP",
+          "cycle" => "monthly",
+          "user_id" => 1
+        })
 
       [changeset: changeset]
     end
@@ -233,13 +256,14 @@ defmodule Subs.Test.Domain.SubscriptionTest do
     end
 
     test "return error for unknown service code" do
-      changeset = create_changeset(%{
-        "service_code" => "what",
-        "amount" => 7.99,
-        "amount_currency" => "GBP",
-        "cycle" => "monthly",
-        "user_id" => 1
-      })
+      changeset =
+        create_changeset(%{
+          "service_code" => "what",
+          "amount" => 7.99,
+          "amount_currency" => "GBP",
+          "cycle" => "monthly",
+          "user_id" => 1
+        })
 
       assert !changeset.valid?
       assert {"unknown service", _} = changeset.errors[:service_code]
