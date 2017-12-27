@@ -9,10 +9,10 @@ defmodule SubsWeb.Api.SubscriptionController do
   alias SubsWeb.Helpers.UserHelper
   alias SubsWeb.Api.{ErrorView, ChangesetView}
 
-  def index(conn, _params) do
+  def index(conn, params) do
     current_user = UserHelper.current_user(conn)
 
-    case FindUserSubscriptions.perform(current_user) do
+    case FindUserSubscriptions.perform(current_user, params) do
       {:ok, %{subscriptions: subscriptions}} ->
         conn
         |> put_status(:ok)

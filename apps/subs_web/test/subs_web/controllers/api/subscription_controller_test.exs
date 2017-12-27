@@ -72,7 +72,7 @@ defmodule SubsWeb.Test.Controllers.SubscriptionControllerTest do
       assert Enum.count(subscriptions) == 3
 
       for subscription <- user_subscriptions do
-        assert Enum.find(subscriptions, fn(sub) -> sub["id"] == subscription.id end) != nil
+        assert Enum.find(subscriptions, fn sub -> sub["id"] == subscription.id end) != nil
       end
     end
 
@@ -85,6 +85,38 @@ defmodule SubsWeb.Test.Controllers.SubscriptionControllerTest do
 
       assert meta["avg"]["monthly"] == "£10.83"
       assert meta["avg"]["yearly"] == "£130.00"
+    end
+
+    test "returns subscriptions filter by date", %{conn: conn, user: user} do
+      sub =
+        insert(:complete_subscription, %{
+          next_bill_date: ~N[2018-11-01T00:00:00Z],
+          user_id: user.id
+        })
+
+      data_conn =
+        get(
+          conn,
+          api_subscription_path(conn, :index, %{
+            "next_bill_date_gte" => "2018-11-01",
+            "next_bill_date_tte" => "2018-11-30"
+          })
+        )
+
+      assert %{"data" => [subscription]} = json_response(data_conn, 200)
+
+      assert subscription["id"] == sub.id
+
+      empty_conn =
+        get(
+          conn,
+          api_subscription_path(conn, :index, %{
+            "next_bill_date_gte" => "2018-12-01",
+            "next_bill_date_lte" => "2018-12-31"
+          })
+        )
+
+      assert %{"data" => []} = json_response(empty_conn, 200)
     end
   end
 
@@ -127,37 +159,45 @@ defmodule SubsWeb.Test.Controllers.SubscriptionControllerTest do
       assert data["message"] == "Missing subscription params"
     end
 
-    test "returns unprocessable entity when requesting with empty subscription params",
-         %{conn: conn} do
+    test "returns unprocessable entity when requesting with empty subscription params", %{
+      conn: conn
+    } do
       conn = post(conn, api_subscription_path(conn, :create), subscription: %{})
 
       assert data = json_response(conn, 422)
+
       assert data["data"]["errors"] == %{
-        "name" => ["can't be blank"],
-        "amount" => ["can't be blank"],
-        "amount_currency" => ["can't be blank"],
-        "cycle" => ["can't be blank"],
-      }
+               "name" => ["can't be blank"],
+               "amount" => ["can't be blank"],
+               "amount_currency" => ["can't be blank"],
+               "cycle" => ["can't be blank"]
+             }
     end
 
-    test  "returns unprocessable entity when given invalid params", %{conn: conn} do
-      conn = post(conn, api_subscription_path(conn, :create), subscription: %{
-        "amount" => -1,
-        "amount_currency" => "DUNNO",
-        "cycle" => "hourly",
-        "color" => "invalid",
-        "first_bill_date" => "invalid"
-      })
+    test "returns unprocessable entity when given invalid params", %{conn: conn} do
+      conn =
+        post(
+          conn,
+          api_subscription_path(conn, :create),
+          subscription: %{
+            "amount" => -1,
+            "amount_currency" => "DUNNO",
+            "cycle" => "hourly",
+            "color" => "invalid",
+            "first_bill_date" => "invalid"
+          }
+        )
 
       assert data = json_response(conn, 422)
+
       assert data["data"]["errors"] == %{
-        "name" => ["can't be blank"],
-        "amount" => ["must be greater than 0"],
-        "amount_currency" => ["unknown currency"],
-        "cycle" => ["must be one of: monthly, yearly"],
-        "color" => ["invalid format, must be HEX format, ex: #FF0000"],
-        "first_bill_date" => ["is invalid"]
-      }
+               "name" => ["can't be blank"],
+               "amount" => ["must be greater than 0"],
+               "amount_currency" => ["unknown currency"],
+               "cycle" => ["must be one of: monthly, yearly"],
+               "color" => ["invalid format, must be HEX format, ex: #FF0000"],
+               "first_bill_date" => ["is invalid"]
+             }
     end
 
     # TODO: Find a better way of doing an integration test that depends on the
@@ -165,33 +205,39 @@ defmodule SubsWeb.Test.Controllers.SubscriptionControllerTest do
     # date and "freezes" it for the test?
     # This test should fail at the end of January to remind me of this again!
     test "creates custom subscription given all params", %{conn: conn} do
-      conn = post(conn, api_subscription_path(conn, :create), subscription: %{
-        "name" => "Custom Service",
-        "description" => "Custom Service Subscription",
-        "amount" => "7.99",
-        "amount_currency" => "GBP",
-        "cycle" => "monthly",
-        "color" => "#36dd30",
-        "first_bill_date" => "2018-01-31T00:00:00Z"
-      })
+      conn =
+        post(
+          conn,
+          api_subscription_path(conn, :create),
+          subscription: %{
+            "name" => "Custom Service",
+            "description" => "Custom Service Subscription",
+            "amount" => "7.99",
+            "amount_currency" => "GBP",
+            "cycle" => "monthly",
+            "color" => "#36dd30",
+            "first_bill_date" => "2018-01-31T00:00:00Z"
+          }
+        )
 
       assert data = json_response(conn, 201)
 
       {id, data} = Map.pop(data["data"], "id")
 
       assert id != nil
+
       assert data == %{
-        "name" => "Custom Service",
-        "description" => "Custom Service Subscription",
-        "amount" => "7.99",
-        "amount_currency" => "GBP",
-        "amount_currency_symbol" => "£",
-        "cycle" => "monthly",
-        "color" => "#36DD30",
-        "first_bill_date" => "2018-01-31T00:00:00Z",
-        "next_bill_date" => "2018-01-31T00:00:00Z",
-        "service_code" => nil
-      }
+               "name" => "Custom Service",
+               "description" => "Custom Service Subscription",
+               "amount" => "7.99",
+               "amount_currency" => "GBP",
+               "amount_currency_symbol" => "£",
+               "cycle" => "monthly",
+               "color" => "#36DD30",
+               "first_bill_date" => "2018-01-31T00:00:00Z",
+               "next_bill_date" => "2018-01-31T00:00:00Z",
+               "service_code" => nil
+             }
     end
   end
 
@@ -203,8 +249,10 @@ defmodule SubsWeb.Test.Controllers.SubscriptionControllerTest do
       [conn: conn, user: user]
     end
 
-    test "returns bad request when requesting without subscription params",
-          %{conn: conn, user: user} do
+    test "returns bad request when requesting without subscription params", %{
+      conn: conn,
+      user: user
+    } do
       subscription = insert(:complete_subscription, user_id: user.id)
       conn = patch(conn, api_subscription_path(conn, :update, subscription.id))
 
@@ -213,39 +261,52 @@ defmodule SubsWeb.Test.Controllers.SubscriptionControllerTest do
     end
 
     test "returns not found for unknown user subscription", %{conn: conn} do
-      another_users_subscription = insert(
-        :complete_subscription,
-        user_id: insert(:user).id
-      )
+      another_users_subscription =
+        insert(
+          :complete_subscription,
+          user_id: insert(:user).id
+        )
 
-      conn = patch(conn,
-                   api_subscription_path(conn, :update, another_users_subscription.id),
-                   subscription: %{})
+      conn =
+        patch(
+          conn,
+          api_subscription_path(conn, :update, another_users_subscription.id),
+          subscription: %{}
+        )
 
       assert data = json_response(conn, 404)
       assert data["message"] == "Subscription not found"
     end
 
-    test "returns unprocessable entity when requesting with empty subscription params",
-         %{conn: conn, user: user} do
+    test "returns unprocessable entity when requesting with empty subscription params", %{
+      conn: conn,
+      user: user
+    } do
       subscription = insert(:complete_subscription, user_id: user.id)
 
-      conn = patch(conn,
-                   api_subscription_path(conn, :update, subscription.id),
-                   subscription: %{"name" => ""})
+      conn =
+        patch(
+          conn,
+          api_subscription_path(conn, :update, subscription.id),
+          subscription: %{"name" => ""}
+        )
 
       assert data = json_response(conn, 422)
+
       assert data["data"]["errors"] == %{
-        "name" => ["can't be blank"]
-      }
+               "name" => ["can't be blank"]
+             }
     end
 
     test "Updates subscription and returns ok", %{conn: conn, user: user} do
       subscription = insert(:complete_subscription, user_id: user.id)
 
-      conn = patch(conn,
-                   api_subscription_path(conn, :update, subscription.id),
-                   subscription: %{"name" => "Updated"})
+      conn =
+        patch(
+          conn,
+          api_subscription_path(conn, :update, subscription.id),
+          subscription: %{"name" => "Updated"}
+        )
 
       assert %{"data" => data} = json_response(conn, 200)
       assert data["id"] == subscription.id
