@@ -32,9 +32,37 @@ defmodule Subs.Test.UseCases.Subscriptions.FindUserSubscriptionsTest do
     assert !includes_subscriptions?(user_subscriptions, archived)
   end
 
+  test "returns user submissions filtered by next bill date inclusively", %{user: user} do
+    nov_sub =
+      insert(:complete_subscription, %{next_bill_date: ~N[2018-11-01T00:00:00Z], user_id: user.id})
+
+    end_nov_sub =
+      insert(:complete_subscription, %{next_bill_date: ~N[2018-11-30T00:00:00Z], user_id: user.id})
+
+    _dec_sub =
+      insert(:complete_subscription, %{next_bill_date: ~N[2018-12-01T00:00:00Z], user_id: user.id})
+
+    assert {:ok, %{subscriptions: user_subscriptions}} =
+             FindUserSubscriptions.perform(user, %{
+               "next_bill_date_gte" => "2018-10-01",
+               "next_bill_date_lte" => "2018-10-31"
+             })
+
+    assert Enum.count(user_subscriptions) == 0
+
+    assert {:ok, %{subscriptions: [first, second]}} =
+             FindUserSubscriptions.perform(user, %{
+               "next_bill_date_gte" => "2018-11-01",
+               "next_bill_date_lte" => "2018-11-30"
+             })
+
+    assert first.id == nov_sub.id
+    assert second.id == end_nov_sub.id
+  end
+
   def includes_subscriptions?(subscriptions, should_include) do
-    Enum.all?(subscriptions, fn(subscription) ->
-      Enum.find(should_include, fn(sub) -> sub.id == subscription.id end)
+    Enum.all?(subscriptions, fn subscription ->
+      Enum.find(should_include, fn sub -> sub.id == subscription.id end)
     end)
   end
 end
