@@ -4,6 +4,7 @@ import { OrderedSet } from 'immutable'
 
 import CurrentUser from 'data/domain/currentUser/CurrentUser'
 import Button from 'components/Button'
+import SubscriptionListItem from 'components/SubscriptionListItem'
 import SubscriptionPill from 'components/SubscriptionPill'
 import Styles from './Styles'
 
@@ -12,11 +13,13 @@ const renderLandingPage = () => {
 }
 
 const renderYearlySubscriptions = (subscriptions) => {
-  if (subscriptions.size === 0) { return null }
+  const yearlyPayments = subscriptions.filter(sub => sub.cycle === 'yearly')
 
-  const links = subscriptions.map((subscription, index) => (
-    <SubscriptionPill subscription={subscription} last={index !== subscriptions.length} />
-  ))
+  const noYearlyPayments = (
+    <div>
+      <p className="gray f6">No yearly payments this month.</p>
+    </div>
+  )
 
   return (
     <div className="flex-auto">
@@ -25,37 +28,25 @@ const renderYearlySubscriptions = (subscriptions) => {
         <small className="ml2">this month</small>
       </div>
       <div className="flex mt2">
-        {links}
+        {yearlyPayments.size === 0
+          ? noYearlyPayments
+          : yearlyPayments.map((subscription, index) => (
+            <SubscriptionPill subscription={subscription} last={index !== subscriptions.length} />
+          ))}
       </div>
     </div>
-  )
-}
-
-const renderMonthlySubscriptions = (subscriptions) => {
-  if (subscriptions.size === 0) { return null }
-
-  const links = subscriptions.map((subscription, index) => (
-    <div className="flex-auto">
-      <SubscriptionPill subscription={subscription} last={index !== subscriptions.length} />
-      <div className="b orange pa2 f7">in 3 days</div>
-    </div >
-  ))
-
-  return (
-    <div className="flex-auto">
-      <div className="f6 b light-silver">Next</div>
-      <div className="flex mt2">
-        {links}
-      </div>
-    </div >
   )
 }
 
 const Home = (props) => {
   const { currentUser, subscriptions } = props
 
-  const yearlyPayments = subscriptions.filter(sub => sub.cycle === 'yearly')
-  const monthlyPayments = subscriptions.filter(sub => sub.cycle === 'monthly')
+  const renderSubscriptionItem = subscription => (
+    <SubscriptionListItem
+      key={subscription.id}
+      subscription={subscription}
+    />
+  )
 
   const renderLoggedPage = () => {
     return (
@@ -72,11 +63,10 @@ const Home = (props) => {
               </small>
             </span>
           </div>
-          {renderYearlySubscriptions(yearlyPayments)}
-          <div className="mh3 br bw2 b--near-white" />
-          {renderMonthlySubscriptions(monthlyPayments)}
+          {renderYearlySubscriptions(subscriptions)}
         </div>
-        {/* <h3 className="black-70 f5 mb2 mt3">Payments</h3>
+        <div className="mv4 bb bw2 b--near-white" />
+        <h3 className="black-70 f5 mb2 mt3">Payments</h3>
         <ul className="pl0 mt0">
           <li className="flex justify-around items-center lh-copy ph0-l light-silver">
             <div className="w-40 pa2 f6 b ">Name</div>
@@ -84,7 +74,8 @@ const Home = (props) => {
             <div className="w-20 pa2 f6 b tc">Alerts</div>
             <div className="w-10 pa2 f6 b tr">Amount</div>
           </li>
-        </ul> */}
+          {subscriptions.map(renderSubscriptionItem)}
+        </ul>
         <div className="mv4 bb bw2 b--near-white" />
         <div className="flex silver b">
           <div className="flex-none">

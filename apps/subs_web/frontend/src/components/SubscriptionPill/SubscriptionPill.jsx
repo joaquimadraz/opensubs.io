@@ -10,7 +10,7 @@ import Styles from './Styles'
 const SubscriptionPill = ({ subscription, last }) => {
   return (
     <Styles
-      className={classNames('flex-auto bg-black pa2 white mr2 db', { mr2: !last })}
+      className={classNames('flex-auto bg-black pa2 white mr2 db mw4', { mr2: !last })}
       background={subscription.color}
       textColor={subscription.textColor}
     >
