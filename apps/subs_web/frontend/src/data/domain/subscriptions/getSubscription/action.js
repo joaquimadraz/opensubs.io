@@ -18,7 +18,7 @@ function handleGetFailure(dispatch, error) {
   dispatch({ type: GET_SUBSCRIPTION_FAILURE, error })
 }
 
-const getAllSubscriptions = (subscriptionId) =>
+const getSubscription = subscriptionId =>
   (dispatch) => {
     handleGetStarted(dispatch)
 
@@ -27,7 +27,7 @@ const getAllSubscriptions = (subscriptionId) =>
       .catch(error => handleGetFailure(dispatch, error))
   }
 
-export default getAllSubscriptions
+export default getSubscription
 
 export {
   GET_SUBSCRIPTION_STARTED,

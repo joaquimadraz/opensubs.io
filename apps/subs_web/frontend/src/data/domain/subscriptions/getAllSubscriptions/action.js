@@ -18,11 +18,11 @@ function handleGetFailure(dispatch, error) {
   dispatch({ type: GET_ALL_SUBSCRIPTIONS_FAILURE, error })
 }
 
-const getAllSubscriptions = () =>
+const getAllSubscriptions = params =>
   (dispatch) => {
     handleGetStarted(dispatch)
 
-    api.getSubscriptions()
+    api.getSubscriptions(params)
       .then(response => handleGetSuccess(dispatch, response))
       .catch(error => handleGetFailure(dispatch, error))
   }

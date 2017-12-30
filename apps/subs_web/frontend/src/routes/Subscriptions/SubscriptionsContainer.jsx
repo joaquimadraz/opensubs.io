@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { OrderedSet } from 'immutable'
+import { Map, OrderedSet } from 'immutable'
 
 import RemoteCall from 'data/domain/RemoteCall'
 import getAllSubscriptionsAction from 'data/domain/subscriptions/getAllSubscriptions/action'

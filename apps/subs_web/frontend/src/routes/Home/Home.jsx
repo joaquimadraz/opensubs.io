@@ -1,21 +1,66 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { OrderedSet } from 'immutable'
 
 import CurrentUser from 'data/domain/currentUser/CurrentUser'
 import Button from 'components/Button'
+import SubscriptionPill from 'components/SubscriptionPill'
 import Styles from './Styles'
 
 const renderLandingPage = () => {
   return <p>Home</p>
 }
 
+const renderYearlySubscriptions = (subscriptions) => {
+  if (subscriptions.size === 0) { return null }
+
+  const links = subscriptions.map((subscription, index) => (
+    <SubscriptionPill subscription={subscription} last={index !== subscriptions.length} />
+  ))
+
+  return (
+    <div className="flex-auto">
+      <div className="f6 b light-silver">
+        <span className="subs-pink">Yearly payments</span>
+        <small className="ml2">this month</small>
+      </div>
+      <div className="flex mt2">
+        {links}
+      </div>
+    </div>
+  )
+}
+
+const renderMonthlySubscriptions = (subscriptions) => {
+  if (subscriptions.size === 0) { return null }
+
+  const links = subscriptions.map((subscription, index) => (
+    <div className="flex-auto">
+      <SubscriptionPill subscription={subscription} last={index !== subscriptions.length} />
+      <div className="b orange pa2 f7">in 3 days</div>
+    </div >
+  ))
+
+  return (
+    <div className="flex-auto">
+      <div className="f6 b light-silver">Next</div>
+      <div className="flex mt2">
+        {links}
+      </div>
+    </div >
+  )
+}
+
 const Home = (props) => {
-  const { currentUser } = props
+  const { currentUser, subscriptions } = props
+
+  const yearlyPayments = subscriptions.filter(sub => sub.cycle === 'yearly')
+  const monthlyPayments = subscriptions.filter(sub => sub.cycle === 'monthly')
 
   const renderLoggedPage = () => {
     return (
       <div>
-        <h3 className="black-70 f4">December 2017</h3>
+        <h3 className="black-70 f4">January 2018</h3>
         <div className="flex">
           <div className="flex-auto">
             <div className="f6 b light-silver">Total</div>
@@ -27,52 +72,11 @@ const Home = (props) => {
               </small>
             </span>
           </div>
-          <div className="flex-auto">
-            <div className="f6 b light-silver">
-              <span className="subs-pink">Yearly payments</span>
-              <small className="ml2">this month</small>
-            </div>
-            <div className="flex mt2">
-              <a href="/" className="flex-auto bg-black pa2 white mr2 db no-underline">
-                <div className="f6">IUC</div>
-                <div className="b mt2">£268</div>
-              </a>
-              <a href="/" className="flex-auto bg-black pa2 white db no-underline">
-                <div className="f6">Car insurance</div>
-                <div className="b mt2">£190</div>
-              </a>
-            </div>
-          </div>
-          <div className="mh3 br bw2 b--near-white" />          
-          <div className="flex-auto">
-            <div className="f6 b light-silver">Next</div>
-            <div className="flex mt2">
-              <div className="flex-auto">
-                <a href="/" className="bg-black pa2 white mr2 db no-underline">
-                  <div className="f6">Three</div>
-                  <div className="b mt2">£20</div>
-                </a>
-                <div className="b orange pa2 f7">in 3 days</div>
-              </div>
-              <div className="flex-auto">
-                <a href="/" className="bg-black pa2 white mr2 db no-underline">
-                  <div className="f6">Council Tax</div>
-                  <div className="b mt2">£101</div>
-                </a>
-                <div className="b green pa2 f7">in 2 weeks</div>
-              </div>
-              <div className="flex-auto">
-                <a href="/" className="bg-black pa2 white db no-underline">
-                  <div className="f6">Internet BT</div>
-                  <div className="b mt2">£38</div>
-                </a>
-                <div className="b green pa2 f7">in 3 weeks</div>
-              </div>
-            </div>
-          </div>
+          {renderYearlySubscriptions(yearlyPayments)}
+          <div className="mh3 br bw2 b--near-white" />
+          {renderMonthlySubscriptions(monthlyPayments)}
         </div>
-        <div className="mv4 bb bw2 b--near-white" />
-        <h3 className="black-70 f5 mb2 mt3">Payments</h3>
+        {/* <h3 className="black-70 f5 mb2 mt3">Payments</h3>
         <ul className="pl0 mt0">
           <li className="flex justify-around items-center lh-copy ph0-l light-silver">
             <div className="w-40 pa2 f6 b ">Name</div>
@@ -80,7 +84,7 @@ const Home = (props) => {
             <div className="w-20 pa2 f6 b tc">Alerts</div>
             <div className="w-10 pa2 f6 b tr">Amount</div>
           </li>
-        </ul>
+        </ul> */}
         <div className="mv4 bb bw2 b--near-white" />
         <div className="flex silver b">
           <div className="flex-none">
@@ -104,6 +108,7 @@ const Home = (props) => {
 
 Home.propTypes = {
   currentUser: PropTypes.instanceOf(CurrentUser).isRequired,
+  subscriptions: PropTypes.instanceOf(OrderedSet).isRequired,
 }
 
 export default Home

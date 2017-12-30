@@ -30,7 +30,7 @@ const SubscriptionListItem = ({ subscription }) => {
         <div className="w-10 w-20-ns pa2 pa3-ns tc" />
         <div className="w-30 w-10-ns pa2 pa3-ns tr">
           <span className="SubscriptionListItem--amount">
-            {subscription.amount_currency_symbol}{subscription.amount}
+            {subscription.amountFormatted}
           </span>
         </div>
       </Link>

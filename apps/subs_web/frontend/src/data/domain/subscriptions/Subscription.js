@@ -32,6 +32,10 @@ class Subscription extends SubscriptionRecord {
   get textColor() {
     return colors.textColorForBg(this.color)
   }
+
+  get amountFormatted() {
+    return `${this.amount_currency_symbol}${this.amount}`
+  }
 }
 
 export function parseSubscription(data) {

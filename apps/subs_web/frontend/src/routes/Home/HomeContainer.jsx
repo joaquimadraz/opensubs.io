@@ -1,35 +1,51 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import { OrderedSet } from 'immutable'
 
 import CurrentUser from 'data/domain/currentUser/CurrentUser'
+import getAllSubscriptionsAction from 'data/domain/subscriptions/getAllSubscriptions/action'
+
 import Home from './Home'
 
 class HomeContainer extends Component {
   componentDidMount() {
-    // TODO
+    const { dispatch } = this.props
+
+    dispatch(getAllSubscriptionsAction({
+      next_bill_date_gte: '2018-01-01',
+      next_bill_date_lte: '2018-01-31',
+    }))
   }
 
   render() {
-    const { currentUser } = this.props
+    const { currentUser, subscriptions } = this.props
 
     return (
       <Home
         currentUser={currentUser}
+        subscriptions={subscriptions}
       />
     )
   }
 }
 
 const mapStateToProps = (state) => {
-  const { currentUser } = state
+  const { subscriptions, currentUser } = state
+
+  const subscriptionsRecords = subscriptions.get('ids').map(id => (
+    subscriptions.getIn(['entities', id])
+  ))
 
   return {
     currentUser,
+    subscriptions: subscriptionsRecords,
   }
 }
 
 HomeContainer.propTypes = {
+  dispatch: PropTypes.func.isRequired,
+  subscriptions: PropTypes.instanceOf(OrderedSet).isRequired,
   currentUser: PropTypes.instanceOf(CurrentUser).isRequired,
 }
 

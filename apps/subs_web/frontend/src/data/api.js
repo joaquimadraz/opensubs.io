@@ -29,8 +29,8 @@ const getUsersMe = () =>
 const postSubscriptions = params =>
   axios.post('/api/subscriptions', params, { headers: authHeader() })
 
-const getSubscriptions = () =>
-  axios.get('/api/subscriptions', { headers: authHeader() })
+const getSubscriptions = params =>
+  axios.get('/api/subscriptions', { params, headers: authHeader() })
 
 const patchSubscription = (subscriptionId, params) =>
   axios.patch(`/api/subscriptions/${subscriptionId}`, params, { headers: authHeader() })
