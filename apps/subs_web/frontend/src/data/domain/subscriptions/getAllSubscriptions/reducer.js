@@ -1,7 +1,11 @@
+import { OrderedSet, Map } from 'immutable'
 import { parseSubscription } from 'data/domain/subscriptions/Subscription'
 import RemoteCall, { parseErrorResponse } from 'data/domain/RemoteCall'
 
-const resetState = state => state.set('remoteCall', new RemoteCall())
+const resetState = state =>
+  state.set('remoteCall', new RemoteCall())
+    .set('ids', OrderedSet())
+    .set('entities', Map())
 
 const getAllSubscriptionsStarted = (state) => {
   return resetState(state).setIn(['remoteCall', 'loading'], true)

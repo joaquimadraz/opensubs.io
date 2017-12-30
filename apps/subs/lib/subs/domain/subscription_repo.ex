@@ -22,7 +22,11 @@ defmodule Subs.SubscriptionRepo do
 
   def get_user_subscriptions(user, filters) do
     query =
-      from(s in Subscription, where: s.user_id == ^user.id and s.archived == false)
+      from(
+        s in Subscription,
+        where: s.user_id == ^user.id and s.archived == false,
+        order_by: s.name
+      )
       |> apply_next_bill_date_filter(filters)
 
     Repo.all(query)
