@@ -6,12 +6,13 @@ defmodule Subs.Application.SubscriptionsByMonth do
   alias Subs.Helpers.DT
 
   def filter(subscriptions, month, year) do
-    {:ok, naive_target} = NaiveDateTime.new(year, month, 1, 0, 0, 0)
+    {:ok, target} = NaiveDateTime.new(year, month, 1, 0, 0, 0)
+    target = Timex.end_of_month(target)
 
     data =
       subscriptions
       |> Enum.filter(fn sub ->
-        NaiveDateTime.diff(sub.first_bill_date, naive_target) <= 0
+        NaiveDateTime.diff(sub.first_bill_date, target) <= 0
       end)
       |> Enum.reduce(%{monthly: [], yearly: []}, fn sub, acc ->
         case sub.cycle do
@@ -20,7 +21,7 @@ defmodule Subs.Application.SubscriptionsByMonth do
               DT.calculate_current_bill_date(
                 sub.first_bill_date,
                 :months,
-                naive_target
+                target
               )
 
             sub = %{sub | current_bill_date: current_bill_date}
@@ -33,7 +34,7 @@ defmodule Subs.Application.SubscriptionsByMonth do
                 DT.calculate_current_bill_date(
                   sub.first_bill_date,
                   :years,
-                  naive_target
+                  target
                 )
 
               sub = %{sub | current_bill_date: current_bill_date}
@@ -45,6 +46,6 @@ defmodule Subs.Application.SubscriptionsByMonth do
         end
       end)
 
-    {:ok, subscriptions: data[:yearly] ++ data[:monthly]}
+    data[:yearly] ++ data[:monthly]
   end
 end

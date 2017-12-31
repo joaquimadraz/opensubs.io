@@ -4,7 +4,7 @@ defmodule Subs.Test.Application.SubscriptionsByMonthTest do
   alias Subs.Application.SubscriptionsByMonth
 
   test "returns no subscriptions" do
-    assert {:ok, subscriptions: []} = SubscriptionsByMonth.filter([], 10, 2017)
+    [] = SubscriptionsByMonth.filter([], 10, 2017)
   end
 
   describe "given monthly and yearly subscriptions" do
@@ -36,12 +36,12 @@ defmodule Subs.Test.Application.SubscriptionsByMonthTest do
       monthly_sub: monthly_sub,
       all: all,
     } do
-      {:ok, subscriptions: [subscription]} = SubscriptionsByMonth.filter(all, 12, 2017)
+      [subscription] = SubscriptionsByMonth.filter(all, 12, 2017)
 
       assert subscription.id == monthly_sub.id
       assert subscription.current_bill_date == ~N[2017-12-01 00:00:00]
 
-      {:ok, subscriptions: [subscription]} = SubscriptionsByMonth.filter(all, 1, 2018)
+      [subscription] = SubscriptionsByMonth.filter(all, 1, 2018)
 
       assert subscription.id == monthly_sub.id
       assert subscription.current_bill_date == ~N[2018-01-01 00:00:00]
@@ -52,12 +52,12 @@ defmodule Subs.Test.Application.SubscriptionsByMonthTest do
       monthly_sub: monthly_sub,
       all: all,
     } do
-      {:ok, subscriptions: [subscription]} = SubscriptionsByMonth.filter(all, 9, 2017)
+      [subscription] = SubscriptionsByMonth.filter(all, 9, 2017)
 
       assert subscription.id == yearly_sub.id
       assert subscription.current_bill_date == ~N[2017-09-01 00:00:00]
 
-      {:ok, subscriptions: [yearly, monthly]} = SubscriptionsByMonth.filter(all, 9, 2018)
+      [yearly, monthly] = SubscriptionsByMonth.filter(all, 9, 2018)
 
       assert yearly.id == yearly_sub.id
       assert yearly.current_bill_date == ~N[2018-09-01 00:00:00]
@@ -75,11 +75,11 @@ defmodule Subs.Test.Application.SubscriptionsByMonthTest do
           first_bill_date: ~N[2016-02-29 00:00:00]
         )
 
-      {:ok, subscriptions: [subscription]} = SubscriptionsByMonth.filter([monthly_feb], 2, 2018)
+      [subscription] = SubscriptionsByMonth.filter([monthly_feb], 2, 2018)
 
       assert subscription.current_bill_date == ~N[2018-02-28 00:00:00]
 
-      {:ok, subscriptions: [subscription]} = SubscriptionsByMonth.filter([monthly_feb], 2, 2020)
+      [subscription] = SubscriptionsByMonth.filter([monthly_feb], 2, 2020)
 
       assert subscription.current_bill_date == ~N[2020-02-29 00:00:00]
     end
@@ -93,7 +93,7 @@ defmodule Subs.Test.Application.SubscriptionsByMonthTest do
           first_bill_date: ~N[2016-02-28 00:00:00]
         )
 
-      {:ok, subscriptions: [subscription]} = SubscriptionsByMonth.filter([yearly_feb], 2, 2018)
+      [subscription] = SubscriptionsByMonth.filter([yearly_feb], 2, 2018)
 
       assert subscription.current_bill_date == ~N[2018-02-28 00:00:00]
     end

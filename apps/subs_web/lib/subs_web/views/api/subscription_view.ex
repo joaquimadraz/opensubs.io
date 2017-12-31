@@ -3,13 +3,17 @@ defmodule SubsWeb.Api.SubscriptionView do
   alias Subs.Helpers.Money
   alias SubsWeb.Api.SubscriptionView
 
-  def render("index.json", %{subscriptions: subscriptions}) do
+  def render("index.json", %{subscriptions: subscriptions, month_stats: month_stats}) do
     %{
       data: render_many(subscriptions, SubscriptionView, "subscription.json"),
       meta: %{
         avg: %{
           monthly: calculate_monthly_avg(subscriptions),
           yearly: calculate_yearly_avg(subscriptions),
+        },
+        month: %{
+          subscriptions: render_many(month_stats[:payments], SubscriptionView, "current_subscription.json"),
+          total: amount_to_human_formated(month_stats[:total])
         }
       }
     }
@@ -48,6 +52,23 @@ defmodule SubsWeb.Api.SubscriptionView do
       color: subscription.color,
       first_bill_date: naive_to_utc_iso8601(subscription.first_bill_date),
       next_bill_date: naive_to_utc_iso8601(subscription.next_bill_date),
+      service_code: subscription.service_code,
+    }
+  end
+
+  def render("current_subscription.json", %{subscription: subscription}) do
+    %{
+      id: subscription.id,
+      name: subscription.name,
+      description: subscription.description,
+      amount: amount_to_human(subscription.amount),
+      amount_currency: subscription.amount_currency,
+      amount_currency_symbol: subscription.amount_currency_symbol,
+      cycle: subscription.cycle,
+      color: subscription.color,
+      first_bill_date: naive_to_utc_iso8601(subscription.first_bill_date),
+      next_bill_date: naive_to_utc_iso8601(subscription.next_bill_date),
+      current_bill_date: naive_to_utc_iso8601(subscription.current_bill_date),
       service_code: subscription.service_code,
     }
   end

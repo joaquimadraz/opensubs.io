@@ -87,6 +87,16 @@ defmodule SubsWeb.Test.Controllers.SubscriptionControllerTest do
       assert meta["avg"]["yearly"] == "£130.00"
     end
 
+    test "returns 200 with month stats", %{conn: conn, user: user} do
+      insert(:complete_subscription, %{amount: 1000, cycle: "monthly", user_id: user.id})
+      insert(:complete_subscription, %{amount: 950, cycle: "monthly", user_id: user.id})
+
+      conn = get(conn, api_subscription_path(conn, :index))
+      assert %{"meta" => meta} = json_response(conn, 200)
+
+      assert meta["month"]["total"] == "£19.50"
+    end
+
     test "returns subscriptions filter by date", %{conn: conn, user: user} do
       sub =
         insert(:complete_subscription, %{
