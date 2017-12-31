@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { OrderedSet, Map } from 'immutable'
 
+import RemoteCall from 'data/domain/RemoteCall'
 import CurrentUser from 'data/domain/currentUser/CurrentUser'
 import getAllSubscriptionsAction from 'data/domain/subscriptions/getAllSubscriptions/action'
 
@@ -16,13 +17,19 @@ class HomeContainer extends Component {
   }
 
   render() {
-    const { currentUser, subscriptions, avgs } = this.props
+    const {
+      currentUser,
+      subscriptions,
+      avgs,
+      remoteCall,
+    } = this.props
 
     return (
       <Home
         avgs={avgs}
         currentUser={currentUser}
         subscriptions={subscriptions}
+        remoteCall={remoteCall}
       />
     )
   }
@@ -48,6 +55,7 @@ HomeContainer.propTypes = {
   currentUser: PropTypes.instanceOf(CurrentUser).isRequired,
   subscriptions: PropTypes.instanceOf(OrderedSet).isRequired,
   avgs: PropTypes.instanceOf(Map).isRequired,
+  remoteCall: PropTypes.instanceOf(RemoteCall).isRequired,
 }
 
 export default connect(mapStateToProps)(HomeContainer)

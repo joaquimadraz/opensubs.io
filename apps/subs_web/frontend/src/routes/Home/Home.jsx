@@ -47,9 +47,9 @@ const Home = (props) => {
     remoteCall,
   } = props
 
-  // if (remoteCall.loading) {
-  //   return (<p>Loading...</p>)
-  // }
+  if (remoteCall.loading) {
+    return (<p>Loading...</p>)
+  }
 
   const renderLoggedPage = () => {
     return (
