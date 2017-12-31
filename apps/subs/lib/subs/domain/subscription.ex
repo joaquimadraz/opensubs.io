@@ -15,6 +15,7 @@ defmodule Subs.Subscription do
     field :color, :string
     field :first_bill_date, :naive_datetime
     field :next_bill_date, :naive_datetime
+    field :current_bill_date, :naive_datetime, virtual: true
     field :archived, :boolean
     field :archived_at, :naive_datetime
     field :service_code, :string

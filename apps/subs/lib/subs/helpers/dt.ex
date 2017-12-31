@@ -7,6 +7,7 @@ defmodule Subs.Helpers.DT do
     Timex.beginning_of_day(NaiveDateTime.utc_now())
   end
 
+  # TODO: Rethink this.
   def calculate_next_bill_date(from_date, step, until_date \\ today_beginning_of_day()) do
     if NaiveDateTime.diff(from_date, until_date) > 0 do
       from_date
@@ -14,6 +15,17 @@ defmodule Subs.Helpers.DT do
       from_date
       |> step_date(step, 1)
       |> calculate_next_bill_date(step, until_date)
+    end
+  end
+
+  def calculate_current_bill_date(from_date, step, until_date \\ today_beginning_of_day()) do
+    diff =
+      Timex.diff(Timex.beginning_of_month(from_date), Timex.beginning_of_month(until_date), step)
+
+    if diff <= 0 do
+      step_date(from_date, step, diff * -1)
+    else
+      from_date
     end
   end
 
