@@ -16,7 +16,11 @@ const getAllSubscriptionsSuccess = (state, { data, meta }) => {
     .setIn(['avgs', 'monthly'], meta.avg.monthly)
     .setIn(['avgs', 'yearly'], meta.avg.yearly)
     .setIn(['month', 'total'], meta.month.total)
-    .setIn(['month', 'subscriptions'], meta.month.subscriptions.map(parseSubscription))
+    .setIn(['month', 'subscriptions'], OrderedSet(meta.month.subscriptions.map(parseSubscription)))
+    .setIn(['prevMonth', 'total'], meta.prev.total)
+    .setIn(['prevMonth', 'subscriptions'], OrderedSet(meta.prev.subscriptions.map(parseSubscription)))
+    .setIn(['nextMonth', 'total'], meta.next.total)
+    .setIn(['nextMonth', 'subscriptions'], OrderedSet(meta.next.subscriptions.map(parseSubscription)))
 
   return data.reduce((result, subscription) => (
     result.update('ids', value => value.add(subscription.id))

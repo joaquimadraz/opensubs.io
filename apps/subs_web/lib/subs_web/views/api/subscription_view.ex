@@ -13,15 +13,15 @@ defmodule SubsWeb.Api.SubscriptionView do
         },
         prev: %{
           subscriptions: render_many(month_stats[:prev][:payments], SubscriptionView, "current_subscription.json"),
-          total: amount_to_human_formated(month_stats[:prev][:total])
+          total: amount_to_human(month_stats[:prev][:total])
         },
         month: %{
           subscriptions: render_many(month_stats[:curr][:payments], SubscriptionView, "current_subscription.json"),
-          total: amount_to_human_formated(month_stats[:curr][:total])
+          total: amount_to_human(month_stats[:curr][:total])
         },
         next: %{
           subscriptions: render_many(month_stats[:next][:payments], SubscriptionView, "current_subscription.json"),
-          total: amount_to_human_formated(month_stats[:next][:total])
+          total: amount_to_human(month_stats[:next][:total])
         }
       }
     }

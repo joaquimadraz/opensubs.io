@@ -1,7 +1,7 @@
 import moment from 'moment'
 import 'moment-timezone'
 
-import { dateTimeFormat } from 'constants'
+import { dateTimeFormat, monthYearFormat } from 'constants'
 
 const timezone = 'Europe/London'
 
@@ -34,11 +34,16 @@ const parseAndFormatDate = (dateIso8601, format = dateTimeFormat) => {
   return formatDate(date, format)
 }
 
+const formatDateToMonthYear = (date = now()) => {
+  return moment(date).format(monthYearFormat)
+}
+
 export {
   now,
   daysBetween,
   parseFromISO8601,
   formatDate,
   formatDateToISO8601,
+  formatDateToMonthYear,
   parseAndFormatDate,
 }

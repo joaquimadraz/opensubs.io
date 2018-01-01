@@ -74,6 +74,14 @@ const initialState = Map({
     subscriptions: OrderedSet(),
     total: 0,
   }),
+  prevMonth: Map({
+    subscriptions: OrderedSet(),
+    total: 0,
+  }),
+  nextMonth: Map({
+    subscriptions: OrderedSet(),
+    total: 0,
+  }),
   remoteCall: new RemoteCall(),
 })
 

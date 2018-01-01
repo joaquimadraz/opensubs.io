@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { OrderedSet, Map } from 'immutable'
+import { Map } from 'immutable'
+import { formatDateToMonthYear } from 'utils/dt'
 
 import RemoteCall from 'data/domain/RemoteCall'
 import CurrentUser from 'data/domain/currentUser/CurrentUser'
@@ -29,7 +30,7 @@ const renderYearlySubscriptions = (subscriptions) => {
         <small className="ml2">this month</small>
       </div>
       <div className="flex mt2">
-        {yearlyPayments.length === 0
+        {yearlyPayments.size === 0
           ? noYearlyPayments
           : yearlyPayments.map((subscription, index) => (
             <SubscriptionPill subscription={subscription} last={index !== subscriptions.length} />
@@ -44,6 +45,8 @@ const Home = (props) => {
     currentUser,
     avgs,
     month,
+    prevMonth,
+    nextMonth,
     remoteCall,
   } = props
 
@@ -51,21 +54,33 @@ const Home = (props) => {
     return (<p>Loading...</p>)
   }
 
+  // TODO: Refactor. Extract current month stats to component
+  const diff = month.get('total') - prevMonth.get('total')
+  const sign = diff > 0 ? '+' : '-'
+  const signCx = diff > 0 ? 'red' : 'green'
+  const upDown = diff > 0 ? 'up' : 'down'
+
   const renderLoggedPage = () => {
     return (
       <div>
         <div className="flex">
           <div className="flex-column w-60">
-            <h3 className="black-70 f4">January 2018</h3>
+            <h3 className="black-70 f4">{formatDateToMonthYear()}</h3>
             <div className="flex">
               <div className="flex-auto">
                 <div className="f6 b light-silver">Total</div>
                 <span className="f2 b dib mt2 black-70">
-                  <span className="v-mid">{month.get('total')}</span>
-                  <small className="f5 red v-mid ml2">
-                    <span className="Home--arrow-up dib v-mid red" />
-                    <span className="dib ml2 v-mid">+ £350</span>
-                  </small>
+                  <span className="v-mid">£{month.get('total')}</span>
+                  {
+                    diff !== 0
+                    ? (
+                      <small className={`f5 ${signCx} v-mid ml2`}>
+                        <span className={`Home--arrow-${upDown} dib v-mid b--${signCx}`} />
+                        <span className="dib ml2 v-mid">{sign} £{Math.abs(diff)}</span>
+                      </small>
+                    )
+                    : null
+                  }
                 </span>
               </div>
               <div className="flex-auto">
@@ -119,6 +134,8 @@ Home.propTypes = {
   currentUser: PropTypes.instanceOf(CurrentUser).isRequired,
   avgs: PropTypes.instanceOf(Map).isRequired,
   month: PropTypes.instanceOf(Map).isRequired,
+  prevMonth: PropTypes.instanceOf(Map).isRequired,
+  nextMonth: PropTypes.instanceOf(Map).isRequired,
   remoteCall: PropTypes.instanceOf(RemoteCall).isRequired,
 }
 

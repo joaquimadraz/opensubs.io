@@ -22,6 +22,8 @@ class HomeContainer extends Component {
       subscriptions,
       avgs,
       month,
+      prevMonth,
+      nextMonth,
       remoteCall,
     } = this.props
 
@@ -29,6 +31,8 @@ class HomeContainer extends Component {
       <Home
         avgs={avgs}
         month={month}
+        prevMonth={prevMonth}
+        nextMonth={nextMonth}
         currentUser={currentUser}
         subscriptions={subscriptions}
         remoteCall={remoteCall}
@@ -47,6 +51,8 @@ const mapStateToProps = (state) => {
   return {
     avgs: subscriptions.get('avgs'),
     month: subscriptions.get('month'),
+    prevMonth: subscriptions.get('prevMonth'),
+    nextMonth: subscriptions.get('nextMonth'),
     currentUser,
     subscriptions: subscriptionsRecords,
     remoteCall: subscriptions.get('remoteCall'),
@@ -59,6 +65,8 @@ HomeContainer.propTypes = {
   subscriptions: PropTypes.instanceOf(OrderedSet).isRequired,
   avgs: PropTypes.instanceOf(Map).isRequired,
   month: PropTypes.instanceOf(Map).isRequired,
+  prevMonth: PropTypes.instanceOf(Map).isRequired,
+  nextMonth: PropTypes.instanceOf(Map).isRequired,
   remoteCall: PropTypes.instanceOf(RemoteCall).isRequired,
 }
 
