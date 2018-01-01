@@ -70,6 +70,10 @@ const initialState = Map({
     monthly: 0,
     yearly: 0,
   }),
+  month: Map({
+    subscriptions: OrderedSet(),
+    total: 0,
+  }),
   remoteCall: new RemoteCall(),
 })
 

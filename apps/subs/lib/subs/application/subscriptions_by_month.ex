@@ -5,6 +5,7 @@ defmodule Subs.Application.SubscriptionsByMonth do
   """
   alias Subs.Helpers.DT
 
+  # TODO: Refactor this ugly code.
   def filter(subscriptions, month, year) do
     {:ok, target} = NaiveDateTime.new(year, month, 1, 0, 0, 0)
     target = Timex.end_of_month(target)

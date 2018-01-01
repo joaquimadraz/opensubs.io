@@ -15,6 +15,8 @@ const getAllSubscriptionsSuccess = (state, { data, meta }) => {
   const newState = resetState(state)
     .setIn(['avgs', 'monthly'], meta.avg.monthly)
     .setIn(['avgs', 'yearly'], meta.avg.yearly)
+    .setIn(['month', 'total'], meta.month.total)
+    .setIn(['month', 'subscriptions'], meta.month.subscriptions.map(parseSubscription))
 
   return data.reduce((result, subscription) => (
     result.update('ids', value => value.add(subscription.id))

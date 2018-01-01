@@ -14,6 +14,7 @@ const remoteData = {
   amount_currency_symbol: null,
   first_bill_date: null,
   next_bill_date: null,
+  current_bill_date: null,
   service_code: '',
 }
 
@@ -27,6 +28,10 @@ class Subscription extends SubscriptionRecord {
 
   get humanNextBillDate() {
     return parseAndFormatDate(this.next_bill_date)
+  }
+
+  get humanCurrentBillDate() {
+    return this.current_bill_date ? parseAndFormatDate(this.current_bill_date) : null
   }
 
   get textColor() {
