@@ -2,51 +2,35 @@ defmodule Subs.Application.SubscriptionsByMonth do
   @moduledoc """
   Given a set of subscriptions, a month and a year, filter subcriptions that
   fit in that month/year.
+  Subscription order comes from the DB.
   """
+  alias Subs.Subscription
   alias Subs.Helpers.DT
 
-  # TODO: Refactor this ugly code.
   def filter(subscriptions, month, year) do
     {:ok, target} = NaiveDateTime.new(year, month, 1, 0, 0, 0)
     target = Timex.end_of_month(target)
 
-    data =
-      subscriptions
-      |> Enum.filter(fn sub ->
-        NaiveDateTime.diff(sub.first_bill_date, target) <= 0
-      end)
-      |> Enum.reduce(%{monthly: [], yearly: []}, fn sub, acc ->
-        case sub.cycle do
-          "monthly" ->
-            current_bill_date =
-              DT.calculate_current_bill_date(
-                sub.first_bill_date,
-                :months,
-                target
-              )
+    subscriptions
+    |> Enum.filter(fn subscription ->
+      past_subscription?(subscription, target) &&
+        (Subscription.monthly?(subscription) || yearly_on_current_month?(subscription, month))
+    end)
+    |> Enum.map(fn subscription ->
+      step = if(subscription.cycle == "monthly", do: :months, else: :years)
 
-            sub = %{sub | current_bill_date: current_bill_date}
+      current_bill_date =
+        DT.calculate_current_bill_date(subscription.first_bill_date, step, target)
 
-            put_in(acc[:monthly], [sub | acc[:monthly]])
+      %{subscription | current_bill_date: current_bill_date}
+    end)
+  end
 
-          "yearly" ->
-            if sub.first_bill_date.month == month do
-              current_bill_date =
-                DT.calculate_current_bill_date(
-                  sub.first_bill_date,
-                  :years,
-                  target
-                )
+  defp past_subscription?(subscription, target) do
+    NaiveDateTime.diff(subscription.first_bill_date, target) <= 0
+  end
 
-              sub = %{sub | current_bill_date: current_bill_date}
-
-              put_in(acc[:yearly], [sub | acc[:yearly]])
-            else
-              acc
-            end
-        end
-      end)
-
-    data[:yearly] ++ data[:monthly]
+  defp yearly_on_current_month?(subscription, month) do
+    Subscription.yearly?(subscription) && subscription.first_bill_date.month == month
   end
 end

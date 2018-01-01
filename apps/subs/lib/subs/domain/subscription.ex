@@ -101,6 +101,9 @@ defmodule Subs.Subscription do
     |> try_archive()
   end
 
+  def monthly?(subscription), do: subscription.cycle == "monthly"
+  def yearly?(subscription), do: subscription.cycle == "yearly"
+
   defp validate_subscription(changeset) do
     changeset
     |> validate_number(:amount, greater_than: 0)
