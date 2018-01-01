@@ -1,6 +1,6 @@
 import { Record } from 'immutable'
 
-import { parseAndFormatDate } from 'utils/dt'
+import { parseAndFormatDate, daysBetween, now } from 'utils/dt'
 import colors from 'constants/colors'
 
 const remoteData = {
@@ -40,6 +40,12 @@ class Subscription extends SubscriptionRecord {
 
   get amountFormatted() {
     return `${this.amount_currency_symbol}${this.amount}`
+  }
+
+  get isCurrentDue() {
+    if (!this.current_bill_date) { return false }
+
+    return daysBetween(this.current_bill_date, now()) < 0
   }
 }
 

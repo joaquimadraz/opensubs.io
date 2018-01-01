@@ -93,7 +93,7 @@ const Home = (props) => {
           </div>
         </div>
         <div className="mv4 bb bw2 b--near-white" />
-        <SubscriptionsList subscriptions={month.get('subscriptions')} current/>
+        <SubscriptionsList subscriptions={month.get('subscriptions')} current />
         <div className="mv4 bb bw2 b--near-white" />
         <div className="flex silver b">
           <div className="flex-none">

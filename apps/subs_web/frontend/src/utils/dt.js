@@ -5,12 +5,16 @@ import { dateTimeFormat } from 'constants'
 
 const timezone = 'Europe/London'
 
+const now = () => {
+  return moment.utc().tz(timezone)
+}
+
 const toMoment = (dateIso8601) => {
   return moment.utc(dateIso8601).tz(timezone)
 }
 
-const hoursBetween = (to, from) => {
-  return toMoment(to).diff(toMoment(from), 'hours')
+const daysBetween = (to, from) => {
+  return toMoment(to).diff(toMoment(from), 'days')
 }
 
 const parseFromISO8601 = (dateIso8601) => {
@@ -31,7 +35,8 @@ const parseAndFormatDate = (dateIso8601, format = dateTimeFormat) => {
 }
 
 export {
-  hoursBetween,
+  now,
+  daysBetween,
   parseFromISO8601,
   formatDate,
   formatDateToISO8601,

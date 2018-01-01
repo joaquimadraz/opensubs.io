@@ -1,4 +1,5 @@
-const defaultColor = { bg: '#F8F8F8', text: '#333333' }
+const defaultColor = { bg: '#F2F2F2', text: '#333333' }
+const disabled = { bg: '#F8F8F8', text: '#D0D0D0' }
 
 const available = [
   { bg: '#ED5564', text: '#FFFFFF' },
@@ -46,6 +47,7 @@ const textColorForBg = available.reduce((acc, color) => {
 
 export default {
   default: defaultColor.bg,
+  disabled,
   available: available.map(color => color.bg),
   textColorForBg: color => (textColorForBg[color.toUpperCase()] || '#FFFFFF'),
 }

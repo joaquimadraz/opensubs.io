@@ -4,6 +4,7 @@ import { Link } from 'react-router'
 import classNames from 'classnames'
 
 import routes from 'constants/routes'
+import colors from 'constants/colors'
 import Subscription from 'data/domain/subscriptions/Subscription'
 import Styles from './Styles'
 
@@ -11,8 +12,8 @@ const SubscriptionPill = ({ subscription, last }) => {
   return (
     <Styles
       className={classNames('flex-auto bg-black pa2 white mr2 db mw4', { mr2: !last })}
-      background={subscription.color}
-      textColor={subscription.textColor}
+      background={subscription.isCurrentDue ? colors.disabled.bg : subscription.color}
+      textColor={subscription.isCurrentDue ? colors.disabled.text : subscription.textColor}
     >
       <Link
         to={routes.subscriptionsShow(subscription.id)}
