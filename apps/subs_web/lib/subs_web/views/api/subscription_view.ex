@@ -11,9 +11,17 @@ defmodule SubsWeb.Api.SubscriptionView do
           monthly: calculate_monthly_avg(subscriptions),
           yearly: calculate_yearly_avg(subscriptions),
         },
+        prev: %{
+          subscriptions: render_many(month_stats[:prev][:payments], SubscriptionView, "current_subscription.json"),
+          total: amount_to_human_formated(month_stats[:prev][:total])
+        },
         month: %{
-          subscriptions: render_many(month_stats[:payments], SubscriptionView, "current_subscription.json"),
-          total: amount_to_human_formated(month_stats[:total])
+          subscriptions: render_many(month_stats[:curr][:payments], SubscriptionView, "current_subscription.json"),
+          total: amount_to_human_formated(month_stats[:curr][:total])
+        },
+        next: %{
+          subscriptions: render_many(month_stats[:next][:payments], SubscriptionView, "current_subscription.json"),
+          total: amount_to_human_formated(month_stats[:next][:total])
         }
       }
     }
