@@ -143,7 +143,7 @@ defmodule Subs.Subscription do
 
   defp populate_first_bill_date(changeset = %{valid?: false}), do: changeset
   defp populate_first_bill_date(changeset) do
-    case get_change(changeset, :first_bill_date) do
+    case get_field(changeset, :first_bill_date) do
       nil ->
         put_change(changeset, :first_bill_date, DT.today_beginning_of_day())
       _ ->

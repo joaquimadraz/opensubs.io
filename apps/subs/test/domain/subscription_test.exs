@@ -17,6 +17,19 @@ defmodule Subs.Test.Domain.SubscriptionTest do
   end
 
   describe "update_changeset" do
+    test "changing anything else than first_bill_date should not change first_bill_date" do
+      user = insert(:user)
+
+      subscription =
+        insert(:complete_subscription, user: user, first_bill_date: ~N[2017-12-25T00:00:00Z])
+
+      changeset = update_changeset(subscription, %{"amount" => "9.99"})
+
+      assert 999 = Changeset.get_change(changeset, :amount)
+      assert Changeset.get_change(changeset, :first_bill_date) == nil
+      assert ~N[2017-12-25T00:00:00Z] = Changeset.get_field(changeset, :first_bill_date)
+    end
+
     test "updates nothing" do
       subscription = build(:complete_subscription)
       changeset = update_changeset(subscription, %{})
