@@ -6,7 +6,11 @@ import { dateTimeFormat, monthYearFormat } from 'constants'
 const timezone = 'Europe/London'
 
 const now = () => {
-  return moment.utc().tz(timezone)
+  return moment.utc().tz(timezone).toDate()
+}
+
+const addMonths = (date, count) => {
+  return moment(date).add(count, 'months').toDate()
 }
 
 const toMoment = (dateIso8601) => {
@@ -40,6 +44,7 @@ const formatDateToMonthYear = (date = now()) => {
 
 export {
   now,
+  addMonths,
   daysBetween,
   parseFromISO8601,
   formatDate,

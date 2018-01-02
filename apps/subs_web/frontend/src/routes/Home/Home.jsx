@@ -1,11 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Map } from 'immutable'
-import { formatDateToMonthYear, now } from 'utils/dt'
 
 import RemoteCall from 'data/domain/RemoteCall'
 import CurrentUser from 'data/domain/currentUser/CurrentUser'
-import Button from 'components/Button'
 import SubscriptionsList from 'components/SubscriptionsList'
 import CurrentMonthStats from './CurrentMonthStats'
 import NextMonthStats from './NextMonthStats'
@@ -17,6 +15,7 @@ const renderLandingPage = () => {
 
 const Home = (props) => {
   const {
+    currentDate,
     currentUser,
     avgs,
     month,
@@ -34,7 +33,11 @@ const Home = (props) => {
       <div>
         <div className="flex">
           <div className="flex-column w-60">
-            <CurrentMonthStats month={month} prevMonth={prevMonth} />
+            <CurrentMonthStats
+              currentDate={currentDate}
+              month={month}
+              prevMonth={prevMonth}
+            />
           </div>
           <div className="mh4 br bw2 b--near-white" />
           <div className="flex-column w-40">
@@ -58,7 +61,11 @@ const Home = (props) => {
         <div className="mv4 bb bw2 b--near-white" />
         <SubscriptionsList subscriptions={month.get('subscriptions')} current />
         <div className="mv4 bb bw2 b--near-white" />
-        <NextMonthStats month={month} nextMonth={nextMonth} />
+        <NextMonthStats
+          currentDate={currentDate}
+          month={month}
+          nextMonth={nextMonth}
+        />
       </div>
     )
   }
@@ -71,6 +78,7 @@ const Home = (props) => {
 }
 
 Home.propTypes = {
+  currentDate: PropTypes.object.isRequired,
   currentUser: PropTypes.instanceOf(CurrentUser).isRequired,
   avgs: PropTypes.instanceOf(Map).isRequired,
   month: PropTypes.instanceOf(Map).isRequired,

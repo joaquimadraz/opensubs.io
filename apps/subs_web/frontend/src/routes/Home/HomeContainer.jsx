@@ -3,17 +3,46 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { OrderedSet, Map } from 'immutable'
 
+import { now, parseFromISO8601 } from 'utils/dt'
 import RemoteCall from 'data/domain/RemoteCall'
 import CurrentUser from 'data/domain/currentUser/CurrentUser'
 import getAllSubscriptionsAction from 'data/domain/subscriptions/getAllSubscriptions/action'
 
 import Home from './Home'
 
+const pad = (num, size) => {
+  const s = `0${num}`
+  return s.substr(s.length - size)
+}
+
 class HomeContainer extends Component {
+  constructor() {
+    super()
+
+    this.state = {
+      currentDate: null,
+    }
+  }
+
+  componentWillMount() {
+    const { location: { query: { month, year } } } = this.props
+
+    if (month && year) {
+      const rawDate = `${year}-${pad(month, 2)}-01T00:00:00Z`
+      this.setState(() => ({ currentDate: parseFromISO8601(rawDate) }))
+    } else {
+      this.setState(() => ({ currentDate: now() }))
+    }
+  }
+
   componentDidMount() {
     const { dispatch } = this.props
+    const { currentDate } = this.state
 
-    dispatch(getAllSubscriptionsAction())
+    dispatch(getAllSubscriptionsAction({
+      month_eq: currentDate.getMonth() + 1,
+      year_eq: currentDate.getFullYear(),
+    }))
   }
 
   render() {
@@ -27,8 +56,11 @@ class HomeContainer extends Component {
       remoteCall,
     } = this.props
 
+    const { currentDate } = this.state
+
     return (
       <Home
+        currentDate={currentDate}
         avgs={avgs}
         month={month}
         prevMonth={prevMonth}
@@ -61,6 +93,7 @@ const mapStateToProps = (state) => {
 
 HomeContainer.propTypes = {
   dispatch: PropTypes.func.isRequired,
+  location: PropTypes.object.isRequired,
   currentUser: PropTypes.instanceOf(CurrentUser).isRequired,
   subscriptions: PropTypes.instanceOf(OrderedSet).isRequired,
   avgs: PropTypes.instanceOf(Map).isRequired,

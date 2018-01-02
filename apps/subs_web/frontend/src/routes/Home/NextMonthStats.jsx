@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Map } from 'immutable'
-import { formatDateToMonthYear, now } from 'utils/dt'
+import { formatDateToMonthYear, addMonths } from 'utils/dt'
 
 import Button from 'components/Button'
 import Styles from './Styles'
@@ -64,8 +64,8 @@ const renderBaseMessage = (date, nextMonth) => {
 }
 
 const NextMonthStats = (props) => {
-  const { month, nextMonth } = props
-  const date = now().add(1, 'month').startOf('month')
+  const { currentDate, month, nextMonth } = props
+  const date = addMonths(currentDate, 1)
   const diffPerc = month.get('total') > 0 ? Math.round(((nextMonth.get('total') / month.get('total')) - 1) * 100) : 0
   const yearlyPaymentsCount = nextMonth.get('subscriptions').count(sub => sub.isYearly)
   let message = renderMoreLessMessage(date, nextMonth, diffPerc)
@@ -91,6 +91,7 @@ const NextMonthStats = (props) => {
 }
 
 NextMonthStats.propTypes = {
+  currentDate: PropTypes.object.isRequired,
   month: PropTypes.instanceOf(Map).isRequired,
   nextMonth: PropTypes.instanceOf(Map).isRequired,
 }

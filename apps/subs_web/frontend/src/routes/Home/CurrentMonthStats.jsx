@@ -32,9 +32,7 @@ const renderYearlySubscriptions = (subscriptions) => {
   )
 }
 
-const CurrentMonthStats = (props) => {
-  const { month, prevMonth } = props
-
+const CurrentMonthStats = ({ currentDate, month, prevMonth }) => {
   const diff = month.get('total') - prevMonth.get('total')
   const sign = diff > 0 ? '+' : '-'
   const signCx = diff > 0 ? 'red' : 'green'
@@ -42,7 +40,7 @@ const CurrentMonthStats = (props) => {
 
   return (
     <Styles>
-      <h3 className="black-70 f4">{formatDateToMonthYear()}</h3>
+      <h3 className="black-70 f4">{formatDateToMonthYear(currentDate)}</h3>
       <div className="flex">
         <div className="flex-auto">
           <div className="f6 b light-silver">Total</div>
@@ -69,6 +67,7 @@ const CurrentMonthStats = (props) => {
 }
 
 CurrentMonthStats.propTypes = {
+  currentDate: PropTypes.object.isRequired,
   month: PropTypes.instanceOf(Map).isRequired,
   prevMonth: PropTypes.instanceOf(Map).isRequired,
 }
