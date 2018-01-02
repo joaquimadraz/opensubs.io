@@ -47,6 +47,10 @@ class Subscription extends SubscriptionRecord {
 
     return daysBetween(this.current_bill_date, now()) < 0
   }
+
+  get isYearly() {
+    return this.cycle === 'yearly'
+  }
 }
 
 export function parseSubscription(data) {
