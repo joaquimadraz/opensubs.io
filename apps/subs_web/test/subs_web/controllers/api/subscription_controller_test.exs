@@ -94,7 +94,7 @@ defmodule SubsWeb.Test.Controllers.SubscriptionControllerTest do
       conn = get(conn, api_subscription_path(conn, :index))
       assert %{"meta" => meta} = json_response(conn, 200)
 
-      assert meta["month"]["total"] == "£19.50"
+      assert meta["month"]["total"] == "19.50"
     end
 
     test "returns subscriptions filter by date", %{conn: conn, user: user} do
