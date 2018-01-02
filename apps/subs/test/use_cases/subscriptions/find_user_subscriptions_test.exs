@@ -1,6 +1,8 @@
 defmodule Subs.Test.UseCases.Subscriptions.FindUserSubscriptionsTest do
   use Subs.DataCase
+  import Mox
   import Subs.Test.Support.Factory
+  alias Subs.Helpers.DT
   alias Subs.UseCases.Subscriptions.FindUserSubscriptions
 
   setup do
@@ -58,6 +60,67 @@ defmodule Subs.Test.UseCases.Subscriptions.FindUserSubscriptionsTest do
 
     assert first.id == nov_sub.id
     assert second.id == end_nov_sub.id
+  end
+
+  test "returns user submissions with default current month stats", %{user: user} do
+    insert(:complete_subscription, user_id: user.id, first_bill_date: ~N[2017-01-01T00:00:00Z])
+
+    now = ~N[2049-01-01T00:00:00Z]
+
+    Test.Subs.DTMock
+    |> expect(:now, fn -> now end)
+    |> expect(:step_date, 2, &DT.step_date/3)
+
+    assert {:ok, %{
+             month_stats: %{
+               prev: %{
+                 payments: [prev_payment]
+               },
+               curr: %{
+                 payments: [curr_payment]
+               },
+               next: %{
+                 payments: [next_payment]
+               }
+             }
+           }} = FindUserSubscriptions.perform(user, %{}, Test.Subs.DTMock)
+
+    assert prev_payment.current_bill_date == ~N[2048-12-01T00:00:00.000000]
+    assert curr_payment.current_bill_date == ~N[2049-01-01T00:00:00.000000]
+    assert next_payment.current_bill_date == ~N[2049-02-01T00:00:00.000000]
+  end
+
+  test "returns user submissions filtered by month/year", %{user: user} do
+    insert(:complete_subscription, user_id: user.id, first_bill_date: ~N[1989-01-01T00:00:00Z])
+
+    now = ~N[2018-01-01T00:00:00Z]
+
+    Test.Subs.DTMock
+    |> expect(:now, fn -> now end)
+    |> expect(:step_date, 2, &DT.step_date/3)
+
+    assert {:ok, %{
+             month_stats: %{
+               prev: %{
+                 payments: [prev_payment]
+               },
+               curr: %{
+                 payments: [curr_payment]
+               },
+               next: %{
+                 payments: [next_payment]
+               }
+             }
+           }} =
+             FindUserSubscriptions.perform(
+               user,
+               %{"month_eq" => "8", "year_eq" => "1989"},
+               Test.Subs.DTMock
+             )
+
+    assert prev_payment.current_bill_date == ~N[1989-07-01T00:00:00.000000]
+    assert curr_payment.current_bill_date == ~N[1989-08-01T00:00:00.000000]
+    assert next_payment.current_bill_date == ~N[1989-09-01T00:00:00.000000]
   end
 
   def includes_subscriptions?(subscriptions, should_include) do

@@ -5,15 +5,20 @@ defmodule Subs.UseCases.Subscriptions.FindUserSubscriptions do
   alias Subs.Helpers.DT
   alias Subs.Application.SubscriptionsByMonth
 
-  def perform(user, filters \\ %{}) do
+  def perform(user, filters \\ %{}, dt \\ DT) do
     subscriptions = SubscriptionRepo.get_user_subscriptions(user, filters)
-    year = filters["year_eq"] || DT.now().year
-    month = filters["month_eq"] || DT.now().month
 
-    {:ok, current_date} = NaiveDateTime.new(year, month, 1, 0, 0, 0)
+    current_date =
+      with {year, _} <- Integer.parse(filters["year_eq"] || ""),
+           {month, _} <- Integer.parse(filters["month_eq"] || ""),
+           {:ok, date} <- NaiveDateTime.new(year, month, 1, 0, 0, 0) do
+        date
+      else
+        _ -> dt.now()
+      end
 
-    prev_month = DT.step_date(current_date, :months, -1)
-    next_month = DT.step_date(current_date, :months, 1)
+    prev_month = dt.step_date(current_date, :months, -1)
+    next_month = dt.step_date(current_date, :months, 1)
 
     month_subscriptions =
       SubscriptionsByMonth.filter(subscriptions, current_date.month, current_date.year)
