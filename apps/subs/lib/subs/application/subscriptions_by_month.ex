@@ -24,6 +24,7 @@ defmodule Subs.Application.SubscriptionsByMonth do
 
       %{subscription | current_bill_date: current_bill_date}
     end)
+    |> Enum.sort_by(& &1.current_bill_date)
   end
 
   defp past_subscription?(subscription, target) do
