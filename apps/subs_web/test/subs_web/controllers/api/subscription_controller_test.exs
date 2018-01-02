@@ -1,7 +1,9 @@
 defmodule SubsWeb.Test.Controllers.SubscriptionControllerTest do
   use SubsWeb.ConnCase
+  import Mox
   import Subs.Test.Support.Factory
   alias SubsWeb.Test.Support.ApiHelpers
+  alias Subs.Helpers.DT
 
   setup %{conn: conn} do
     {:ok, conn: put_req_header(conn, "accept", "application/json")}
@@ -127,6 +129,27 @@ defmodule SubsWeb.Test.Controllers.SubscriptionControllerTest do
         )
 
       assert %{"data" => []} = json_response(empty_conn, 200)
+    end
+
+    # TODO: Use config mock to freeze current date
+    test "returns subscriptions with month stats for current month/year", %{
+      conn: conn,
+      user: user
+    } do
+      sub =
+        insert(:complete_subscription, %{
+          next_bill_date: ~N[2017-01-01T00:00:00Z],
+          user_id: user.id
+        })
+
+      data_conn = get(conn, api_subscription_path(conn, :index))
+
+      assert %{"meta" => meta} = json_response(data_conn, 200)
+
+      current_month = NaiveDateTime.from_iso8601!(List.first(meta["month"]["subscriptions"])["current_bill_date"])
+
+      assert current_month.month == DT.now().month
+      assert current_month.year == DT.now().year
     end
   end
 
