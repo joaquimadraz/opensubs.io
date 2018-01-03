@@ -20,11 +20,12 @@ const renderMoreLessMessage = (date, nextMonth, diffPerc) => {
         <span className="subs-pink">£{nextMonth.get('total')}</span>
         <span> in {formatDateToMonthYear(date)}.</span>
       </p>
-      <p className="mv2">
-        <span>That’s </span>
-        <span className={precCx}>{Math.abs(diffPerc)}% {precLabel}</span>
-        <span> than the current month</span>
-      </p>
+      {diffPerc !== 0 &&
+        <p className="mv2">
+          <span>That’s </span>
+          <span className={precCx}>{Math.abs(diffPerc)}% {precLabel}</span>
+          <span> than the current month</span>
+        </p>}
     </div>
   )
 }
@@ -69,16 +70,17 @@ const NextMonthStats = ({
   nextMonth,
   onNextMonthClick,
 }) => {
+  // TODO: Acceptance test + refactor
   const date = addMonths(currentDate, 1)
   const diffPerc = month.get('total') > 0 ? Math.round(((nextMonth.get('total') / month.get('total')) - 1) * 100) : 0
   const yearlyPaymentsCount = nextMonth.get('subscriptions').count(sub => sub.isYearly)
 
-  let message = renderMoreLessMessage(date, nextMonth, diffPerc)
+  let message = renderBaseMessage(date, nextMonth)
 
-  if (diffPerc === 0) {
-    message = renderBaseMessage(date, nextMonth)
-  } else if (yearlyPaymentsCount > 0) {
+  if (yearlyPaymentsCount > 0) {
     message = renderYearlyPaymentMessage(date, yearlyPaymentsCount, diffPerc)
+  } else if (diffPerc !== 0 || (month.get('total') === 0 && nextMonth.get('total') !== 0)) {
+    message = renderMoreLessMessage(date, nextMonth, diffPerc)
   }
 
   return (
