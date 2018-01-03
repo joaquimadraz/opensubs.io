@@ -26,6 +26,8 @@ defmodule Notifier.Mixfile do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
+      {:postgrex, ">= 0.0.0"},
+      {:ecto, "~> 2.1"},
       {:bamboo, "~> 0.8"},
       {:bamboo_smtp, "~> 1.4.0"},
     ]
