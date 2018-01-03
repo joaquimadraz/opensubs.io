@@ -1,7 +1,7 @@
 use Mix.Config
 
 # Configure your database
-config :subs, Notifier.Repo,
+config :notifier, Notifier.Repo,
   adapter: Ecto.Adapters.Postgres,
   username: "postgres",
   password: "postgres",
