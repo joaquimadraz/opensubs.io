@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { OrderedSet, Map } from 'immutable'
 
+import routes from 'constants/routes'
 import { now, parseFromISO8601 } from 'utils/dt'
 import RemoteCall from 'data/domain/RemoteCall'
 import CurrentUser from 'data/domain/currentUser/CurrentUser'
@@ -18,6 +19,8 @@ const pad = (num, size) => {
 class HomeContainer extends Component {
   constructor() {
     super()
+
+    this.handleNextMonthClick = this.handleNextMonthClick.bind(this)
 
     this.state = {
       currentDate: null,
@@ -45,6 +48,19 @@ class HomeContainer extends Component {
     }))
   }
 
+  handleNextMonthClick(date) {
+    const { dispatch, router } = this.props
+
+    this.setState(() => ({ currentDate: date }))
+
+    router.push(`${routes.root}?month=${date.getMonth() + 1}&year=${date.getFullYear()}`)
+
+    dispatch(getAllSubscriptionsAction({
+      month_eq: date.getMonth() + 1,
+      year_eq: date.getFullYear(),
+    }))
+  }
+
   render() {
     const {
       currentUser,
@@ -68,6 +84,7 @@ class HomeContainer extends Component {
         currentUser={currentUser}
         subscriptions={subscriptions}
         remoteCall={remoteCall}
+        onNextMonthClick={this.handleNextMonthClick}
       />
     )
   }
@@ -92,6 +109,7 @@ const mapStateToProps = (state) => {
 }
 
 HomeContainer.propTypes = {
+  router: PropTypes.object.isRequired,
   dispatch: PropTypes.func.isRequired,
   location: PropTypes.object.isRequired,
   currentUser: PropTypes.instanceOf(CurrentUser).isRequired,

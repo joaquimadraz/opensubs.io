@@ -22,6 +22,7 @@ const Home = (props) => {
     prevMonth,
     nextMonth,
     remoteCall,
+    onNextMonthClick,
   } = props
 
   if (remoteCall.loading) {
@@ -65,6 +66,7 @@ const Home = (props) => {
           currentDate={currentDate}
           month={month}
           nextMonth={nextMonth}
+          onNextMonthClick={onNextMonthClick}
         />
       </div>
     )
@@ -85,6 +87,7 @@ Home.propTypes = {
   prevMonth: PropTypes.instanceOf(Map).isRequired,
   nextMonth: PropTypes.instanceOf(Map).isRequired,
   remoteCall: PropTypes.instanceOf(RemoteCall).isRequired,
+  onNextMonthClick: PropTypes.func,
 }
 
 export default Home

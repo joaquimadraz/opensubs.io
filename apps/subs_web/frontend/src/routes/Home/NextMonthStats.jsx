@@ -63,11 +63,16 @@ const renderBaseMessage = (date, nextMonth) => {
   )
 }
 
-const NextMonthStats = (props) => {
-  const { currentDate, month, nextMonth } = props
+const NextMonthStats = ({
+  currentDate,
+  month,
+  nextMonth,
+  onNextMonthClick,
+}) => {
   const date = addMonths(currentDate, 1)
   const diffPerc = month.get('total') > 0 ? Math.round(((nextMonth.get('total') / month.get('total')) - 1) * 100) : 0
   const yearlyPaymentsCount = nextMonth.get('subscriptions').count(sub => sub.isYearly)
+
   let message = renderMoreLessMessage(date, nextMonth, diffPerc)
 
   if (diffPerc === 0) {
@@ -83,7 +88,7 @@ const NextMonthStats = (props) => {
           {message}
         </div>
         <div className="dib ml3">
-          <Button>see more</Button>
+          <Button onClick={() => onNextMonthClick(date)}>see more</Button>
         </div>
       </div>
     </Styles>
@@ -94,6 +99,11 @@ NextMonthStats.propTypes = {
   currentDate: PropTypes.object.isRequired,
   month: PropTypes.instanceOf(Map).isRequired,
   nextMonth: PropTypes.instanceOf(Map).isRequired,
+  onNextMonthClick: PropTypes.func,
+}
+
+NextMonthStats.defaultProps = {
+  onNextMonthClick: () => {},
 }
 
 export default NextMonthStats

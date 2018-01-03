@@ -25,7 +25,11 @@ const renderYearlySubscriptions = (subscriptions) => {
         {yearlyPayments.size === 0
           ? noYearlyPayments
           : yearlyPayments.map((subscription, index) => (
-            <SubscriptionPill subscription={subscription} last={index !== subscriptions.length} />
+            <SubscriptionPill
+              key={subscription.id}
+              subscription={subscription}
+              last={index !== subscriptions.length}
+            />
           ))}
       </div>
     </div>
