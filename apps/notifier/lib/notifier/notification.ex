@@ -10,7 +10,9 @@ defmodule Notifier.Notification do
     field(:title, :string)
     field(:body, :string)
     field(:notify_at, :naive_datetime)
-    field(:delivered, :boolean)
+    field(:status, NotificationStatusEnum, default: :pending)
+    field(:failure_reason, :string)
+    field(:try_deliver_at, :naive_datetime)
 
     timestamps()
   end

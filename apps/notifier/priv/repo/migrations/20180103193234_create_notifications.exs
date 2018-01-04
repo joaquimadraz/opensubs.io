@@ -7,7 +7,9 @@ defmodule Notifier.Repo.Migrations.CreateNotifications do
       add(:title, :string, null: false)
       add(:body, :text, null: false)
       add(:notify_at, :naive_datetime, null: false)
-      add(:delivered, :boolean, default: false)
+      add(:status, :integer, default: 0, null: false)
+      add(:failure_reason, :string)
+      add(:try_deliver_at, :naive_datetime)
 
       timestamps()
     end

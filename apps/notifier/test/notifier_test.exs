@@ -17,5 +17,8 @@ defmodule NotifierTest do
     assert notification.title == title
     assert notification.body == body
     assert notification.notify_at == notify_at
+    assert notification.status == :pending
+    assert notification.failure_reason == nil
+    assert notification.try_deliver_at == nil
   end
 end

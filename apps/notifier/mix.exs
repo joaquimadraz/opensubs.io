@@ -29,6 +29,7 @@ defmodule Notifier.Mixfile do
     [
       {:postgrex, ">= 0.0.0"},
       {:ecto, "~> 2.1"},
+      {:ecto_enum, "~> 1.0"},
       {:bamboo, "~> 0.8"},
       {:bamboo_smtp, "~> 1.4.0"},
     ]
