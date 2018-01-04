@@ -36,8 +36,27 @@ defmodule Notifier do
   def deliver_notifications(dt \\ DT, deliverer \\ NotificationDeliverer) do
     pending = NotificationRepo.get_pending()
 
-    Enum.map(pending, fn (notification) ->
-      deliverer.deliver(notification, Mailer, dt)
-    end)
+    if Mix.env != :test, do: IO.puts("# pending notifications to deliver: #{Enum.count(pending)}")
+
+    notifications =
+      Enum.map(pending, fn notification ->
+        deliverer.deliver(notification, dt)
+      end)
+
+    results =
+      notifications
+      |> Enum.reduce(%{failed: 0, delivered: 0}, fn status, acc ->
+        case status do
+          {:ok, _} ->
+            put_in(acc, [:delivered], acc[:failed] + 1)
+          {:error, _} ->
+            put_in(acc, [:failed], acc[:failed] + 1)
+        end
+      end)
+
+    if Mix.env != :test, do: IO.puts("# notifications failed: #{results[:delivered]}")
+    if Mix.env != :test, do: IO.puts("# notifications delivered: #{results[:failed]}")
+
+    notifications
   end
 end

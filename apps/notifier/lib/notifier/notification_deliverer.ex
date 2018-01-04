@@ -1,7 +1,7 @@
 defmodule Notifier.NotificationDeliverer do
   alias Notifier.{DT, NotificationRepo}
 
-  def deliver(notification, mailer \\ Notifier.Mailer, dt \\ DT) do
+  def deliver(notification, dt \\ DT, mailer \\ Notifier.Mailer) do
     email = Notifier.Email.notification_email(notification)
 
     case mailer.safe_deliver(email) do

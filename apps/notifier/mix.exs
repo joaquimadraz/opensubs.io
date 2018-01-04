@@ -37,6 +37,8 @@ defmodule Notifier.Mixfile do
       {:ecto_enum, "~> 1.0"},
       {:bamboo, "~> 0.8"},
       {:bamboo_smtp, "~> 1.4.0"},
+      {:quantum, ">= 2.2.1"},
+      {:timex, "~> 3.0"},
       {:ex_machina, "~> 2.0", only: :test},
       {:mox, "~> 0.3.0", only: :test},
     ]

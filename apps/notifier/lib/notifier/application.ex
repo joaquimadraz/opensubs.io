@@ -11,6 +11,7 @@ defmodule Notifier.Application do
     # List all child processes to be supervised
     children = [
       supervisor(Notifier.Repo, []),
+      worker(Notifier.Scheduler, [])
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

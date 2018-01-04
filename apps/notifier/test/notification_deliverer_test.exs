@@ -16,7 +16,7 @@ defmodule Notifier.NotificationDelivererTest do
     notification = insert(:pending_notification, title: "smtp_failure")
     expect(Notifier.DTMock, :now, fn -> now end)
 
-    {:error, notification} = NotificationDeliverer.deliver(notification, MailerMock, Notifier.DTMock)
+    {:error, notification} = NotificationDeliverer.deliver(notification, Notifier.DTMock, MailerMock)
     assert notification.status == :failed
     assert notification.try_deliver_at == now
     assert notification.failure_reason == "SMTP_ERROR: Provider failed"
@@ -27,7 +27,7 @@ defmodule Notifier.NotificationDelivererTest do
     notification = insert(:pending_notification, title: "unknown_failure")
     expect(Notifier.DTMock, :now, fn -> now end)
 
-    {:error, notification} = NotificationDeliverer.deliver(notification, MailerMock, Notifier.DTMock)
+    {:error, notification} = NotificationDeliverer.deliver(notification, Notifier.DTMock, MailerMock)
     assert notification.status == :failed
     assert notification.try_deliver_at == now
     assert notification.failure_reason == "UNKNOWN_ERROR: Something failed"
@@ -38,7 +38,7 @@ defmodule Notifier.NotificationDelivererTest do
     notification = insert(:pending_notification)
     expect(Notifier.DTMock, :now, fn -> now end)
 
-    {:ok, notification} = NotificationDeliverer.deliver(notification, MailerMock, Notifier.DTMock)
+    {:ok, notification} = NotificationDeliverer.deliver(notification, Notifier.DTMock, MailerMock)
     assert notification.status == :delivered
     assert notification.try_deliver_at == now
     assert notification.failure_reason == nil
