@@ -38,6 +38,7 @@ defmodule Notifier.Mixfile do
       {:bamboo, "~> 0.8"},
       {:bamboo_smtp, "~> 1.4.0"},
       {:ex_machina, "~> 2.0", only: :test},
+      {:mox, "~> 0.3.0", only: :test},
     ]
   end
 
