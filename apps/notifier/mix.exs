@@ -10,6 +10,7 @@ defmodule Notifier.Mixfile do
       deps_path: "../../deps",
       lockfile: "../../mix.lock",
       elixir: "~> 1.5",
+      elixirc_paths: elixirc_paths(Mix.env),
       start_permanent: Mix.env == :prod,
       deps: deps(),
       aliases: aliases(),
@@ -24,6 +25,10 @@ defmodule Notifier.Mixfile do
     ]
   end
 
+  # Specifies which paths to compile per environment.
+  defp elixirc_paths(:test), do: ["lib", "test/support"]
+  defp elixirc_paths(_),     do: ["lib"]
+
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
@@ -32,6 +37,7 @@ defmodule Notifier.Mixfile do
       {:ecto_enum, "~> 1.0"},
       {:bamboo, "~> 0.8"},
       {:bamboo_smtp, "~> 1.4.0"},
+      {:ex_machina, "~> 2.0", only: :test},
     ]
   end
 
