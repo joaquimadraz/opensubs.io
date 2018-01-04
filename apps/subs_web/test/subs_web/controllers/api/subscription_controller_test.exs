@@ -1,9 +1,9 @@
 defmodule SubsWeb.Test.Controllers.SubscriptionControllerTest do
   use SubsWeb.ConnCase
-  import Mox
   import Subs.Test.Support.Factory
   alias SubsWeb.Test.Support.ApiHelpers
-  alias Subs.Helpers.DT
+
+  @dt Application.get_env(:subs, :dt)
 
   setup %{conn: conn} do
     {:ok, conn: put_req_header(conn, "accept", "application/json")}
@@ -136,11 +136,7 @@ defmodule SubsWeb.Test.Controllers.SubscriptionControllerTest do
       conn: conn,
       user: user
     } do
-      sub =
-        insert(:complete_subscription, %{
-          next_bill_date: ~N[2017-01-01T00:00:00Z],
-          user_id: user.id
-        })
+      insert(:complete_subscription, user_id: user.id)
 
       data_conn = get(conn, api_subscription_path(conn, :index))
 
@@ -148,8 +144,8 @@ defmodule SubsWeb.Test.Controllers.SubscriptionControllerTest do
 
       current_month = NaiveDateTime.from_iso8601!(List.first(meta["month"]["subscriptions"])["current_bill_date"])
 
-      assert current_month.month == DT.now().month
-      assert current_month.year == DT.now().year
+      assert current_month.month == @dt.now().month
+      assert current_month.year == @dt.now().year
     end
   end
 
@@ -233,10 +229,6 @@ defmodule SubsWeb.Test.Controllers.SubscriptionControllerTest do
              }
     end
 
-    # TODO: Find a better way of doing an integration test that depends on the
-    # current date. Should it be in a mock? A GenServer that holds the current
-    # date and "freezes" it for the test?
-    # This test should fail at the end of January to remind me of this again!
     test "creates custom subscription given all params", %{conn: conn} do
       conn =
         post(
@@ -249,7 +241,7 @@ defmodule SubsWeb.Test.Controllers.SubscriptionControllerTest do
             "amount_currency" => "GBP",
             "cycle" => "monthly",
             "color" => "#36dd30",
-            "first_bill_date" => "2018-01-31T00:00:00Z"
+            "first_bill_date" => "2017-08-06T09:00:00Z" # DTMock.now()
           }
         )
 
@@ -267,8 +259,8 @@ defmodule SubsWeb.Test.Controllers.SubscriptionControllerTest do
                "amount_currency_symbol" => "£",
                "cycle" => "monthly",
                "color" => "#36DD30",
-               "first_bill_date" => "2018-01-31T00:00:00Z",
-               "next_bill_date" => "2018-01-31T00:00:00Z",
+               "first_bill_date" => "2017-08-06T09:00:00Z",
+               "next_bill_date" => "2018-01-06T09:00:00Z",
                "service_code" => nil
              }
     end

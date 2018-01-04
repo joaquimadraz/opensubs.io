@@ -1,10 +1,14 @@
 defmodule Subs.Helpers.DT do
-  @behaviour Subs.Helpers.DTHelper
+  @behaviour Subs.Helpers.DTBehaviour
 
   def now, do: NaiveDateTime.utc_now()
 
   def today_beginning_of_day do
     Timex.beginning_of_day(NaiveDateTime.utc_now())
+  end
+
+  def minutes_between(from_date, to_date) do
+    Timex.diff(from_date, to_date, :minutes)
   end
 
   # TODO: Rethink this.

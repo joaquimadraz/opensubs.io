@@ -2,8 +2,9 @@ defmodule Subs.Test.UseCases.Subscriptions.FindUserSubscriptionsTest do
   use Subs.DataCase
   import Mox
   import Subs.Test.Support.Factory
-  alias Subs.Helpers.DT
   alias Subs.UseCases.Subscriptions.FindUserSubscriptions
+
+  @dt Application.get_env(:subs, :dt)
 
   setup do
     [user: insert(:user)]
@@ -69,7 +70,7 @@ defmodule Subs.Test.UseCases.Subscriptions.FindUserSubscriptionsTest do
 
     Test.Subs.DTMock
     |> expect(:now, fn -> now end)
-    |> expect(:step_date, 2, &DT.step_date/3)
+    |> expect(:step_date, 2, &@dt.step_date/3)
 
     assert {:ok, %{
              month_stats: %{
@@ -97,7 +98,7 @@ defmodule Subs.Test.UseCases.Subscriptions.FindUserSubscriptionsTest do
 
     Test.Subs.DTMock
     |> expect(:now, fn -> now end)
-    |> expect(:step_date, 2, &DT.step_date/3)
+    |> expect(:step_date, 2, &@dt.step_date/3)
 
     assert {:ok, %{
              month_stats: %{

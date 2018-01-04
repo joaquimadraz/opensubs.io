@@ -3,9 +3,10 @@ defmodule Subs.User do
 
   use Subs.Schema
   alias Subs.{Subscription, UserRepo}
-  alias Subs.Helpers.{DT, Crypto}
+  alias Subs.Helpers.Crypto
 
   @bcrypt Application.get_env(:subs, :bcrypt)
+  @dt Application.get_env(:subs, :dt)
 
   schema "users" do
     field :name, :string
@@ -69,7 +70,7 @@ defmodule Subs.User do
                    confirmed_at: nil)
   end
 
-  def recover_password_changeset(struct, dt \\ DT) do
+  def recover_password_changeset(struct, dt \\ @dt) do
     password_recovery_token = UUID.uuid4(:hex)
 
     change(struct, password_recovery_token: password_recovery_token,

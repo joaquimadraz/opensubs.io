@@ -4,9 +4,10 @@ defmodule SubsWeb.Test.Controllers.UserControllerTest do
   import Subs.Test.Support.Factory
   alias Subs.UserRepo
   alias SubsWeb.Guardian
-  alias Subs.Helpers.{DT, Crypto}
+  alias Subs.Helpers.Crypto
 
   @bcrypt Application.get_env(:subs, :bcrypt)
+  @dt Application.get_env(:subs, :dt)
 
   setup %{conn: conn} do
     {:ok, conn: put_req_header(conn, "accept", "application/json")}
@@ -120,7 +121,7 @@ defmodule SubsWeb.Test.Controllers.UserControllerTest do
   describe "POST /api/users/confirm" do
     setup %{conn: conn} do
       user = insert(:user, %{
-        confirmation_sent_at: NaiveDateTime.utc_now(),
+        confirmation_sent_at: @dt.now(),
         confirmation_token: "111",
         encrypted_confirmation_token: Crypto.sha1("111")
       })
@@ -145,7 +146,7 @@ defmodule SubsWeb.Test.Controllers.UserControllerTest do
     end
 
     test "returns conflict for user confirmed", %{conn: conn, user: user} do
-      {:ok, user} = UserRepo.update(user, %{confirmed_at: NaiveDateTime.utc_now()})
+      {:ok, user} = UserRepo.update(user, %{confirmed_at: @dt.now()})
 
       conn = post(conn, api_user_confirm_path(conn, :confirm), %{
         "t" => user.confirmation_token
@@ -193,7 +194,7 @@ defmodule SubsWeb.Test.Controllers.UserControllerTest do
 
       # Assert user password recovery data is reset
       assert user.password_recovery_expires_at != nil
-      assert Timex.diff(user.password_recovery_expires_at, DT.now(), :minutes) == 59
+      assert @dt.minutes_between(user.password_recovery_expires_at, @dt.now()) == 60
       assert user.encrypted_password_recovery_token != nil
 
       # Assert recover email was delivered

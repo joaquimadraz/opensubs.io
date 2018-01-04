@@ -3,7 +3,10 @@ defmodule Subs.Subscription do
 
   use Subs.Schema
   alias Subs.User
-  alias Subs.Helpers.{DT, Money}
+  alias Subs.Helpers.Money
+
+  @subs_services Application.get_env(:subs, :subs_services)
+  @dt Application.get_env(:subs, :dt)
 
   schema "subscriptions" do
     field :name, :string
@@ -24,8 +27,6 @@ defmodule Subs.Subscription do
 
     timestamps()
   end
-
-  @subs_services Application.get_env(:subs, :subs_services)
 
   @required_create_fields ~w(
     name
@@ -145,7 +146,7 @@ defmodule Subs.Subscription do
   defp populate_first_bill_date(changeset) do
     case get_field(changeset, :first_bill_date) do
       nil ->
-        put_change(changeset, :first_bill_date, DT.today_beginning_of_day())
+        put_change(changeset, :first_bill_date, @dt.today_beginning_of_day())
       _ ->
         changeset
     end
@@ -163,10 +164,10 @@ defmodule Subs.Subscription do
   end
 
   defp calculate_next_bill_date(first_bill_date, "monthly") do
-    DT.calculate_next_bill_date(first_bill_date, :months)
+    @dt.calculate_next_bill_date(first_bill_date, :months)
   end
   defp calculate_next_bill_date(first_bill_date, "yearly") do
-    DT.calculate_next_bill_date(first_bill_date, :years)
+    @dt.calculate_next_bill_date(first_bill_date, :years)
   end
 
   # Consolidates amount as integer value before storing on the database.
@@ -189,7 +190,7 @@ defmodule Subs.Subscription do
 
   defp try_archive(changeset = %{valid?: false}), do: changeset
   defp try_archive(changeset = %{changes: %{archived: true}}) do
-    put_change(changeset, :archived_at, DT.now())
+    put_change(changeset, :archived_at, @dt.now())
   end
   defp try_archive(changeset), do: changeset
 

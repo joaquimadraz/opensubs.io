@@ -4,6 +4,8 @@ defmodule Subs.Test.Domain.SubscriptionTest do
   alias Subs.Subscription
   alias Ecto.Changeset
 
+  @dt Application.get_env(:subs, :dt)
+
   def create_changeset(params) do
     Subscription.create_changeset(%Subscription{}, params)
   end
@@ -160,7 +162,7 @@ defmodule Subs.Test.Domain.SubscriptionTest do
       changeset = build_changeset_with_user(user, params)
       first_bill_date = Changeset.get_change(changeset, :first_bill_date)
 
-      assert NaiveDateTime.to_date(first_bill_date) == Date.utc_today()
+      assert NaiveDateTime.to_date(first_bill_date) == NaiveDateTime.to_date(@dt.now())
     end
 
     test "populates next_bill_date based on monthly cycle", %{user: user} do

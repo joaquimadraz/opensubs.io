@@ -1,4 +1,4 @@
-defmodule Subs.Helpers.DTHelper do
+defmodule Subs.Helpers.DTBehaviour do
   @moduledoc """
   I've created this behaviour to be able to use mock it with mox.
   Still figuring out if this is the best approach.

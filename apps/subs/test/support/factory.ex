@@ -1,8 +1,10 @@
 defmodule Subs.Test.Support.Factory do
   @moduledoc false
   use ExMachina.Ecto, repo: Subs.Repo
-  alias Subs.Helpers.{DT, Crypto}
+  alias Subs.Helpers.Crypto
   alias Subs.{User, Subscription}
+
+  @dt Application.get_env(:subs, :dt)
 
   def user_factory do
     %User{
@@ -31,12 +33,12 @@ defmodule Subs.Test.Support.Factory do
       amount_currency: "GBP",
       amount_currency_symbol: "£",
       cycle: "monthly",
-      first_bill_date: NaiveDateTime.utc_now(),
-      next_bill_date: NaiveDateTime.utc_now()
+      first_bill_date: @dt.now(),
+      next_bill_date: @dt.now()
     }
   end
 
   def archived_subscription_factory do
-    build(:complete_subscription, %{archived: true, archived_at: DT.now()})
+    build(:complete_subscription, %{archived: true, archived_at: @dt.now()})
   end
 end

@@ -2,10 +2,11 @@ defmodule Subs.UseCases.Subscriptions.FindUserSubscriptions do
   @moduledoc false
   use Subs.UseCase
   alias Subs.SubscriptionRepo
-  alias Subs.Helpers.DT
   alias Subs.Application.SubscriptionsByMonth
 
-  def perform(user, filters \\ %{}, dt \\ DT) do
+  @dt Application.get_env(:subs, :dt)
+
+  def perform(user, filters \\ %{}, dt \\ @dt) do
     subscriptions = SubscriptionRepo.get_user_subscriptions(user, filters)
 
     current_date =

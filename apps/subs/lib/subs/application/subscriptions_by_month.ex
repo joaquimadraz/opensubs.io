@@ -5,7 +5,8 @@ defmodule Subs.Application.SubscriptionsByMonth do
   Subscription order comes from the DB.
   """
   alias Subs.Subscription
-  alias Subs.Helpers.DT
+
+  @dt Application.get_env(:subs, :dt)
 
   def filter(subscriptions, month, year) do
     {:ok, target} = NaiveDateTime.new(year, month, 1, 0, 0, 0)
@@ -20,7 +21,7 @@ defmodule Subs.Application.SubscriptionsByMonth do
       step = if(subscription.cycle == "monthly", do: :months, else: :years)
 
       current_bill_date =
-        DT.calculate_current_bill_date(subscription.first_bill_date, step, target)
+        @dt.calculate_current_bill_date(subscription.first_bill_date, step, target)
 
       %{subscription | current_bill_date: current_bill_date}
     end)
