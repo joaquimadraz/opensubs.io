@@ -1,6 +1,6 @@
 defmodule NotifierTest do
   use Notifier.DataCase
-
+  use Bamboo.Test
   import Mox
   import Notifier.Test.Support.Factory
   alias Notifier.Notification
@@ -44,6 +44,13 @@ defmodule NotifierTest do
       assert delivered.id == pending.id
       assert delivered.status == :delivered
       assert delivered.try_deliver_at == now
+    end
+
+    test "delivers notification" do
+      pending = insert(:pending_notification)
+      Notifier.deliver_notifications()
+
+      assert_delivered_with(subject: pending.title, text_body: pending.body)
     end
   end
 end
