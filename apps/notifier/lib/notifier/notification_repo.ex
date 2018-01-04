@@ -14,6 +14,12 @@ defmodule Notifier.NotificationRepo do
     |> Repo.update()
   end
 
+  def deliver_failed(notification, reason, dt \\ Notifier.DT) do
+    notification
+    |> Notification.deliver_failed_changeset(reason, dt)
+    |> Repo.update()
+  end
+
   def get_by_id(id), do: Repo.get(Notification, id)
 
   def get_pending() do

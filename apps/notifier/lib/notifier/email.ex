@@ -39,4 +39,12 @@ defmodule Notifier.Email do
     |> subject(subject)
     |> text_body(body)
   end
+
+  def notification_email(notification) do
+    new_email()
+    |> to(notification.to)
+    |> from(@from_email)
+    |> subject(notification.title)
+    |> text_body(notification.body)
+  end
 end

@@ -28,4 +28,13 @@ defmodule Notifier.Notification do
   def deliver_changeset(struct, dt \\ Notifier.DT) do
     change(struct, status: :delivered, try_deliver_at: dt.now())
   end
+
+  def deliver_failed_changeset(struct, reason, dt \\ Notifier.DT) do
+    change(
+      struct,
+      status: :failed,
+      failure_reason: reason,
+      try_deliver_at: dt.now()
+    )
+  end
 end
