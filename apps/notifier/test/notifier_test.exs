@@ -28,7 +28,7 @@ defmodule NotifierTest do
 
   describe "deliver" do
     test "returns no delivered notification when no pending notifications exist" do
-      assert {:ok, []} = Notifier.deliver_notifications()
+      assert [] = Notifier.deliver_notifications()
     end
 
     test "returns delivered notification" do
@@ -39,7 +39,7 @@ defmodule NotifierTest do
 
       expect(Notifier.DTMock, :now, fn -> now end)
 
-      assert {:ok, [delivered]} = Notifier.deliver_notifications(Notifier.DTMock)
+      assert [delivered] = Notifier.deliver_notifications(Notifier.DTMock)
 
       assert delivered.id == pending.id
       assert delivered.status == :delivered

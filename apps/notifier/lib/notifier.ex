@@ -1,6 +1,12 @@
 defmodule Notifier do
   @moduledoc false
-  alias Notifier.{Email, Mailer, NotificationRepo}
+  alias Notifier.{
+    DT,
+    Email,
+    Mailer,
+    NotificationRepo,
+    NotificationDeliverer
+  }
 
   def send_confirmation_email(to_email, confirmation_url) do
     to_email
@@ -27,18 +33,13 @@ defmodule Notifier do
   @doc """
   Deliver pending notifications
   """
-  def deliver_notifications(dt \\ Notifier.DT) do
+  def deliver_notifications(dt \\ DT, deliverer \\ NotificationDeliverer) do
     pending = NotificationRepo.get_pending()
-    delivered = Enum.map(pending, &deliver_notification(&1, dt))
 
-    {:ok, delivered}
-  end
-
-  @doc """
-  Deliver single notification
-  """
-  defp deliver_notification(notification, dt \\ Notifier.DT) do
-    {:ok, notification} = NotificationRepo.deliver(notification, dt)
-    notification
+    Enum.map(pending, fn (notification) ->
+      case deliverer.deliver(notification, dt) do
+        {:ok, notification} -> notification
+      end
+    end)
   end
 end
