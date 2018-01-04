@@ -39,7 +39,7 @@ defmodule NotifierTest do
 
       expect(Notifier.DTMock, :now, fn -> now end)
 
-      assert [delivered] = Notifier.deliver_notifications(Notifier.DTMock)
+      assert [{:ok, delivered}] = Notifier.deliver_notifications(Notifier.DTMock)
 
       assert delivered.id == pending.id
       assert delivered.status == :delivered

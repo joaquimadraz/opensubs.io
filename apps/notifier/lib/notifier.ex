@@ -37,9 +37,7 @@ defmodule Notifier do
     pending = NotificationRepo.get_pending()
 
     Enum.map(pending, fn (notification) ->
-      case deliverer.deliver(notification, Mailer, dt) do
-        {:ok, notification} -> notification
-      end
+      deliverer.deliver(notification, Mailer, dt)
     end)
   end
 end
