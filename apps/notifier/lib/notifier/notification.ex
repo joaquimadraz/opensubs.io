@@ -24,4 +24,8 @@ defmodule Notifier.Notification do
     |> cast(params, @required_create_fields)
     |> validate_required(@required_create_fields)
   end
+
+  def deliver_changeset(struct, dt \\ Notifier.DT) do
+    change(struct, status: :delivered, try_deliver_at: dt.now())
+  end
 end

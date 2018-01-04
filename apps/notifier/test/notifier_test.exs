@@ -1,8 +1,9 @@
 defmodule NotifierTest do
   use Notifier.DataCase
 
-  alias Notifier.Notification
+  import Mox
   import Notifier.Test.Support.Factory
+  alias Notifier.Notification
 
   describe "create_notification" do
     test "creates a pending notification with default values" do
@@ -22,6 +23,27 @@ defmodule NotifierTest do
       assert notification.status == :pending
       assert notification.failure_reason == nil
       assert notification.try_deliver_at == nil
+    end
+  end
+
+  describe "deliver" do
+    test "returns no delivered notification when no pending notifications exist" do
+      assert {:ok, []} = Notifier.deliver_notifications()
+    end
+
+    test "returns delivered notification" do
+      insert(:failed_notification)
+      insert(:delivered_notification)
+      pending = insert(:pending_notification)
+      now = ~N[2018-01-02T00:00:00]
+
+      expect(Notifier.DTMock, :now, fn -> now end)
+
+      assert {:ok, [delivered]} = Notifier.deliver_notifications(Notifier.DTMock)
+
+      assert delivered.id == pending.id
+      assert delivered.status == :delivered
+      assert delivered.try_deliver_at == now
     end
   end
 end

@@ -23,4 +23,22 @@ defmodule Notifier do
         notify_at: notify_at
       })
   end
+
+  @doc """
+  Deliver pending notifications
+  """
+  def deliver_notifications(dt \\ Notifier.DT) do
+    pending = NotificationRepo.get_pending()
+    delivered = Enum.map(pending, &deliver_notification(&1, dt))
+
+    {:ok, delivered}
+  end
+
+  @doc """
+  Deliver single notification
+  """
+  defp deliver_notification(notification, dt \\ Notifier.DT) do
+    {:ok, notification} = NotificationRepo.deliver(notification, dt)
+    notification
+  end
 end
