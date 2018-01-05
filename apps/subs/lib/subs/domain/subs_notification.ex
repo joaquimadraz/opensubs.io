@@ -17,9 +17,6 @@ defmodule Subs.SubsNotification do
     timestamps()
   end
 
-  @dt Application.get_env(:subs, :dt)
-  @deliver_notifications_at Application.get_env(:subs, :deliver_notifications_at)
-
   @required_create_fields ~w(
     type
     deliver_at

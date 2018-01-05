@@ -61,9 +61,30 @@ defmodule Subs.Test.Application.DailyNotificationsBuilderTest do
     insert(:complete_subscription, name: "A", user: user_a, next_bill_date: now)
     insert(:complete_subscription, name: "B", user: user_b, next_bill_date: now)
 
-    [sub_a_notification, sub_b_notification] = DailyNotificationsBuilder.build(Test.Subs.DTMock)
+    [%{notification: notification_a}, %{notification: notification_b}] =
+      DailyNotificationsBuilder.build(Test.Subs.DTMock)
 
-    assert sub_a_notification.notification.to == user_a.email
-    assert sub_b_notification.notification.to == user_b.email
+    assert notification_a.to == user_a.email
+    assert notification_b.to == user_b.email
+  end
+
+  test "creates sub notification and updates monthly subscription next_bill_date", %{now: now} do
+    user = insert(:user)
+
+    insert(:complete_subscription, cycle: "monthly", user: user, next_bill_date: now)
+
+    [%{subscriptions: [subscription]}] = DailyNotificationsBuilder.build(Test.Subs.DTMock)
+
+    assert subscription.next_bill_date == ~N[2018-02-01T00:00:00.000000]
+  end
+
+  test "creates sub notification and updates yearly subscription next_bill_date", %{now: now} do
+    user = insert(:user)
+
+    insert(:complete_subscription, cycle: "yearly", user: user, next_bill_date: now)
+
+    [%{subscriptions: [subscription]}] = DailyNotificationsBuilder.build(Test.Subs.DTMock)
+
+    assert subscription.next_bill_date == ~N[2019-01-01T00:00:00.000000]
   end
 end

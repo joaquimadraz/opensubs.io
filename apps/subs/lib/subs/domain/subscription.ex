@@ -57,6 +57,7 @@ defmodule Subs.Subscription do
     cycle
     color
     first_bill_date
+    next_bill_date
     archived
   )
 
