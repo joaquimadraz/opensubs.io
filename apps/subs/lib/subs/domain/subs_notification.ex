@@ -6,6 +6,7 @@ defmodule Subs.SubsNotification do
 
   schema "subs_notifications" do
     field(:type, SubsNotificationTypesEnum)
+    # TODO: Instead of sending all at 2AM, schedule for user's timezone
     field(:deliver_at, :naive_datetime)
 
     belongs_to :user, User
@@ -24,14 +25,9 @@ defmodule Subs.SubsNotification do
     deliver_at
   )a
 
-  def create_changeset(subscription) do
-    params = %{
-      type: :daily,
-      deliver_at: @dt.step_date(subscription.next_bill_date, :hours, @deliver_notifications_at)
-    }
-
+  def create_changeset(user, params \\ %{}) do
     %SubsNotification{}
     |> cast(params, @required_create_fields)
-    |> put_assoc(:user, subscription.user)
+    |> put_assoc(:user, user)
   end
 end

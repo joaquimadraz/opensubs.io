@@ -11,7 +11,6 @@ defmodule Notifier.Email do
     Please click on this link to confirm your account:
     #{confirmation_url}
 
-
     Thanks!
     """
 

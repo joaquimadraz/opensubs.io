@@ -40,6 +40,7 @@ defmodule Subs.Mixfile do
       {:ex_machina, "~> 2.0", only: :test},
       {:uuid, "~> 1.1"},
       {:timex, "~> 3.1"},
+      {:inflex, "~> 1.8.1"},
       {:notifier, in_umbrella: true},
       {:repository, in_umbrella: true},
       {:mox, "~> 0.3.0", only: :test},
