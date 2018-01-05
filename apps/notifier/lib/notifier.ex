@@ -54,8 +54,8 @@ defmodule Notifier do
         end
       end)
 
-    if Mix.env != :test, do: IO.puts("# notifications failed: #{results[:delivered]}")
-    if Mix.env != :test, do: IO.puts("# notifications delivered: #{results[:failed]}")
+    if Mix.env != :test, do: IO.puts("# notifications failed: #{results[:failed]}")
+    if Mix.env != :test, do: IO.puts("# notifications delivered: #{results[:delivered]}")
 
     notifications
   end

@@ -31,7 +31,6 @@ defmodule Subs.Test.Application.DailyNotificationsBuilderTest do
 
     # Subs.SubsNotification was created for a particular user
     assert subs_notification.user_id == user.id
-    assert subs_notification.status == :pending
     assert subs_notification.type == :daily
     assert subs_notification.deliver_at == ~N[2018-01-01T02:00:00Z]
 

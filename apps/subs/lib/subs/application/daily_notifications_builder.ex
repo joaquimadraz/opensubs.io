@@ -1,10 +1,9 @@
 defmodule Subs.Application.DailyNotificationsBuilder do
   alias Subs.{SubscriptionRepo, SubsNotificationRepo}
-  alias Subs.Helpers.DT
 
-  @dt Application.get_env(:subs, :db)
+  @dt Application.get_env(:subs, :dt)
 
-  def build(dt \\ DT) do
+  def build(dt \\ @dt) do
     now = dt.now()
     from = dt.beginning_of_day(now)
     to = dt.end_of_day(now)

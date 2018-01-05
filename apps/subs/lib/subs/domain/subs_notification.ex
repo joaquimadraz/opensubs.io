@@ -5,7 +5,6 @@ defmodule Subs.SubsNotification do
   alias Subs.{User, SubsNotification, Subscription}
 
   schema "subs_notifications" do
-    field(:status, NotificationStatusEnum)
     field(:type, SubsNotificationTypesEnum)
     field(:deliver_at, :naive_datetime)
 
@@ -21,14 +20,12 @@ defmodule Subs.SubsNotification do
   @deliver_notifications_at Application.get_env(:subs, :deliver_notifications_at)
 
   @required_create_fields ~w(
-    status
     type
     deliver_at
   )a
 
   def create_changeset(subscription) do
     params = %{
-      status: :pending,
       type: :daily,
       deliver_at: @dt.step_date(subscription.next_bill_date, :hours, @deliver_notifications_at)
     }
