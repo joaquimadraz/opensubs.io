@@ -1,4 +1,11 @@
 defmodule Subs.Application.DailyNotificationsBuilder do
+  @moduledoc """
+  This module is executed every midnight by cron.
+  It gets all billable subscriptions from a day, updates it's next_bill_date
+  and generates a notification to be delivered by the Notifier.
+
+  TODO: Dunno. But I don't like this module.
+  """
   alias Subs.{SubscriptionRepo, SubsNotificationRepo}
   alias Subs.Domain.NotificationTemplate
 
@@ -9,27 +16,30 @@ defmodule Subs.Application.DailyNotificationsBuilder do
     from = dt.beginning_of_day(now)
     to = dt.end_of_day(now)
 
-    # TODO: Refactor. Try grouping from the DB.
+    # TODO: Refactor. Try grouping from the DB?
     SubscriptionRepo.get_billable_subscriptions(from, to)
-    |> Enum.reduce(%{}, fn (subscription, acc) ->
-      # next_bill_date calculation is outside notification create because we maybe not
-      # want to send a notification for a particular subscription
-      # TODO: Dunno. But I don't like this module.
-      step = if(subscription.cycle == "monthly", do: :months, else: :years)
-
-      next_bill_date = @dt.step_date(subscription.next_bill_date, step, 1)
-
-      {:ok, subscription} =
-        SubscriptionRepo.update(subscription, %{next_bill_date: next_bill_date})
-
+    |> Enum.reduce(%{}, fn subscription, acc ->
+      {:ok, subscription} = move_next_bill_date!(subscription)
       Map.update(acc, subscription.user, [subscription], &(&1 ++ [subscription]))
     end)
     |> Enum.map(fn {user, subscriptions} ->
-      template = NotificationTemplate.create_daily_notification(user, subscriptions)
+      template = NotificationTemplate.daily_notification(user, subscriptions)
 
       case SubsNotificationRepo.create(user, subscriptions, template, dt) do
         {:ok, subs_notification} -> subs_notification
       end
     end)
+  end
+
+  @doc """
+  next_bill_date calculation is outside notification create because we maybe not
+  want to send a notification for a particular subscription.
+  """
+  defp move_next_bill_date!(subscription) do
+    step = if(subscription.cycle == "monthly", do: :months, else: :years)
+
+    next_bill_date = @dt.step_date(subscription.next_bill_date, step, 1)
+
+    {:ok, subscription} = SubscriptionRepo.update(subscription, %{next_bill_date: next_bill_date})
   end
 end

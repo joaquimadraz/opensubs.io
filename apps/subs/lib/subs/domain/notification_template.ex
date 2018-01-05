@@ -3,7 +3,7 @@ defmodule Subs.Domain.NotificationTemplate do
 
   defstruct [:title, :body]
 
-  def create_daily_notification(_user, subscriptions) do
+  def daily_notification(_user, subscriptions) do
     count = Enum.count(subscriptions)
 
     title = "You have #{count} #{Inflex.inflect("payment", count)} due today"
