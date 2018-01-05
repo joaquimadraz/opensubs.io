@@ -50,7 +50,11 @@ defmodule Subs.SubscriptionRepo do
 
   def get_billable_subscriptions(from, to) do
     query =
-      from(s in Subscription, where: s.next_bill_date >= ^from and s.next_bill_date <= ^to)
+      from(
+        s in Subscription,
+        where: s.next_bill_date >= ^from and s.next_bill_date <= ^to,
+        preload: :user
+      )
 
     Repo.all(query)
   end

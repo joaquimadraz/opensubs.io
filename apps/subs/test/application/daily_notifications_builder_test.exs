@@ -8,17 +8,17 @@ defmodule Subs.Test.Application.DailyNotificationsBuilderTest do
     now = ~N[2018-01-01T00:00:00Z]
 
     Test.Subs.DTMock
-    |> expect(:now, 2, fn -> now end)
+    |> expect(:now, 3, fn -> now end)
     |> expect(:beginning_of_day, fn _ -> now end)
     |> expect(:end_of_day, fn _ -> ~N[2018-01-01T23:59:59Z] end)
 
     [now: now]
   end
+
   test "creates sub notification for specific day", %{now: now} do
     user = insert(:user)
 
-    subscription =
-      insert(:complete_subscription, user: user, next_bill_date: now)
+    subscription = insert(:complete_subscription, user: user, next_bill_date: now)
 
     insert(:complete_subscription, user: user, next_bill_date: ~N[2018-01-02T00:00:00Z])
 
@@ -52,5 +52,18 @@ defmodule Subs.Test.Application.DailyNotificationsBuilderTest do
 
     assert notification.title == "You have 2 payments due today"
     assert notification.body == "Hello!\n\nDue today:\nA - GBP7.00 \nB - GBP7.00 \n\n\nThanks!\n"
+  end
+
+  test "creates multiple sub notifications for different users", %{now: now} do
+    user_a = insert(:user, email: "a@email.com")
+    user_b = insert(:user, email: "b@email.com")
+
+    insert(:complete_subscription, name: "A", user: user_a, next_bill_date: now)
+    insert(:complete_subscription, name: "B", user: user_b, next_bill_date: now)
+
+    [sub_a_notification, sub_b_notification] = DailyNotificationsBuilder.build(Test.Subs.DTMock)
+
+    assert sub_a_notification.notification.to == user_a.email
+    assert sub_b_notification.notification.to == user_b.email
   end
 end
