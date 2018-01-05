@@ -27,9 +27,11 @@ defmodule Subs.DataCase do
 
   setup tags do
     :ok = Ecto.Adapters.SQL.Sandbox.checkout(Subs.Repo)
+    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Notifier.Repo)
 
     unless tags[:async] do
       Ecto.Adapters.SQL.Sandbox.mode(Subs.Repo, {:shared, self()})
+      Ecto.Adapters.SQL.Sandbox.mode(Notifier.Repo, {:shared, self()})
     end
 
     :ok

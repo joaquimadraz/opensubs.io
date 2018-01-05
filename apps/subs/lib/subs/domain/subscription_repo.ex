@@ -1,7 +1,7 @@
 defmodule Subs.SubscriptionRepo do
   @moduledoc false
   import Ecto.Query
-  alias Subs.{Repo, Subscription}
+  alias Subs.{Repo, Subscription, SubsNotification, SubsNotificationsSubscription}
 
   def create(params) do
     %Subscription{}
@@ -32,6 +32,28 @@ defmodule Subs.SubscriptionRepo do
     Repo.all(query)
   end
 
+  def get_user_subscription(user, subscription_id) do
+    Repo.get_by(Subscription, user_id: user.id, id: subscription_id)
+  end
+
+  def get_subscription_notifications(subscription_id, status \\ :pending) do
+    query =
+      from(
+        sn in SubsNotification,
+        join: snb in SubsNotificationsSubscription,
+        where: snb.subs_notification_id == sn.id and snb.subscription_id == ^subscription_id
+      )
+
+    Repo.all(query)
+  end
+
+  def get_billable_subscriptions(from, to) do
+    query =
+      from(s in Subscription, where: s.next_bill_date >= ^from and s.next_bill_date <= ^to)
+
+    Repo.all(query)
+  end
+
   defp apply_next_bill_date_filter(query, filters) do
     query
     |> apply_next_bill_date_gt(filters)
@@ -53,8 +75,4 @@ defmodule Subs.SubscriptionRepo do
   end
 
   defp apply_next_bill_date_lt(query, _), do: query
-
-  def get_user_subscription(user, subscription_id) do
-    Repo.get_by(Subscription, user_id: user.id, id: subscription_id)
-  end
 end

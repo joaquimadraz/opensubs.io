@@ -2,7 +2,7 @@ defmodule Subs.User do
   @moduledoc false
 
   use Subs.Schema
-  alias Subs.{Subscription, UserRepo}
+  alias Subs.{Subscription, UserRepo, SubsNotification}
   alias Subs.Helpers.Crypto
 
   @bcrypt Application.get_env(:subs, :bcrypt)
@@ -24,6 +24,7 @@ defmodule Subs.User do
     field :password_recovery_used_at, :naive_datetime
 
     has_many :subscriptions, Subscription
+    has_many :subs_notifications, SubsNotification
 
     timestamps()
   end

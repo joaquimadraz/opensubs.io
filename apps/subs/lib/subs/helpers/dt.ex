@@ -3,9 +3,11 @@ defmodule Subs.Helpers.DT do
 
   def now, do: NaiveDateTime.utc_now()
 
-  def today_beginning_of_day do
-    Timex.beginning_of_day(NaiveDateTime.utc_now())
-  end
+  def today_beginning_of_day, do: beginning_of_day(now())
+
+  def beginning_of_day(date), do: Timex.beginning_of_day(date)
+
+  def end_of_day(date), do: Timex.end_of_day(date)
 
   def minutes_between(from_date, to_date) do
     Timex.diff(from_date, to_date, :minutes)

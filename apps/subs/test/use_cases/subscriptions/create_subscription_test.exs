@@ -1,7 +1,6 @@
 defmodule Subs.Test.UseCases.Subscriptions.CreateSubscriptionTest do
   use Subs.DataCase
   import Subs.Test.Support.Factory
-
   alias Subs.UseCases.Subscriptions.CreateSubscription
 
   setup do
