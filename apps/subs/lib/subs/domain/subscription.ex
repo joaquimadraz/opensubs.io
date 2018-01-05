@@ -106,6 +106,8 @@ defmodule Subs.Subscription do
   def monthly?(subscription), do: subscription.cycle == "monthly"
   def yearly?(subscription), do: subscription.cycle == "yearly"
 
+  def cycle_step(subscription), do: if(subscription.cycle == "monthly", do: :months, else: :years)
+
   defp validate_subscription(changeset) do
     changeset
     |> validate_number(:amount, greater_than: 0)

@@ -18,7 +18,7 @@ defmodule Subs.Application.SubscriptionsByMonth do
         (Subscription.monthly?(subscription) || yearly_on_current_month?(subscription, month))
     end)
     |> Enum.map(fn subscription ->
-      step = if(subscription.cycle == "monthly", do: :months, else: :years)
+      step = Subscription.cycle_step(subscription)
 
       current_bill_date =
         @dt.calculate_current_bill_date(subscription.first_bill_date, step, target)

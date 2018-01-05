@@ -6,7 +6,7 @@ defmodule Subs.Application.DailyNotificationsBuilder do
 
   TODO: Dunno. But I don't like this module.
   """
-  alias Subs.{SubscriptionRepo, SubsNotificationRepo}
+  alias Subs.{Subscription, SubscriptionRepo, SubsNotificationRepo}
   alias Subs.Domain.NotificationTemplate
 
   @dt Application.get_env(:subs, :dt)
@@ -31,15 +31,12 @@ defmodule Subs.Application.DailyNotificationsBuilder do
     end)
   end
 
-  @doc """
-  next_bill_date calculation is outside notification create because we maybe not
-  want to send a notification for a particular subscription.
-  """
+  # next_bill_date calculation is outside notification create because we maybe not
+  # want to send a notification for a particular subscription.
   defp move_next_bill_date!(subscription) do
-    step = if(subscription.cycle == "monthly", do: :months, else: :years)
+    next_bill_date =
+      @dt.step_date(subscription.next_bill_date, Subscription.cycle_step(subscription), 1)
 
-    next_bill_date = @dt.step_date(subscription.next_bill_date, step, 1)
-
-    {:ok, subscription} = SubscriptionRepo.update(subscription, %{next_bill_date: next_bill_date})
+    {:ok, _subscription} = SubscriptionRepo.update(subscription, %{next_bill_date: next_bill_date})
   end
 end
