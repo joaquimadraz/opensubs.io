@@ -1,4 +1,4 @@
-defmodule Subs.Repo.Migrations.AddConfirmationFieldsToUser do
+defmodule Repository.Repo.Migrations.AddConfirmationFieldsToUser do
   use Ecto.Migration
 
   def change do

@@ -1,4 +1,4 @@
-defmodule Subs.Repo.Migrations.AddServiceCodeToSubscriptions do
+defmodule Repository.Repo.Migrations.AddServiceCodeToSubscriptions do
   use Ecto.Migration
 
   def change do

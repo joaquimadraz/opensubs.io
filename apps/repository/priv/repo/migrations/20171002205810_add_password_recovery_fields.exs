@@ -1,4 +1,4 @@
-defmodule Subs.Repo.Migrations.AddPasswordRecoveryFields do
+defmodule Repository.Repo.Migrations.AddPasswordRecoveryFields do
   use Ecto.Migration
 
   def change do

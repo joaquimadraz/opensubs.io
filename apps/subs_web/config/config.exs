@@ -8,7 +8,7 @@ use Mix.Config
 # General application configuration
 config :subs_web,
   namespace: SubsWeb,
-  ecto_repos: [Subs.Repo]
+  ecto_repos: [Repository.Repo]
 
 # Configures the endpoint
 config :subs_web, SubsWeb.Endpoint,

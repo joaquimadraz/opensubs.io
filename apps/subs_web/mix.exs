@@ -44,6 +44,7 @@ defmodule SubsWeb.Mixfile do
       {:phoenix_live_reload, "~> 1.0", only: :dev},
       {:gettext, "~> 0.11"},
       {:subs, in_umbrella: true},
+      {:repository, in_umbrella: true},
       {:cowboy, "~> 1.0"},
       {:guardian, "~> 1.0-beta"},
       {:wallaby, "~> 0.19.2", only: :test},

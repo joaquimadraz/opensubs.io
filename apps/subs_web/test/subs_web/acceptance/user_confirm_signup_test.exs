@@ -2,7 +2,8 @@ defmodule SubsWeb.Test.Acceptance.UserConfirmSignupTest do
   use SubsWeb.FeatureCase
 
   import Wallaby.Query
-  alias Subs.{User, Repo, UserRepo}
+  alias Subs.{User, UserRepo}
+  alias Repository.Repo
 
   @tag :acceptance
   test "render error message when invalid token is used", %{session: session} do

@@ -1,4 +1,4 @@
-defmodule Subs.Repo.Migrations.AddUserIdToSubscriptions do
+defmodule Repository.Repo.Migrations.AddUserIdToSubscriptions do
   use Ecto.Migration
 
   def change do

@@ -1,6 +1,6 @@
 use Mix.Config
 
-config :subs, ecto_repos: [Subs.Repo]
+config :subs, ecto_repos: [Repository.Repo]
 
 config :subs, :bcrypt, Comeonin.Bcrypt
 

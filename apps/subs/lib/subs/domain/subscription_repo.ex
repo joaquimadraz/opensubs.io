@@ -1,7 +1,8 @@
 defmodule Subs.SubscriptionRepo do
   @moduledoc false
   import Ecto.Query
-  alias Subs.{Repo, Subscription, SubsNotification, SubsNotificationsSubscription}
+  alias Subs.{Subscription, SubsNotification, SubsNotificationsSubscription}
+  alias Repository.Repo
 
   def create(params) do
     %Subscription{}

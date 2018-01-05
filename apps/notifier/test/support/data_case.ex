@@ -16,7 +16,7 @@ defmodule Notifier.DataCase do
 
   using do
     quote do
-      alias Notifier.Repo
+      alias Repository.Repo
 
       import Ecto
       import Ecto.Changeset
@@ -26,10 +26,10 @@ defmodule Notifier.DataCase do
   end
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Notifier.Repo)
+    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Repository.Repo)
 
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(Notifier.Repo, {:shared, self()})
+      Ecto.Adapters.SQL.Sandbox.mode(Repository.Repo, {:shared, self()})
     end
 
     :ok

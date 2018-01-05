@@ -5,7 +5,7 @@ defmodule SubsWeb.FeatureCase do
     quote do
       use Wallaby.DSL
 
-      alias Subs.Repo
+      alias Repository.Repo
       import Ecto
       import Ecto.Changeset
       import Ecto.Query
@@ -15,13 +15,13 @@ defmodule SubsWeb.FeatureCase do
   end
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Subs.Repo)
+    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Repository.Repo)
 
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(Subs.Repo, {:shared, self()})
+      Ecto.Adapters.SQL.Sandbox.mode(Repository.Repo, {:shared, self()})
     end
 
-    metadata = Phoenix.Ecto.SQL.Sandbox.metadata_for(Subs.Repo, self())
+    metadata = Phoenix.Ecto.SQL.Sandbox.metadata_for(Repository.Repo, self())
     {:ok, session} = Wallaby.start_session(metadata: metadata)
     {:ok, session: session}
   end

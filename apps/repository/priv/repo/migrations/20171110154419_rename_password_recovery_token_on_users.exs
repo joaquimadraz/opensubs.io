@@ -1,4 +1,4 @@
-defmodule Subs.Repo.Migrations.RenamePasswordRecoveryTokenOnUsers do
+defmodule Repository.Repo.Migrations.RenamePasswordRecoveryTokenOnUsers do
   use Ecto.Migration
 
   def change do

@@ -1,6 +1,7 @@
 defmodule Notifier.NotificationRepo do
   import Ecto.Query
-  alias Notifier.{Repo, Notification}
+  alias Notifier.Notification
+  alias Repository.Repo
 
   def create(params) do
     %Notification{}

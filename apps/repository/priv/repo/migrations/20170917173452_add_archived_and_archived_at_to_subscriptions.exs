@@ -1,4 +1,4 @@
-defmodule Subs.Repo.Migrations.AddArchivedAndArchivedAtToSubscriptions do
+defmodule Repository.Repo.Migrations.AddArchivedAndArchivedAtToSubscriptions do
   use Ecto.Migration
 
   def change do

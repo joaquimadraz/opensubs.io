@@ -1,7 +1,8 @@
 defmodule Subs.UserRepo do
   @moduledoc false
 
-  alias Subs.{Repo, User}
+  alias Subs.User
+  alias Repository.Repo
   alias Subs.Helpers.Crypto
 
   def create(params) do

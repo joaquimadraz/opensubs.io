@@ -1,4 +1,4 @@
-defmodule Subs.Repo.Migrations.RenameConfirmationTokenOnUsers do
+defmodule Repository.Repo.Migrations.RenameConfirmationTokenOnUsers do
   use Ecto.Migration
 
   def change do

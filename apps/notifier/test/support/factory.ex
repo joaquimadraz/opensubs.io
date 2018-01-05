@@ -1,6 +1,6 @@
 defmodule Notifier.Test.Support.Factory do
   @moduledoc false
-  use ExMachina.Ecto, repo: Notifier.Repo
+  use ExMachina.Ecto, repo: Repository.Repo
   alias Notifier.Notification
 
   def pending_notification_factory do

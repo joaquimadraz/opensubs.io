@@ -16,7 +16,7 @@ defmodule Subs.DataCase do
 
   using do
     quote do
-      alias Subs.Repo
+      alias Repository.Repo
 
       import Ecto
       import Ecto.Changeset
@@ -26,12 +26,10 @@ defmodule Subs.DataCase do
   end
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Subs.Repo)
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Notifier.Repo)
+    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Repository.Repo)
 
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(Subs.Repo, {:shared, self()})
-      Ecto.Adapters.SQL.Sandbox.mode(Notifier.Repo, {:shared, self()})
+      Ecto.Adapters.SQL.Sandbox.mode(Repository.Repo, {:shared, self()})
     end
 
     :ok

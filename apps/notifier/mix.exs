@@ -32,14 +32,13 @@ defmodule Notifier.Mixfile do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:postgrex, ">= 0.0.0"},
-      {:ecto, "~> 2.1"},
       {:ecto_enum, "~> 1.0"},
       {:bamboo, "~> 0.8"},
       {:bamboo_smtp, "~> 1.4.0"},
       {:quantum, ">= 2.2.1"},
       {:timex, "~> 3.0"},
       {:ex_machina, "~> 2.0", only: :test},
+      {:repository, in_umbrella: true},
       {:mox, "~> 0.3.0", only: :test},
     ]
   end

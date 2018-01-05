@@ -2,7 +2,8 @@ defmodule Subs.SubsNotificationRepo do
   @moduledoc false
   alias Ecto.Multi
   import Ecto.Query
-  alias Subs.{Repo, SubsNotification}
+  alias Subs.SubsNotification
+  alias Repository.Repo
 
   def create_from_subscription(subscription) do
     case Repo.transaction(create_transaction(subscription)) do

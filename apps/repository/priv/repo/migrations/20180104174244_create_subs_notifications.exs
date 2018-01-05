@@ -1,4 +1,4 @@
-defmodule Subs.Repo.Migrations.CreateSubsNotifications do
+defmodule Repository.Repo.Migrations.CreateSubsNotifications do
   use Ecto.Migration
 
   def change do

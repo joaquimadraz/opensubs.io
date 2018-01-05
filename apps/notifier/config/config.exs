@@ -1,6 +1,6 @@
 use Mix.Config
 
-config :notifier, ecto_repos: [Notifier.Repo]
+config :notifier, ecto_repos: [Repository.Repo]
 
 config :notifier, Notifier.Mailer,
   adapter: Bamboo.SMTPAdapter

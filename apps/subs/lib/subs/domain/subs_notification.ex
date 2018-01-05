@@ -2,7 +2,7 @@ defmodule Subs.SubsNotification do
   @moduledoc false
 
   use Subs.Schema
-  alias Subs.{Repo, User, SubsNotification, Subscription}
+  alias Subs.{User, SubsNotification, Subscription}
 
   schema "subs_notifications" do
     field(:status, NotificationStatusEnum)

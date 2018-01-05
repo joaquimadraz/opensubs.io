@@ -1,6 +1,6 @@
 defmodule Subs.Test.Support.Factory do
   @moduledoc false
-  use ExMachina.Ecto, repo: Subs.Repo
+  use ExMachina.Ecto, repo: Repository.Repo
   alias Subs.Helpers.Crypto
   alias Subs.{User, Subscription}
 

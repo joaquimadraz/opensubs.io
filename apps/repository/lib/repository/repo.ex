@@ -1,5 +1,5 @@
-defmodule Notifier.Repo do
-  use Ecto.Repo, otp_app: :notifier
+defmodule Repository.Repo do
+  use Ecto.Repo, otp_app: :repository
 
   @doc """
   Dynamically loads the repository url from the
