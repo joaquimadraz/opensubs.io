@@ -1,4 +1,4 @@
-defmodule Subs.Test.Domain.SubscriptionTest do
+defmodule Subs.Test.Domain.NotificationTemplateTest do
   use Subs.DataCase
   import Subs.Test.Support.Factory
   alias Subs.Domain.NotificationTemplate

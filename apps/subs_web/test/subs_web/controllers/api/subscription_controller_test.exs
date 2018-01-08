@@ -241,7 +241,7 @@ defmodule SubsWeb.Test.Controllers.SubscriptionControllerTest do
             "amount_currency" => "GBP",
             "cycle" => "monthly",
             "color" => "#36dd30",
-            "first_bill_date" => "2017-08-06T09:00:00Z" # DTMock.now()
+            "first_bill_date" => "2017-07-06T09:00:00Z"
           }
         )
 
@@ -259,8 +259,8 @@ defmodule SubsWeb.Test.Controllers.SubscriptionControllerTest do
                "amount_currency_symbol" => "£",
                "cycle" => "monthly",
                "color" => "#36DD30",
-               "first_bill_date" => "2017-08-06T09:00:00Z",
-               "next_bill_date" => "2018-01-06T09:00:00Z",
+               "first_bill_date" => "2017-07-06T09:00:00Z",
+               "next_bill_date" => "2017-08-06T09:00:00Z",
                "service_code" => nil
              }
     end
