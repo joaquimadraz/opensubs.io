@@ -13,8 +13,9 @@ defmodule Subs.Application.DailyNotificationsBuilder do
 
   def build(dt \\ @dt) do
     now = dt.now()
-    from = dt.beginning_of_day(now)
-    to = dt.end_of_day(now)
+
+    from = dt.beginning_of_day(now) |> dt.step_date(:days, 1)
+    to = dt.end_of_day(now) |> dt.step_date(:days, 1)
 
     # TODO: Refactor. Try grouping from the DB?
     SubscriptionRepo.get_billable_subscriptions(from, to)

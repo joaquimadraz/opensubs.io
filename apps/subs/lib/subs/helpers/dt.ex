@@ -40,6 +40,7 @@ defmodule Subs.Helpers.DT do
   end
 
   def step_date(from_date, :hours, hours), do: Timex.shift(from_date, hours: hours)
+  def step_date(from_date, :days, days), do: Timex.shift(from_date, days: days)
   def step_date(from_date, :months, months), do: Timex.shift(from_date, months: months)
   def step_date(from_date, :years, years), do: Timex.shift(from_date, years: years)
 end
