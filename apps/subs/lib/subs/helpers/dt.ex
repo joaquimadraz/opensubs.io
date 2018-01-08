@@ -1,13 +1,14 @@
 defmodule Subs.Helpers.DT do
   @behaviour Subs.Helpers.DTBehaviour
 
+  defdelegate beginning_of_day(date), to: Timex
+  defdelegate end_of_day(date), to: Timex
+  defdelegate end_of_week(date), to: Timex
+  defdelegate end_of_month(date), to: Timex
+
   def now, do: NaiveDateTime.utc_now()
 
   def today_beginning_of_day, do: beginning_of_day(now())
-
-  def beginning_of_day(date), do: Timex.beginning_of_day(date)
-
-  def end_of_day(date), do: Timex.end_of_day(date)
 
   def minutes_between(from_date, to_date) do
     Timex.diff(from_date, to_date, :minutes)

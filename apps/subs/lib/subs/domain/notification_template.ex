@@ -7,7 +7,7 @@ defmodule Subs.Domain.NotificationTemplate do
   defstruct [:title, :body]
 
   # TODO: Refactor, this module is awfull. What have I done!?
-  def build(:daily, subscriptions) do
+  def build(:daily, subscriptions, _date \\ @dt.now()) do
     yearly_payments = Enum.filter(subscriptions, &Subscription.yearly?/1)
     monthly_payments = Enum.filter(subscriptions, &Subscription.monthly?/1)
 
@@ -28,7 +28,7 @@ defmodule Subs.Domain.NotificationTemplate do
     %__MODULE__{title: title, body: message}
   end
 
-  def build(:weekly, subscriptions) do
+  def build(:weekly, subscriptions, _date) do
     yearly_payments = Enum.filter(subscriptions, &Subscription.yearly?/1)
     monthly_payments = Enum.filter(subscriptions, &Subscription.monthly?/1)
 
@@ -47,8 +47,8 @@ defmodule Subs.Domain.NotificationTemplate do
     %__MODULE__{title: title, body: message}
   end
 
-  def build(:monthly, subscriptions) do
-    title = build_title(:monthly) |> freeze()
+  def build(:monthly, subscriptions, date) do
+    title = build_title(:monthly, date) |> freeze()
 
     message =
       []
@@ -65,12 +65,12 @@ defmodule Subs.Domain.NotificationTemplate do
     %__MODULE__{title: title, body: message}
   end
 
-  defp build_title(:monthly) do
-    ["Your payments for ", [@dt.strftime(@dt.now(), "%B %Y")]]
+  defp build_title(:monthly, date) do
+    ["Your payments for ", [@dt.strftime(date, "%B %Y")]]
   end
 
   def build_title(:weekly, yearly_payments, monthly_payments) do
-    [build_payments_title(yearly_payments, monthly_payments), ["this week"]]
+    [build_payments_title(yearly_payments, monthly_payments), ["next week"]]
   end
 
   def build_title(:daily, yearly_payments, monthly_payments) do
@@ -102,14 +102,14 @@ defmodule Subs.Domain.NotificationTemplate do
   end
 
   defp append_weekly_title(message) do
-    [message, ["Here are your payments for this week:"]]
+    [message, ["Here are your payments for next week:"]]
   end
 
   defp append_monthly_total(message, subscriptions) do
     currency_symbol = "£"
     total = Enum.reduce(subscriptions, 0.0, fn subscription, acc -> acc + subscription.amount end)
 
-    [message, ["This month you are spending ", Money.to_human_formated(total, currency_symbol)]]
+    [message, ["Next month you are spending ", Money.to_human_formated(total, currency_symbol)]]
   end
 
   defp append_monthly_title(message, subscriptions) do
@@ -117,7 +117,7 @@ defmodule Subs.Domain.NotificationTemplate do
     payments = Inflex.inflect("payment", count)
     are = if count > 1, do: " are ", else: " is "
 
-    [message, ["Here", are, "your ", payments, " for this month:"]]
+    [message, ["Here", are, "your ", payments, " for next month:"]]
   end
 
   defp append_greeting(message), do: message ++ ["Hello,"]

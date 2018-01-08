@@ -180,12 +180,12 @@ defmodule Subs.Test.Domain.NotificationTemplateTest do
         )
       ]
 
-      expected_title = "B is due this week"
+      expected_title = "B is due next week"
 
       expected_body = """
       Hello,
 
-      Here are your payments for this week:
+      Here are your payments for next week:
       B - £9.99, is due on Wednesday (2018-01-03)
 
 
@@ -219,12 +219,12 @@ defmodule Subs.Test.Domain.NotificationTemplateTest do
         )
       ]
 
-      expected_title = "A is due this week"
+      expected_title = "A is due next week"
 
       expected_body = """
       Hello,
 
-      Here are your payments for this week:
+      Here are your payments for next week:
       A - £100.00, is due on Monday (2018-01-01)
       B - £9.99, is due on Wednesday (2018-01-03)
 
@@ -266,9 +266,9 @@ defmodule Subs.Test.Domain.NotificationTemplateTest do
       expected_body = """
       Hello,
 
-      This month you are spending £1200.00
+      Next month you are spending £1200.00
 
-      Here are your payments for this month:
+      Here are your payments for next month:
       R - £1000.00, 2018-01-01
       I - £200.00, 2018-01-31
 

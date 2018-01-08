@@ -7,8 +7,8 @@ defmodule Subs.SubsNotificationRepo do
 
   @dt Application.get_env(:subs, :dt)
 
-  def create(user, subscriptions, template, dt \\ @dt) do
-    transaction = create_transaction(user, subscriptions, template, dt)
+  def create(user, subscriptions, type, template, now \\ @dt.now) do
+    transaction = create_transaction(user, subscriptions, type, template, now)
 
     case Repo.transaction(transaction) do
       {:ok, %{insert_subs_notification: subs_notification}} ->
@@ -16,16 +16,14 @@ defmodule Subs.SubsNotificationRepo do
     end
   end
 
-  defp create_transaction(user, subscriptions, template, dt) do
-    deliver_at = dt.now()
-
+  defp create_transaction(user, subscriptions, type, template, now) do
     Multi.new()
     |> Multi.run(:init, fn _ ->
-      {:ok, SubsNotification.create_changeset(user, %{type: :daily, deliver_at: deliver_at})}
+      {:ok, SubsNotification.create_changeset(user, %{type: type, deliver_at: now})}
     end)
     |> Multi.run(
       :insert_notification,
-      &insert_notification(&1.init, user, template, deliver_at)
+      &insert_notification(&1.init, user, template, now)
     )
     |> Multi.run(
       :insert_subs_notification,
@@ -33,8 +31,8 @@ defmodule Subs.SubsNotificationRepo do
     )
   end
 
-  defp insert_notification(_, user, template, deliver_at) do
-    Notifier.create_notification(user.email, template.title, template.body, deliver_at)
+  defp insert_notification(_, user, template, now) do
+    Notifier.create_notification(user.email, template.title, template.body, now)
   end
 
   defp insert_subs_notification(subs_notification_changeset, notification, subscriptions) do

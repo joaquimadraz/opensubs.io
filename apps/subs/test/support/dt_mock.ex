@@ -7,6 +7,8 @@ defmodule Subs.Test.Support.DTMock do
   defdelegate step_date(from_date, step, hours), to: DT
   defdelegate minutes_between(from_date, to_date), to: DT
   defdelegate strftime(from_date, format), to: DT
+  defdelegate beginning_of_day(date), to: DT
+  defdelegate end_of_day(date), to: DT
 
   def now(), do: ~N[2017-08-06T09:00:00Z]
 
