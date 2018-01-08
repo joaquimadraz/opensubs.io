@@ -13,6 +13,10 @@ defmodule Subs.Helpers.DT do
     Timex.diff(from_date, to_date, :minutes)
   end
 
+  def strftime(date, format) do
+    Timex.format!(date, format, :strftime)
+  end
+
   # TODO: Rethink this.
   def calculate_next_bill_date(from_date, step, until_date \\ today_beginning_of_day()) do
     if NaiveDateTime.diff(from_date, until_date) > 0 do

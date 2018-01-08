@@ -34,8 +34,19 @@ defmodule Subs.Test.Application.DailyNotificationsBuilderTest do
     assert notification.to == user.email
     assert notification.status == :pending
     assert notification.notify_at == now
-    assert notification.title == "You have 1 payment due today"
-    assert notification.body == "Hello!\n\nDue today:\nCustom Service - GBP7.00 \n\n\nThanks!\n"
+    assert notification.title == "Custom Service is due tomorrow"
+
+    assert notification.body ==
+             """
+             Hello,
+
+             1 monthly payment is due tomorrow:
+             Custom Service - £7.00
+
+
+             See you later,
+             Subs
+             """
 
     # Only the 2018-01-01 subscription was assigned for the notification
     [assigned_subscription] = subs_notification.subscriptions
@@ -50,8 +61,23 @@ defmodule Subs.Test.Application.DailyNotificationsBuilderTest do
 
     [%{notification: notification}] = DailyNotificationsBuilder.build(Test.Subs.DTMock)
 
-    assert notification.title == "You have 2 payments due today"
-    assert notification.body == "Hello!\n\nDue today:\nA - GBP7.00 \nB - GBP7.00 \n\n\nThanks!\n"
+    assert notification.title == "A and B are due tomorrow"
+
+    assert notification.body ==
+             """
+             Hello,
+
+             2 monthly payments are due tomorrow:
+             A - £7.00
+             B - £7.00
+
+
+             Total - £14.00
+
+
+             See you later,
+             Subs
+             """
   end
 
   test "creates multiple sub notifications for different users", %{now: now} do

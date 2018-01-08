@@ -6,6 +6,7 @@ defmodule Subs.Test.Support.DTMock do
   defdelegate calculate_current_bill_date(from_date, step, until_date), to: DT
   defdelegate step_date(from_date, step, hours), to: DT
   defdelegate minutes_between(from_date, to_date), to: DT
+  defdelegate strftime(from_date, format), to: DT
 
   def now(), do: ~N[2017-08-06T09:00:00Z]
 
