@@ -56,7 +56,7 @@ defmodule SubsWeb.Test.Controllers.UserControllerTest do
       })
 
       assert json_response(conn, 201)
-      assert_delivered_with(subject: "Welcome to Subs, please confirm you account")
+      assert_delivered_with(subject: "Confirm your Subs account")
     end
   end
 
