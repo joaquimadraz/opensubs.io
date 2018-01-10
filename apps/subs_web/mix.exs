@@ -9,7 +9,7 @@ defmodule SubsWeb.Mixfile do
       config_path: "../../config/config.exs",
       deps_path: "../../deps",
       lockfile: "../../mix.lock",
-      elixir: "~> 1.4",
+      elixir: "~> 1.5",
       elixirc_paths: elixirc_paths(Mix.env),
       compilers: [:phoenix, :gettext] ++ Mix.compilers,
       start_permanent: Mix.env == :prod,
@@ -24,7 +24,7 @@ defmodule SubsWeb.Mixfile do
   def application do
     [
       mod: {SubsWeb.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :runtime_tools, :elixir_make]
     ]
   end
 
@@ -47,6 +47,7 @@ defmodule SubsWeb.Mixfile do
       {:repository, in_umbrella: true},
       {:cowboy, "~> 1.0"},
       {:guardian, "~> 1.0-beta"},
+      {:distillery, "~> 1.5", runtime: false},
       {:wallaby, "~> 0.19.2", only: :test},
     ]
   end
