@@ -36,9 +36,9 @@ RUN mix phx.digest
 
 WORKDIR /subs
 COPY rel rel
-RUN cp services.json ./rel/releases/subs_web/services.json
 
 RUN mix release --env=prod --verbose
+RUN cp services.json ./rel/releases/subs_web/services.json
 
 ### Release
 
