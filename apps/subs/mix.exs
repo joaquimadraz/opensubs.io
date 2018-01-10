@@ -43,6 +43,7 @@ defmodule Subs.Mixfile do
       {:inflex, "~> 1.8.1"},
       {:notifier, in_umbrella: true},
       {:repository, in_umbrella: true},
+      {:quantum, ">= 2.2.1"},
       {:mox, "~> 0.3.0", only: :test},
     ]
   end

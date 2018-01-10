@@ -2,6 +2,7 @@ defmodule Subs.Test.Application.DailyNotificationsBuilderTest do
   use Subs.DataCase
   import Subs.Test.Support.Factory
   alias Subs.Application.DailyNotificationsBuilder
+  alias Subs.SubscriptionRepo
 
   test "creates sub notification for specific day" do
     now = ~N[2018-01-01T00:00:00Z]
@@ -92,30 +93,20 @@ defmodule Subs.Test.Application.DailyNotificationsBuilderTest do
     assert notification_b.to == user_b.email
   end
 
-  test "creates sub notification and updates monthly subscription next_bill_date" do
+  test "updates subscription next_bill_date without creating notification" do
     now = ~N[2018-01-01T00:00:00Z]
-    tomorrow = ~N[2018-01-02T00:00:00Z]
+    next_bill_date = ~N[2018-02-01T00:00:00Z]
 
     user = insert(:user)
 
-    insert(:complete_subscription, cycle: "monthly", user: user, next_bill_date: tomorrow)
+    subscription =
+      insert(:complete_subscription, cycle: "monthly", user: user, next_bill_date: now)
 
-    [%{subscriptions: [subscription]}] = DailyNotificationsBuilder.build(now)
+    # next_bill_date updated but no notitifaction created, only on 2018-01-31 there's one
+    [] = DailyNotificationsBuilder.build(now)
 
-    assert subscription.next_bill_date == ~N[2018-02-02 00:00:00.000000]
-  end
-
-  test "creates sub notification and updates yearly subscription next_bill_date" do
-    now = ~N[2018-01-01T00:00:00Z]
-    tomorrow = ~N[2018-01-02T00:00:00Z]
-
-    user = insert(:user)
-
-    insert(:complete_subscription, cycle: "yearly", user: user, next_bill_date: tomorrow)
-
-    [%{subscriptions: [subscription]}] = DailyNotificationsBuilder.build(now)
-
-    assert subscription.next_bill_date == ~N[2019-01-02 00:00:00.000000]
+    subscription = SubscriptionRepo.get_user_subscription(user, subscription.id)
+    assert NaiveDateTime.to_date(subscription.next_bill_date) == NaiveDateTime.to_date(next_bill_date)
   end
 
   describe "Weekly notification" do

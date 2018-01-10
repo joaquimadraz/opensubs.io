@@ -12,6 +12,8 @@ defmodule Subs.Application do
   def start(_type, _args) do
     import Supervisor.Spec, warn: false
 
-    Supervisor.start_link([], strategy: :one_for_one, name: Subs.Supervisor)
+    Supervisor.start_link([
+      worker(Subs.Scheduler, [])
+    ], strategy: :one_for_one, name: Subs.Supervisor)
   end
 end

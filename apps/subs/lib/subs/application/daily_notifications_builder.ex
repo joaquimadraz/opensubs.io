@@ -1,3 +1,5 @@
+require Logger
+
 defmodule Subs.Application.DailyNotificationsBuilder do
   @moduledoc """
   This module is executed every midnight by cron.
@@ -12,6 +14,8 @@ defmodule Subs.Application.DailyNotificationsBuilder do
   @dt Application.get_env(:subs, :dt)
 
   def build(now \\ @dt.now) do
+    Logger.info "Daily notification builder is running..."
+
     beginning_of_day = @dt.beginning_of_day(now)
     end_of_day = @dt.end_of_day(now)
     tomorrow = @dt.step_date(beginning_of_day, :days, 1)
@@ -27,7 +31,7 @@ defmodule Subs.Application.DailyNotificationsBuilder do
     # TODO: Rethink this now that needs to run every day
     SubscriptionRepo.get_billable_subscriptions(beginning_of_day, end_of_day)
     |> Enum.each(fn subscription ->
-      {:ok, subscription} = move_next_bill_date!(subscription)
+      {:ok, _subscription} = move_next_bill_date!(subscription)
     end)
 
     # Check what type of notification to send and ranges to get subscriptions for
@@ -49,7 +53,6 @@ defmodule Subs.Application.DailyNotificationsBuilder do
     # TODO: Refactor. Try grouping from the DB?
     SubscriptionRepo.get_billable_subscriptions(from, to)
     |> Enum.reduce(%{}, fn subscription, acc ->
-      {:ok, subscription} = move_next_bill_date!(subscription)
       Map.update(acc, subscription.user, [subscription], &(&1 ++ [subscription]))
     end)
     |> Enum.map(fn {user, subscriptions} ->

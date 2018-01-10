@@ -1,3 +1,5 @@
+require Logger
+
 defmodule Notifier do
   @moduledoc false
   alias Notifier.{
@@ -41,6 +43,8 @@ defmodule Notifier do
         deliverer.deliver(notification, dt)
       end)
 
+    Logger.info("# pending notifications to deliver: #{Enum.count(pending)}")
+
     results =
       notifications
       |> Enum.reduce(%{failed: 0, delivered: 0}, fn status, acc ->
@@ -51,6 +55,9 @@ defmodule Notifier do
             put_in(acc, [:failed], acc[:failed] + 1)
         end
       end)
+
+    Logger.info("# notifications failed: #{results[:failed]}")
+    Logger.info("# notifications delivered: #{results[:delivered]}")
 
     notifications
   end
