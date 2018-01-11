@@ -64,7 +64,12 @@ defmodule SubsWeb.Test.Controllers.UserControllerTest do
     setup %{conn: conn} do
       user_password = "password"
 
-      user = insert(:user, encrypted_password: @bcrypt.hashpwsalt(user_password))
+      user =
+        insert(
+          :user,
+          encrypted_password: @bcrypt.hashpwsalt(user_password),
+          confirmed_at: NaiveDateTime.utc_now()
+        )
 
       [conn: conn,
        user: user,
@@ -81,6 +86,23 @@ defmodule SubsWeb.Test.Controllers.UserControllerTest do
     test "returns forbidden for invalid credentials", %{conn: conn} do
       conn = post(conn, api_user_authenticate_path(conn, :authenticate), %{
         email: "unknown@email.com",
+        password: "password"
+      })
+
+      assert data = json_response(conn, 403)
+      assert data["message"] == "Invalid credentials"
+    end
+
+    test "returns forbidden for user not confirmed", %{conn: conn} do
+      user_password = "password"
+      user = insert(
+        :user,
+        encrypted_password: @bcrypt.hashpwsalt(user_password),
+        confirmed_at: nil
+      )
+
+      conn = post(conn, api_user_authenticate_path(conn, :authenticate), %{
+        email: user.email,
         password: "password"
       })
 
@@ -172,11 +194,13 @@ defmodule SubsWeb.Test.Controllers.UserControllerTest do
 
   describe "POST /api/users/recover_password" do
     setup %{conn: conn} do
-      user = insert(:user, %{
-        email: "dc@example.com",
-        password_recovery_token: nil,
-        password_recovery_expires_at: nil
-      })
+      user =
+        insert(:user, %{
+          email: "dc@example.com",
+          password_recovery_token: nil,
+          password_recovery_expires_at: nil,
+          confirmed_at: NaiveDateTime.utc_now(),
+        })
 
       [conn: conn, user: user]
     end
@@ -218,7 +242,7 @@ defmodule SubsWeb.Test.Controllers.UserControllerTest do
       )
 
       assert data = json_response(conn, 400)
-      assert data["message"] == "Missing emails param"
+      assert data["message"] == "Missing email param"
     end
 
     test "returns unprocessable entity when sending an invalid email param",
@@ -233,6 +257,103 @@ defmodule SubsWeb.Test.Controllers.UserControllerTest do
       assert data["data"]["errors"] == %{
         "email" => ["has invalid format"]
       }
+    end
+  end
+
+  describe "POST /api/users/reset_password" do
+    setup %{conn: conn} do
+      recovery_token = "aaabbbccc"
+
+      user = insert(:user, %{
+        email: "dc@example.com",
+        encrypted_password_recovery_token: Crypto.sha1(recovery_token),
+        password_recovery_expires_at: @dt.step_date(@dt.now, :hours, 1)
+      })
+
+      [conn: conn, user: user, recovery_token: recovery_token]
+    end
+
+    test "returns bad request when missing token",
+      %{conn: conn} do
+      conn = post(
+        conn,
+        api_user_reset_password_path(conn, :reset_password)
+      )
+
+      assert data = json_response(conn, 400)
+      assert data["message"] == "Missing required params"
+    end
+
+    test "returns ok and updates user password",
+      %{conn: conn, recovery_token: recovery_token} do
+      conn = post(
+        conn,
+        api_user_reset_password_path(conn, :reset_password),
+        %{
+          "t" => recovery_token,
+          "password" => "445566",
+          "password_confirmation" => "445566"
+        }
+      )
+
+      assert data = json_response(conn, 200)
+      assert data["message"] == "Password was updated"
+    end
+
+    test "returns unprocessable entity when sending invalid passwords",
+      %{conn: conn, recovery_token: recovery_token} do
+      conn = post(
+        conn,
+        api_user_reset_password_path(conn, :reset_password),
+        %{
+          "t" => recovery_token,
+          "password" => "112244",
+          "password_confirmation" => "556677"
+        }
+      )
+
+      assert data = json_response(conn, 422)
+      assert data["data"]["errors"] == %{
+        "password_confirmation" => ["does not match confirmation"]
+      }
+    end
+
+    test "returns conflict for invalid token", %{conn: conn} do
+      conn = post(
+        conn,
+        api_user_reset_password_path(conn, :reset_password),
+        %{
+          "t" => "invalid",
+          "password" => "112244",
+          "password_confirmation" => "112244"
+        }
+      )
+
+      assert data = json_response(conn, 409)
+      assert data["message"] == "Token is invalid"
+    end
+
+    test "returns conflict for expired token", %{conn: conn} do
+      recovery_token = "dddeeefff"
+
+      insert(:user, %{
+        email: "jon.bones@example.com",
+        encrypted_password_recovery_token: Crypto.sha1(recovery_token),
+        password_recovery_expires_at: @dt.step_date(@dt.now, :hours, -1)
+      })
+
+      conn = post(
+        conn,
+        api_user_reset_password_path(conn, :reset_password),
+        %{
+          "t" => recovery_token,
+          "password" => "112244",
+          "password_confirmation" => "112244"
+        }
+      )
+
+      assert data = json_response(conn, 409)
+      assert data["message"] == "Token has expired"
     end
   end
 end

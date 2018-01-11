@@ -1,8 +1,11 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
-import loginAction from 'data/domain/login/action'
-import recoverPasswordAction from 'data/domain/recoverPassword/action'
+import RemoteCall from 'data/domain/RemoteCall'
+import loginAction, { LOGIN_RESET } from 'data/domain/login/login/action'
+import recoverPasswordAction from 'data/domain/login/recoverPassword/action'
+import Button from 'components/Button'
 
 import Login from './Login'
 import RecoverPassword from './RecoverPassword'
@@ -32,6 +35,24 @@ class LoginContainer extends Component {
     }
   }
 
+  setRecoverPassword() {
+    this.props.dispatch({ type: LOGIN_RESET })
+
+    this.setState(() => ({
+      isLogin: false,
+      loginData: initialLoginData,
+    }))
+  }
+
+  setLogin() {
+    this.props.dispatch({ type: LOGIN_RESET })
+
+    this.setState(() => ({
+      isLogin: true,
+      recoverEmail: '',
+    }))
+  }
+
   handleFormSubmit() {
     const { dispatch, location: { query: { r: redirectUrl } } } = this.props
     const { email, password } = this.state.loginData
@@ -41,8 +62,9 @@ class LoginContainer extends Component {
 
   handleFormChange(attribute, value) {
     this.setState((prevState) => {
-      prevState.loginData[attribute] = value
-      return prevState
+      const newState = prevState
+      newState.loginData[attribute] = value
+      return newState
     })
   }
 
@@ -57,48 +79,47 @@ class LoginContainer extends Component {
     dispatch(recoverPasswordAction(recoverEmail))
   }
 
-  setRecoverPassword() {
-    this.setState(() => ({
-      isLogin: false,
-      loginData: initialLoginData,
-    }))
-  }
-
-  setLogin() {
-    this.setState(() => ({
-      isLogin: true,
-      recoverEmail: '',
-    }))
-  }
-
   renderLogin() {
     const { remoteCall } = this.props
     const { loginData } = this.state
 
     return (
-      <div>
-        <Login
-          data={loginData}
-          remoteCall={remoteCall}
-          onClick={this.handleFormSubmit}
-          onChange={this.handleFormChange}
-        />
-        <button onClick={this.setRecoverPassword}>Recover password</button>
-      </div>
+      <Login
+        data={loginData}
+        remoteCall={remoteCall}
+        onClick={this.handleFormSubmit}
+        onChange={this.handleFormChange}
+      >
+        <button
+          className="bg-transparent pa0 bn dark-gray b pointer"
+          onClick={this.setRecoverPassword}
+        >
+          Recover password
+        </button>
+      </Login>
     )
   }
 
   renderRecoverPassword() {
     const { remoteCall } = this.props
+    const { recoverEmail } = this.state
 
     return (
       <div>
         <RecoverPassword
+          data={{ email: recoverEmail }}
           remoteCall={remoteCall}
           onChange={this.handleRecoverPasswordFormChange}
           onClick={this.handleRecoverFormSubmit}
-        />
-        <button onClick={this.setLogin}>Back</button>
+        >
+          <Button
+            onClick={this.setLogin}
+            color="dark-gray"
+            className="silver mt2 mt0-ns"
+          >
+            Cancel
+          </Button>
+        </RecoverPassword>
       </div>
     )
   }
@@ -118,6 +139,12 @@ const mapStateToProps = (state) => {
   return {
     remoteCall: state.login.get('remoteCall'),
   }
+}
+
+LoginContainer.propTypes = {
+  dispatch: PropTypes.func.isRequired,
+  location: PropTypes.object.isRequired,
+  remoteCall: PropTypes.instanceOf(RemoteCall).isRequired,
 }
 
 export default connect(mapStateToProps)(LoginContainer)

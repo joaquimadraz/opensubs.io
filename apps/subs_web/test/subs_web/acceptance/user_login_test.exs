@@ -13,7 +13,7 @@ defmodule SubsWeb.Test.Acceptance.UserLoginTest do
     |> fill_in(css("#login-form .user-email"), with: "unexisting")
     |> fill_in(css("#login-form .user-password"), with: "nope")
     |> click(css("#login-btn"))
-    |> assert_has(css("p", text: "Invalid credentials"))
+    |> assert_has(css("div.message", text: "Invalid credentials"))
   end
 
   @tag :acceptance
@@ -27,7 +27,7 @@ defmodule SubsWeb.Test.Acceptance.UserLoginTest do
 
     session
     |> assert_has(css("#recover-password-form"))
-    |> click(button("Back"))
+    |> click(button("Cancel"))
     |> assert_has(css("#login-form"))
 
     assert has_no_css?(session, "#recover-password-form")
@@ -77,9 +77,9 @@ defmodule SubsWeb.Test.Acceptance.UserLoginTest do
     |> assert_signup_and_login_user()
     |> click(css(".Header--menu-trigger"))
     |> click(css(".Header--logout-button"))
-    |> assert_has(css("a", text: "Login"))
+    |> assert_has(css("a[href='/login']"))
     |> visit("/")
-    |> assert_has(css("a", text: "Login"))
+    |> assert_has(css("a[href='/login']"))
   end
 
   defp assert_signup_and_login_user(session, email \\ "joaquim@example.com") do

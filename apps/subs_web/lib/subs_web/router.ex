@@ -26,7 +26,10 @@ defmodule SubsWeb.Router do
       post "/authenticate", Api.UserController, :authenticate, as: :authenticate
       post "/confirm", Api.UserController, :confirm, as: :confirm
       post "/recover_password", Api.UserController, :recover_password, as: :recover_password
+      post "/reset_password", Api.UserController, :reset_password, as: :reset_password
     end
+
+    get "/password/reset", Api.ResetPasswordController, :show
   end
 
   scope "/api", SubsWeb, as: :api do
