@@ -31,19 +31,19 @@
 
 #### Frontend
 - [x] User signup/authentication
-- [ ] User password recovery
+- [x] User password recovery
 - [x] Create custom subscription
-  - [ ] Create from service service
+  - [x] Create from service service
 - [x] List all subscriptions
-- [ ] Subscriptions dashboard
-  - [ ] Due this month
-  - [ ] Due next month
-  - [ ] Monthly payment
-  - [ ] Yearly payment
+- [x] Subscriptions dashboard
+  - [x] Due this month
+  - [x] Due next month
+  - [x] Monthly payment
+  - [x] Yearly payment
 
 ### Nice to have
 - [ ] Categorization (personal, business, services)
-- [ ] Email notifications
+- [x] Email notifications
 - [ ] Web notifications
 
 ### Future
