@@ -1,6 +1,6 @@
 use Mix.Config
 
-config :notifier, Notifier.Scheduler,
+config :subs, Subs.Scheduler,
   jobs: [
     # Every minute
     {"* * * * *", {Subs.Application.DailyNotificationsBuilder, :build, []}},
