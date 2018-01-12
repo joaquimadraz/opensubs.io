@@ -1,5 +1,5 @@
 # Subs (WIP) [![Build Status](https://travis-ci.org/joaquimadraz/subs.svg?branch=master)](https://travis-ci.org/joaquimadraz/subs)
-## Manage on going subscriptions :money_with_wings:
+## Track recurring bills and subscriptions :money_with_wings:
 
 ### Stack
 - Elixir backend
