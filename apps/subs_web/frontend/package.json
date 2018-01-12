@@ -4,7 +4,7 @@
   "main": "index.jsx",
   "license": "MIT",
   "scripts": {
-    "build": "webpack -p"
+    "build": "NODE_ENV=production node_modules/.bin/webpack -p"
   },
   "dependencies": {
     "axios": "^0.17.0",
