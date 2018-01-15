@@ -1,60 +1,85 @@
 defmodule Subs.Test.Domain.UserTest do
-  use ExUnit.Case
+  use SubsWeb.ConnCase
   alias Subs.User
   import Subs.Test.Support.Factory
 
-  describe "given user params" do
-    setup [:build_params]
+  @bcrypt Application.get_env(:subs, :bcrypt)
 
-    setup(context) do
-      Map.merge(%{user: create_user(context.params)}, context)
+  describe "create_changeset" do
+    test "encrypts password" do
+      params = %{string_params_for(:user) | "password" => "11223344"}
+      changeset = create_changeset(params)
+
+      assert changeset.changes.encrypted_password == @bcrypt.hashpwsalt("11223344")
     end
 
-    test "should encrypt password", %{user: user} do
-      encrypted_password = Ecto.Changeset.get_change(user, :encrypted_password)
+    test "confirmation token is set" do
+      params = string_params_for(:user)
+      changeset = create_changeset(params)
 
-      assert encrypted_password != nil
-      assert String.length(encrypted_password) > 0
+      assert changeset.changes.confirmation_token != nil
     end
 
-    test "confirmation_token is set", %{user: user} do
-      confirmation_token = Ecto.Changeset.get_change(user, :confirmation_token)
-      assert confirmation_token != nil
+    test "correctly formats email" do
+      params = %{string_params_for(:user) | "email" => "eXaMPle@EMAIL.com"}
+      changeset = create_changeset(params)
+
+      assert changeset.changes.email == "example@email.com"
+    end
+
+    test "returns error for invalid email"do
+      params = %{string_params_for(:user) | "email" => "invalid"}
+      changeset = create_changeset(params)
+
+      assert {"has invalid format", _} = changeset.errors[:email]
+    end
+
+    test "returns error for missing require currency" do
+      params = string_params_for(:user) |> Map.take(["email", "password", "password_confirmation"])
+      changeset = create_changeset(params)
+
+      assert {"can't be blank", _} = changeset.errors[:currency]
+    end
+
+    test "returns error for unknown currency" do
+      params = %{string_params_for(:user) | "currency" => "AUD"}
+      changeset = create_changeset(params)
+
+      assert {"is invalid", _} = changeset.errors[:currency]
+    end
+
+    test "populates currency symbol" do
+      params = %{string_params_for(:user) | "currency" => "USD"}
+      changeset = create_changeset(params)
+
+      assert changeset.changes.currency_symbol == "$"
     end
   end
 
-  describe "given an multi cased email" do
-    setup [:build_params]
+  describe "update_changeset" do
+    test "updates user currency" do
+      user = insert(:user, currency: "USD", currency_symbol: "$")
+      params = %{"currency" => "EUR"}
+      changeset = update_changeset(user, params)
 
-    test "should format email", %{params: params} do
-      params = %{params | "email" => "bEe@EMAIL.com"}
+      assert changeset.changes.currency == "EUR"
+      assert changeset.changes.currency_symbol == "€"
+    end
 
-      email =
-        params
-        |> create_user
-        |> Ecto.Changeset.get_change(:email)
+    test "returns error for unknown currency" do
+      user = insert(:user)
+      params = %{string_params_for(:user) | "currency" => "AUD"}
+      changeset = update_changeset(user, params)
 
-      assert email == String.downcase(params["email"])
+      assert {"is invalid", _} = changeset.errors[:currency]
     end
   end
 
-  describe "given an invalid email" do
-    setup [:build_params]
-
-    test "should return error for invalid email", %{params: params} do
-      params = %{params | "email" => "invalid"}
-      user = create_user(params)
-      {message, _} = user.errors[:email]
-
-      assert message == "has invalid format"
-    end
-  end
-
-  def create_user(params) do
+  def create_changeset(params) do
     User.create_changeset(%User{}, params)
   end
 
-  def build_params(_) do
-    [params: string_params_for(:user)]
+  def update_changeset(user, params) do
+    User.update_changeset(user, params)
   end
 end
