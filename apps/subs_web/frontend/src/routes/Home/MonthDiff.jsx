@@ -11,7 +11,7 @@ const MonthDiff = ({ currentUser, currentTotal, previousTotal }) => {
 
   const isPositive = diff < 0
 
-  const containerCx = classNames('f5 v-mid ml2', {
+  const containerCx = classNames('f5 v-mid ml2 b', {
     red: !isPositive,
     green: isPositive,
   })
@@ -21,7 +21,7 @@ const MonthDiff = ({ currentUser, currentTotal, previousTotal }) => {
     'b--green Home--arrow-down': isPositive,
   })
 
-  const sign = isPositive ? '+' : '-'
+  const sign = isPositive ? '-' : '+'
 
   const value = Math.abs(diff).toFixed(2)
 

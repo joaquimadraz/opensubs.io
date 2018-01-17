@@ -3,11 +3,13 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { OrderedSet } from 'immutable'
 
+import routes from 'constants/routes'
 import CurrentUser from 'data/domain/currentUser/CurrentUser'
 import RemoteCall from 'data/domain/RemoteCall'
 import Subscription from 'data/domain/subscriptions/Subscription'
-import createSubscriptionAction from 'data/domain/subscriptions/createSubscription/action'
+import createSubscriptionAction, { CREATE_SUBSCRIPTION_RESET } from 'data/domain/subscriptions/createSubscription/action'
 import getAllServicesAction from 'data/domain/services/getAllServices/action'
+import Modal from 'components/Modal'
 import NewSubscription from './NewSubscription'
 
 class NewSubscriptionContainer extends Component {
@@ -16,6 +18,7 @@ class NewSubscriptionContainer extends Component {
 
     this.handleFormSubmit = this.handleFormSubmit.bind(this)
     this.handleFormChange = this.handleFormChange.bind(this)
+    this.handleModalClose = this.handleModalClose.bind(this)
 
     const data = new Subscription({
       amount_currency: props.currentUser.currency,
@@ -31,6 +34,10 @@ class NewSubscriptionContainer extends Component {
     if (services.size === 0) {
       dispatch(getAllServicesAction())
     }
+  }
+
+  componentWillUnmount() {
+    this.props.dispatch({ type: CREATE_SUBSCRIPTION_RESET })
   }
 
   handleFormSubmit() {
@@ -51,19 +58,25 @@ class NewSubscriptionContainer extends Component {
     })
   }
 
+  handleModalClose() {
+    this.props.router.goBack()
+  }
+
   render() {
     const { subscription, services, remoteCall } = this.props
     const { data } = this.state
     const newSubscription = subscription || data
 
     return (
-      <NewSubscription
-        services={services}
-        subscription={newSubscription}
-        remoteCall={remoteCall}
-        onClick={this.handleFormSubmit}
-        onChange={this.handleFormChange}
-      />
+      <Modal onClose={this.handleModalClose}>
+        <NewSubscription
+          services={services}
+          subscription={newSubscription}
+          onClick={this.handleFormSubmit}
+          onChange={this.handleFormChange}
+          remoteCall={remoteCall}
+        />
+      </Modal>
     )
   }
 }
@@ -87,6 +100,7 @@ const mapStateToProps = (state) => {
 
 NewSubscriptionContainer.propTypes = {
   dispatch: PropTypes.func.isRequired,
+  router: PropTypes.object.isRequired,
   currentUser: PropTypes.instanceOf(CurrentUser).isRequired,
   services: PropTypes.instanceOf(OrderedSet).isRequired,
   remoteCall: PropTypes.instanceOf(RemoteCall).isRequired,
