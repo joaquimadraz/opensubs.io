@@ -1,26 +1,54 @@
 # Alias this container as builder:
 FROM bitwalker/alpine-elixir-phoenix as builder
 
-WORKDIR /subs
+# Install aws cli
+RUN apk --no-cache update && \
+    apk --no-cache add python py-pip py-setuptools ca-certificates groff less && \
+    pip --no-cache-dir install awscli && \
+    rm -rf /var/cache/apk/*
 
-ARG host
-ARG app_signal_name
-ARG app_signal_key
-ARG erlang_cookie
+ARG HOST
+ARG ERLANG_COOKIE
+ARG APPSIGNAL_NAME
+ARG APPSIGNAL_KEY
+ARG SENDGRID_API_KEY
+ARG SUBS_ADMIN_EMAIL
+ARG PHOENIX_SECRET_KEY_BASE
+ARG SESSION_COOKIE_NAME
+ARG SESSION_COOKIE_SIGNING_SALT
+ARG SESSION_COOKIE_ENCRYPTION_SALT
+ARG GUARDIAN_SECRET_KEY
+ARG AWS_ACCESS_KEY_ID
+ARG AWS_SECRET_ACCESS_KEY
+ARG AWS_DEFAULT_REGION
+ARG OPENSUBS_S3_SECRETS_BUCKET
 
 ENV MIX_ENV=prod \
-    HOST=$host \
-    SUBS_WEB_KEYKEY=/etc/letsencrypt/live/$host/privkey.pem \
-    SUBS_WEB_CERTFILE=/etc/letsencrypt/live/$host/cert.pem \
-    SUBS_WEB_CACERTFILE=/etc/letsencrypt/live/$host/chain.pem \
-    SUBS_ADMIN_EMAIL=no_reply@$host \
-    APP_SIGNAL_NAME=$app_signal_name \
-    APP_SIGNAL_KEY=$app_signal_key \
-    ERLANG_COOKIE=$erlang_cookie \
-    APPSIGNAL_BUILD_FOR_MUSL=1
+    SUBS_WEB_KEYKEY=/etc/letsencrypt/live/$HOST/privkey.pem \
+    SUBS_WEB_CERTFILE=/etc/letsencrypt/live/$HOST/cert.pem \
+    SUBS_WEB_CACERTFILE=/etc/letsencrypt/live/$HOST/chain.pem \
+    HOST=$HOST \
+    ERLANG_COOKIE=$ERLANG_COOKIE \
+    APPSIGNAL_BUILD_FOR_MUSL=1\
+    APPSIGNAL_NAME=$APPSIGNAL_NAME \
+    APPSIGNAL_KEY=$APPSIGNAL_KEY \
+    SENDGRID_API_KEY=$SENDGRID_API_KEY \
+    SUBS_ADMIN_EMAIL=$SUBS_ADMIN_EMAIL \
+    PHOENIX_SECRET_KEY_BASE=$PHOENIX_SECRET_KEY_BASE \
+    SESSION_COOKIE_NAME=$SESSION_COOKIE_NAME \
+    SESSION_COOKIE_SIGNING_SALT=$SESSION_COOKIE_SIGNING_SALT \
+    SESSION_COOKIE_ENCRYPTION_SALT=$SESSION_COOKIE_ENCRYPTION_SALT \
+    GUARDIAN_SECRET_KEY=$GUARDIAN_SECRET_KEY \
+    AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID \
+    AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY \
+    AWS_DEFAULT_REGION=$AWS_DEFAULT_REGION \
+    OPENSUBS_S3_SECRETS_BUCKET=$OPENSUBS_S3_SECRETS_BUCKET
 
-# tmp where ssl files are
-COPY tmp tmp
+WORKDIR /subs
+
+# Copy ssl files into builder container tmp folder
+RUN mkdir tmp
+RUN aws s3 sync s3://$OPENSUBS_S3_SECRETS_BUCKET/ssl tmp
 
 # Umbrella
 COPY mix.exs mix.lock ./
@@ -49,7 +77,7 @@ RUN cp services.json ./rel/releases/subs_web/services.json
 
 FROM alpine:3.6
 
-ARG host
+ARG HOST
 
 # We need bash and openssl for Phoenix
 # The update is needed for appsignal
@@ -62,11 +90,9 @@ ENV MIX_ENV=prod \
     SHELL=/bin/bash
 
 # Dir where phoenix is looking for cert files. Default for letsencrypt
-WORKDIR /etc/letsencrypt/live/$host
+WORKDIR /etc/letsencrypt/live/$HOST
 
-COPY --from=builder /subs/tmp/privkey.pem .
-COPY --from=builder /subs/tmp/chain.pem .
-COPY --from=builder /subs/tmp/cert.pem .
+COPY --from=builder /subs/tmp .
 
 WORKDIR /subs
 
