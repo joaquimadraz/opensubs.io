@@ -5,6 +5,10 @@ if [ "$TRAVIS_BRANCH" == "master" -a "$TRAVIS_PULL_REQUEST" == "false" ]; then
   # Install AWS CLI
   pip install --user awscli
 
+  # Install AWS ECS CLI
+  sudo curl -o /usr/local/bin/ecs-cli https://s3.amazonaws.com/amazon-ecs-cli/ecs-cli-linux-amd64-latest
+  sudo chmod +x /usr/local/bin/ecs-cli
+
   # Build container
   docker build -t $AWS_ECS_CONTAINER_NAME \
     --build-arg HOST=$HOST \
@@ -22,6 +26,7 @@ if [ "$TRAVIS_BRANCH" == "master" -a "$TRAVIS_PULL_REQUEST" == "false" ]; then
     --build-arg AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY \
     --build-arg AWS_DEFAULT_REGION=$AWS_DEFAULT_REGION \
     --build-arg OPENSUBS_S3_SECRETS_BUCKET=$OPENSUBS_S3_SECRETS_BUCKET \
+    --build-arg DATABASE_URL=$DATABASE_URL \
     .
 
   # Tag docker image
@@ -40,7 +45,6 @@ if [ "$TRAVIS_BRANCH" == "master" -a "$TRAVIS_PULL_REQUEST" == "false" ]; then
     -e 's/$AWS_ECS_URL/'$AWS_ECS_URL'/g' \
     -e 's/$AWS_ECS_DOCKER_IMAGE/'$AWS_ECS_DOCKER_IMAGE'/g' \
     -e 's/$AWS_ECS_CONTAINER_NAME/'$AWS_ECS_CONTAINER_NAME'/g' \
-    -e 's/$DATABASE_URL/'$DATABASE_URL'/g' \
     -e 's/$HOST/'$HOST'/g' \
     -e 's/$PORT/'$PORT'/g' \
     config/ci/docker-compose-prod.yml
