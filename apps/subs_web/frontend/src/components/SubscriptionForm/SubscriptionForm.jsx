@@ -6,6 +6,7 @@ import classNames from 'classnames'
 import RemoteCall from 'data/domain/RemoteCall'
 import Subscription from 'data/domain/subscriptions/Subscription'
 import colors from 'constants/colors'
+import { options as paymentTypes } from 'constants/paymentTypes'
 
 import ErrorMessages from 'components/ErrorMessages'
 import ColorPicker from 'components/ColorPicker'
@@ -14,6 +15,7 @@ import Button from 'components/Button'
 import InputText from 'components/InputText'
 import InputNumber from 'components/InputNumber'
 import InputSelect from 'components/InputSelect'
+import InputRadio from 'components/InputRadio'
 
 const renderErrors = (remoteCall) => {
   if (remoteCall.loading || !remoteCall.data) { return null }
@@ -48,6 +50,7 @@ const SubscriptionForm = ({ subscription, services, onClick, onChange, remoteCal
   }
 
   const servicesOptions = buildServiceOptions(services)
+  const paymentTypesOptions = [{ label: 'N/A', value: null }].concat(paymentTypes)
 
   const renderCustomServiceForm = () => {
     return (
@@ -107,6 +110,25 @@ const SubscriptionForm = ({ subscription, services, onClick, onChange, remoteCal
             onChange={color => onChange('color', color)}
           />
         </div>
+        <div className="b dark-gray mb2 mt3">
+          Payment by
+        </div>
+        <InputRadio
+          name="type"
+          className="subscription-type mr1"
+          options={paymentTypesOptions}
+          value={subscription.type}
+          onChange={onChange}
+        />
+        {subscription.type &&
+          <InputText
+            name="type-description"
+            placeholder="Santander, Monzo, American Express, ..."
+            className="subscription-type-description mt2 w-70"
+            value={subscription.type_description}
+            onChange={event => handleChange(event, 'type_description')}
+          />
+        }
       </div>
     )
   }
@@ -163,6 +185,25 @@ const SubscriptionForm = ({ subscription, services, onClick, onChange, remoteCal
           value={subscription.first_bill_date}
           onChange={date => onChange('first_bill_date', date)}
         />
+        <div className="b dark-gray mb2 mt3">
+          Payment from
+        </div>
+        <InputRadio
+          name="type"
+          className="subscription-type mr1"
+          options={paymentTypesOptions}
+          value={subscription.type}
+          onChange={onChange}
+        />
+        {subscription.type &&
+          <InputText
+            name="type-description"
+            placeholder="Santander, Monzo, American Express, ..."
+            className="subscription-type-description mt2 w-70"
+            value={subscription.type_description}
+            onChange={event => handleChange(event, 'type_description')}
+          />
+        }
       </div>
     )
   }

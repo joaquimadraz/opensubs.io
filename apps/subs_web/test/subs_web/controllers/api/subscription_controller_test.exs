@@ -261,8 +261,94 @@ defmodule SubsWeb.Test.Controllers.SubscriptionControllerTest do
                "color" => "#36DD30",
                "first_bill_date" => "2017-07-06T09:00:00Z",
                "next_bill_date" => "2017-08-06T09:00:00Z",
-               "service_code" => nil
+               "service_code" => nil,
+               "type" => nil,
+               "type_description" => nil
              }
+    end
+
+    test "returns unprocessable entity for invalid payment type", %{conn: conn} do
+      conn =
+        post(
+          conn,
+          api_subscription_path(conn, :create),
+          subscription: %{
+            "name" => "Custom Service",
+            "amount" => "7.99",
+            "amount_currency" => "GBP",
+            "cycle" => "monthly",
+            "type" => "invalid"
+          }
+        )
+
+      assert data = json_response(conn, 422)
+
+      assert data["data"]["errors"] == %{
+        "type" => ["must be one of: card, direct debit, other"]
+      }
+    end
+
+    test "returns unprocessable entity for missing type description for type other", %{conn: conn} do
+      conn =
+        post(
+          conn,
+          api_subscription_path(conn, :create),
+          subscription: %{
+            "name" => "Custom Service",
+            "amount" => "7.99",
+            "amount_currency" => "GBP",
+            "cycle" => "monthly",
+            "type" => "other"
+          }
+        )
+
+      assert data = json_response(conn, 422)
+
+
+      assert data["data"]["errors"] == %{
+        "type_description" => ["can't be blank"]
+      }
+    end
+
+    test "creates subscription with type", %{conn: conn} do
+      conn =
+        post(
+          conn,
+          api_subscription_path(conn, :create),
+          subscription: %{
+            "name" => "Custom Service",
+            "amount" => "7.99",
+            "amount_currency" => "GBP",
+            "cycle" => "monthly",
+            "type" => "card",
+          }
+        )
+
+      assert data = json_response(conn, 201)
+
+      assert data["data"]["type"] == "card"
+      assert data["data"]["type_description"] == "Card"
+    end
+
+    test "creates subscription with type and custom type description", %{conn: conn} do
+      conn =
+        post(
+          conn,
+          api_subscription_path(conn, :create),
+          subscription: %{
+            "name" => "Custom Service",
+            "amount" => "7.99",
+            "amount_currency" => "GBP",
+            "cycle" => "monthly",
+            "type" => "card",
+            "type_description" => "Monzo",
+          }
+        )
+
+      assert data = json_response(conn, 201)
+
+      assert data["data"]["type"] == "card"
+      assert data["data"]["type_description"] == "Monzo"
     end
   end
 
@@ -323,7 +409,7 @@ defmodule SubsWeb.Test.Controllers.SubscriptionControllerTest do
              }
     end
 
-    test "Updates subscription and returns ok", %{conn: conn, user: user} do
+    test "updates subscription name and returns ok", %{conn: conn, user: user} do
       subscription = insert(:complete_subscription, user_id: user.id)
 
       conn =
@@ -336,6 +422,39 @@ defmodule SubsWeb.Test.Controllers.SubscriptionControllerTest do
       assert %{"data" => data} = json_response(conn, 200)
       assert data["id"] == subscription.id
       assert data["name"] == "Updated"
+    end
+
+    test "updates subscription type and returns error for invalid type", %{conn: conn, user: user} do
+      subscription = insert(:complete_subscription, user_id: user.id)
+
+      conn =
+        patch(
+          conn,
+          api_subscription_path(conn, :update, subscription.id),
+          subscription: %{"type" => "invalid"}
+        )
+
+      assert %{"data" => data} = json_response(conn, 422)
+
+      assert data["errors"] == %{
+        "type" => ["must be one of: card, direct debit, other"]
+      }
+    end
+
+    test "updates subscription type and returns ok", %{conn: conn, user: user} do
+      subscription = insert(:complete_subscription, user_id: user.id)
+
+      conn =
+        patch(
+          conn,
+          api_subscription_path(conn, :update, subscription.id),
+          subscription: %{"type" => "direct_debit"}
+        )
+
+      assert %{"data" => data} = json_response(conn, 200)
+
+      assert data["type"] == "direct_debit"
+      assert data["type_description"] == "Direct Debit"
     end
   end
 end
