@@ -44,12 +44,13 @@ end
 # when running `mix release`, the first release in the file
 # will be used by default
 
-release :opensubs.io do
-  set version: "0.1.0"
+release :subs do
+  set version: current_version(:subs_web)
   set applications: [
     :runtime_tools,
     subs: :permanent,
     subs_web: :permanent
   ]
+  set pre_start_hook: "rel/hooks/pre_start.sh"
 end
 
