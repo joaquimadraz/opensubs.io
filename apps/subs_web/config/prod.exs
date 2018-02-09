@@ -15,8 +15,13 @@ use Mix.Config
 # which you typically run after static files are built.
 config :subs_web, SubsWeb.Endpoint,
   load_from_system_env: true,
-  url: [host: "example.com", port: 80],
-  cache_static_manifest: "priv/static/cache_manifest.json"
+  url: [host: {:system, "HOST"}, port: {:system, "PORT"}],
+  server: true,
+  version: Application.spec(:subs_web, :vsn),
+  secret_key_base: System.get_env("SECRET_KEY_BASE"),
+  session_cookie_name: System.get_env("SESSION_COOKIE_NAME"),
+  session_cookie_signing_salt: System.get_env("SESSION_COOKIE_SIGNING_SALT"),
+  session_cookie_encryption_salt: System.get_env("SESSION_COOKIE_ENCRYPTION_SALT")
 
 # ## SSL Support
 #
@@ -55,7 +60,3 @@ config :subs_web, SubsWeb.Endpoint,
 #
 #     config :subs_web, SubsWeb.Endpoint, server: true
 #
-
-# Finally import the config/prod.secret.exs
-# which should be versioned separately.
-import_config "prod.secret.exs"
