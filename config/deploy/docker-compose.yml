@@ -1,0 +1,9 @@
+version: '2'
+services:
+  $AWS_ECS_CONTAINER_NAME:
+    image: '$AWS_ECS_URL/$AWS_ECS_DOCKER_IMAGE'
+    environment:
+      - HOST=$HOST
+      - PORT=$PORT
+    ports:
+      - '$PORT:$PORT'
