@@ -80,19 +80,15 @@ if [ ! -z "$REVISION" ]; then
   aws ecs deregister-task-definition \
     --region $AWS_DEFAULT_REGION \
     --task-definition $AWS_ECS_PROJECT_NAME:$REVISION \
-    >> /tmp/task_deregister_output.txt
-fi
+    >> /dev/null
 
-# Stop current task that is running ou application.
-# This is what will stop the application. 
-{
+  # Stop current task that is running our application.
+  # This is what will stop the application. 
   ecs-cli compose \
     --file config/deploy/docker-compose.yml \
     --project-name "$AWS_ECS_PROJECT_NAME" \
     service stop
-} || {
-  echo "Couldn't stop service"
-}
+fi
 
 # Start new task which will create fresh new task definition as well.
 # This is what will bring the application up with the new code and configurations.
