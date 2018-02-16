@@ -1,8 +1,8 @@
 # OpenSubs [![Build Status](https://travis-ci.org/joaquimadraz/opensubs.io.svg?branch=master)](https://travis-ci.org/joaquimadraz/opensubs.io)
 ## Track recurring bills and subscriptions :money_with_wings:
 
-I'm drafting some blog posts about the work done:
-- [Deploying-an-Elixir-Phoenix-app-to-AWS-ECS](https://github.com/joaquimadraz/opensubs.io/wiki/Deploying-an-Elixir-Phoenix-app-to-AWS-ECS-(WIP))
+Things I wrote about the project:
+- [Guide to deploy an Elixir/Phoenix app to AWS ECS](https://joaquimadraz.com/guide-to-deploy-an-elixir-phoenix-app-to-aws-ecs)
 
 ### Stack
 - Elixir backend
