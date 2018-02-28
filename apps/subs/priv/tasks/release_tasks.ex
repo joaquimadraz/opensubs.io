@@ -34,10 +34,10 @@ defmodule Subs.Tasks.ReleaseTasks do
 
   defp run_migrations() do
     IO.puts "Running migrations..."
-    Ecto.Migrator.run(@repo, migrations_path(@otp_app), :up, all: true)
+    Ecto.Migrator.run(@repo, migrations_path(), :up, all: true)
   end
 
-  defp migrations_path(), do: Path.join([priv_dir(@otp_app), "repo", "migrations"])
+  defp migrations_path(), do: Path.join([priv_dir(), "repo", "migrations"])
 
   defp priv_dir(), do: "#{:code.priv_dir(@otp_app)}"
 end
