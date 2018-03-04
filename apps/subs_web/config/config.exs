@@ -15,8 +15,7 @@ config :subs_web, SubsWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "Dfm/Op55x+WSaLetz1BJ0CMaHNoeuRXV0UP238OH9FfTrsb/wop2dHaRmfW+i59y",
   render_errors: [view: SubsWeb.ErrorView, accepts: ~w(html json)],
-  pubsub: [name: SubsWeb.PubSub, adapter: Phoenix.PubSub.PG2],
-  instrumenters: [Appsignal.Phoenix.Instrumenter]
+  pubsub: [name: SubsWeb.PubSub, adapter: Phoenix.PubSub.PG2]
 
 # Configures Elixir's Logger
 config :logger, :console,
@@ -35,6 +34,12 @@ config :subs_web, SubsWeb.Helpers.AuthAccessPipeline,
   error_handler: SubsWeb.Helpers.AuthErrorHandler
 
 config :subs_web, :subs_services, SubsServices
+
+config :rollbax,
+  enabled: :false,
+  access_token: System.get_env("ROLLBAR_ACCESS_TOKEN"),
+  environment: Mix.env,
+  enable_crash_reports: true
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

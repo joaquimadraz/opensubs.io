@@ -45,7 +45,6 @@ defmodule SubsWeb.Endpoint do
     signing_salt: Application.get_env(:subs_web, SubsWeb.Endpoint)[:session_cookie_signing_salt] || "gHcD7ZWY",
     encryption_salt: Application.get_env(:subs_web, SubsWeb.Endpoint)[:session_cookie_encryption_salt]
 
-  use Appsignal.Phoenix
   plug SubsWeb.Router
 
   @doc """
