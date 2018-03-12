@@ -14,7 +14,7 @@ defmodule Subs.Application.SubscriptionsByMonth do
 
     subscriptions
     |> Enum.filter(fn subscription ->
-      past_subscription?(subscription, target) &&
+      past_subscription?(subscription, target) && before_being_archived?(subscription, target) &&
         (Subscription.monthly?(subscription) || yearly_on_current_month?(subscription, month))
     end)
     |> Enum.map(fn subscription ->
@@ -34,5 +34,9 @@ defmodule Subs.Application.SubscriptionsByMonth do
 
   defp yearly_on_current_month?(subscription, month) do
     Subscription.yearly?(subscription) && subscription.first_bill_date.month == month
+  end
+
+  defp before_being_archived?(subscription, target) do
+    !subscription.archived || Timex.diff(target, subscription.archived_at, :months) <= 0
   end
 end

@@ -25,7 +25,7 @@ defmodule Subs.SubscriptionRepo do
     query =
       from(
         s in Subscription,
-        where: s.user_id == ^user.id and s.archived == false,
+        where: s.user_id == ^user.id,
         order_by: s.name
       )
       |> apply_next_bill_date_filter(filters)

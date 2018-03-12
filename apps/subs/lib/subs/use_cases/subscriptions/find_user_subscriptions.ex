@@ -31,7 +31,7 @@ defmodule Subs.UseCases.Subscriptions.FindUserSubscriptions do
       SubscriptionsByMonth.filter(subscriptions, next_month.month, next_month.year)
 
     ok!(%{
-      subscriptions: subscriptions,
+      subscriptions: Enum.filter(subscriptions, fn subscription -> !subscription.archived end),
       month_stats: %{
         prev: %{
           payments: prev_month_subscriptions,

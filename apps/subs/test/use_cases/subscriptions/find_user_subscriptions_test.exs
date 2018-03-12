@@ -27,7 +27,12 @@ defmodule Subs.Test.UseCases.Subscriptions.FindUserSubscriptionsTest do
 
   test "return user subsmissions except archived", %{user: user} do
     completed = insert_list(5, :complete_subscription, %{user_id: user.id})
-    archived = insert_list(5, :archived_subscription, %{user_id: user.id})
+
+    archived =
+      insert_list(5, :archived_subscription, %{
+        user_id: user.id,
+        archived_at: @dt.step_date(@dt.now(), :months, -2)
+      })
 
     assert {:ok, %{subscriptions: user_subscriptions}} = FindUserSubscriptions.perform(user)
     assert Enum.count(user_subscriptions) == 5
@@ -72,19 +77,20 @@ defmodule Subs.Test.UseCases.Subscriptions.FindUserSubscriptionsTest do
     |> expect(:now, fn -> now end)
     |> expect(:step_date, 2, &@dt.step_date/3)
 
-    assert {:ok, %{
-             month_stats: %{
-               prev: %{
-                 payments: [prev_payment]
-               },
-               curr: %{
-                 payments: [curr_payment]
-               },
-               next: %{
-                 payments: [next_payment]
-               }
-             }
-           }} = FindUserSubscriptions.perform(user, %{}, Test.Subs.DTMock)
+    assert {:ok,
+            %{
+              month_stats: %{
+                prev: %{
+                  payments: [prev_payment]
+                },
+                curr: %{
+                  payments: [curr_payment]
+                },
+                next: %{
+                  payments: [next_payment]
+                }
+              }
+            }} = FindUserSubscriptions.perform(user, %{}, Test.Subs.DTMock)
 
     assert prev_payment.current_bill_date == ~N[2048-12-01T00:00:00.000000]
     assert curr_payment.current_bill_date == ~N[2049-01-01T00:00:00.000000]
@@ -100,19 +106,20 @@ defmodule Subs.Test.UseCases.Subscriptions.FindUserSubscriptionsTest do
     |> expect(:now, fn -> now end)
     |> expect(:step_date, 2, &@dt.step_date/3)
 
-    assert {:ok, %{
-             month_stats: %{
-               prev: %{
-                 payments: [prev_payment]
-               },
-               curr: %{
-                 payments: [curr_payment]
-               },
-               next: %{
-                 payments: [next_payment]
-               }
-             }
-           }} =
+    assert {:ok,
+            %{
+              month_stats: %{
+                prev: %{
+                  payments: [prev_payment]
+                },
+                curr: %{
+                  payments: [curr_payment]
+                },
+                next: %{
+                  payments: [next_payment]
+                }
+              }
+            }} =
              FindUserSubscriptions.perform(
                user,
                %{"month_eq" => "8", "year_eq" => "1989"},
@@ -122,6 +129,46 @@ defmodule Subs.Test.UseCases.Subscriptions.FindUserSubscriptionsTest do
     assert prev_payment.current_bill_date == ~N[1989-07-01T00:00:00.000000]
     assert curr_payment.current_bill_date == ~N[1989-08-01T00:00:00.000000]
     assert next_payment.current_bill_date == ~N[1989-09-01T00:00:00.000000]
+  end
+
+  test "returns archived subscriptions before being archived", %{user: user} do
+    subscription =
+      insert(
+        :complete_subscription,
+        user_id: user.id,
+        first_bill_date: ~N[2018-01-01T00:00:00Z],
+        archived: true,
+        archived_at: ~N[2018-03-02T00:00:00Z]
+      )
+
+    now = ~N[2018-03-01T00:00:00Z]
+
+    Test.Subs.DTMock
+    |> expect(:now, fn -> now end)
+    |> expect(:step_date, 2, &@dt.step_date/3)
+
+    assert {:ok,
+            %{
+              month_stats: %{
+                prev: %{
+                  payments: [fev_payment]
+                },
+                curr: %{
+                  payments: [mar_payment]
+                },
+                next: %{
+                  payments: []
+                }
+              }
+            }} =
+             FindUserSubscriptions.perform(
+               user,
+               %{"month_eq" => "3", "year_eq" => "2018"},
+               Test.Subs.DTMock
+             )
+
+    assert fev_payment.id == subscription.id
+    assert mar_payment.id == subscription.id
   end
 
   def includes_subscriptions?(subscriptions, should_include) do
