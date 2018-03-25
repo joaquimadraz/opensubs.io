@@ -31,7 +31,7 @@ defmodule Subs.UseCases.Subscriptions.FindUserSubscriptions do
       SubscriptionsByMonth.filter(subscriptions, next_month.month, next_month.year)
 
     ok!(%{
-      subscriptions: Enum.filter(subscriptions, fn subscription -> !subscription.archived end),
+      subscriptions: filter_archived_subscriptions(subscriptions),
       month_stats: %{
         prev: %{
           payments: prev_month_subscriptions,
@@ -51,5 +51,9 @@ defmodule Subs.UseCases.Subscriptions.FindUserSubscriptions do
 
   defp sum_subcriptions_amounts(subscriptions) do
     Enum.reduce(subscriptions, 0, fn sub, acc -> acc + sub.amount end)
+  end
+
+  defp filter_archived_subscriptions(subscriptions) do
+    Enum.filter(subscriptions, fn subscription -> !subscription.archived end)
   end
 end
