@@ -48,7 +48,7 @@ defmodule SubsWeb.Mixfile do
       {:cowboy, "~> 1.0"},
       {:guardian, "~> 1.0-beta"},
       {:distillery, "~> 1.5", runtime: false},
-      {:wallaby, "~> 0.19.2", only: :test},
+      {:wallaby, "~> 0.20.0", only: :test},
       {:rollbax, ">= 0.0.0"},
       {:jason, "~> 1.0"},
     ]
