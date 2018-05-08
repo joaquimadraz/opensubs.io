@@ -23,7 +23,7 @@ before_script:
   - mix compile
   - mix ecto.setup
 
-script: mix test
+script: mix test --exclude acceptance
 
 deploy:
   - provider: script
