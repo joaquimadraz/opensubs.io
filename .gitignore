@@ -8,3 +8,5 @@ tmp
 rel/releases
 prod.secrets.exs
 config/ci/shipit.local.sh
+
+.elixir_ls
