@@ -18,6 +18,10 @@ defmodule SubsWeb.Router do
     plug SubsWeb.Helpers.AuthAccessPipeline
   end
 
+  if Mix.env == :dev do
+    forward "/sent_emails", Bamboo.EmailPreviewPlug
+  end
+
   scope "/api", SubsWeb, as: :api do
     pipe_through :api
 

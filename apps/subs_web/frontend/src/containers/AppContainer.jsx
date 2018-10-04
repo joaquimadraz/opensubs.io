@@ -58,7 +58,11 @@ class AppContainer extends Component {
               {children}
             </PrivateApp>
           )
-          : <PublicApp>{children}</PublicApp>
+          : (
+            <PublicApp>
+              {children}
+            </PublicApp>
+            )
         }
       </Styles>
     )

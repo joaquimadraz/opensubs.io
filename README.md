@@ -17,6 +17,12 @@ Things I wrote about the project:
 
 - `cd apps/subs_web/frontend && node_modules/.bin/webpack --config webpack.config.js`, to build the frontend manually
 
+### View sent emails in the development environment
+
+The Bamboo.LocalAdapter is used in :dev mode. To see emails that have been sent, visit the following URL:
+
+`http://0.0.0.0:4000/sent_emails`
+
 #### Running tests
 - `brew install chromedriver`, to run acceptance tests
 - `mix test`, to un all tests

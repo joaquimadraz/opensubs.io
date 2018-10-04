@@ -1,8 +1,7 @@
 use Mix.Config
 
 config :notifier, Notifier.Mailer,
-  server: "localhost",
-  port: 1025
+  adapter: Bamboo.LocalAdapter
 
 config :notifier, Notifier.Scheduler,
   jobs: [
