@@ -3,55 +3,63 @@ defmodule SubsWeb.Router do
   use Plug.ErrorHandler
 
   pipeline :browser do
-    plug :accepts, ["html"]
-    plug :fetch_session
-    plug :fetch_flash
-    plug :protect_from_forgery
-    plug :put_secure_browser_headers
+    plug(:accepts, ["html"])
+    plug(:fetch_session)
+    plug(:fetch_flash)
+    plug(:protect_from_forgery)
+    plug(:put_secure_browser_headers)
   end
 
   pipeline :api do
-    plug :accepts, ["json"]
+    plug(:accepts, ["json"])
   end
 
   pipeline :authenticated do
-    plug SubsWeb.Helpers.AuthAccessPipeline
+    plug(SubsWeb.Helpers.AuthAccessPipeline)
   end
 
-  if Mix.env == :dev do
-    forward "/sent_emails", Bamboo.EmailPreviewPlug
+  if Mix.env() == :dev do
+    forward("/sent_emails", Bamboo.EmailPreviewPlug)
   end
+
+  get("/ping", SubsWeb.PageController, :ping)
 
   scope "/api", SubsWeb, as: :api do
-    pipe_through :api
+    pipe_through(:api)
 
-    resources "/users", Api.UserController, only: [:create]
+    resources("/users", Api.UserController, only: [:create])
 
     scope "/users", as: :user do
-      post "/authenticate", Api.UserController, :authenticate, as: :authenticate
-      post "/confirm", Api.UserController, :confirm, as: :confirm
-      post "/recover_password", Api.UserController, :recover_password, as: :recover_password
-      post "/reset_password", Api.UserController, :reset_password, as: :reset_password
+      post("/authenticate", Api.UserController, :authenticate, as: :authenticate)
+      post("/confirm", Api.UserController, :confirm, as: :confirm)
+      post("/recover_password", Api.UserController, :recover_password, as: :recover_password)
+      post("/reset_password", Api.UserController, :reset_password, as: :reset_password)
     end
 
-    get "/password/reset", Api.ResetPasswordController, :show
+    get("/password/reset", Api.ResetPasswordController, :show)
   end
 
   scope "/api", SubsWeb, as: :api do
-    pipe_through [:api, :authenticated]
+    pipe_through([:api, :authenticated])
 
-    resources "/subscriptions", Api.SubscriptionController, only: [:index, :create, :show, :update]
-    resources "/services", Api.ServiceController, only: [:index]
+    resources(
+      "/subscriptions",
+      Api.SubscriptionController,
+      only: [:index, :create, :show, :update]
+    )
+
+    resources("/services", Api.ServiceController, only: [:index])
 
     scope "/users", as: :user do
-      get "/me", Api.UserController, :me, as: :me
+      get("/me", Api.UserController, :me, as: :me)
     end
   end
 
   scope "/", SubsWeb do
-    pipe_through :browser # Use the default browser stack
+    # Use the default browser stack
+    pipe_through(:browser)
 
-    get "/*path", PageController, :index
+    get("/*path", PageController, :index)
   end
 
   defp handle_errors(conn, %{kind: kind, reason: reason, stack: stacktrace}) do
